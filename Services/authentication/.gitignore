@@ -43,7 +43,7 @@ Pipfile.lock
 poetry.lock
 
 # Environment variables and secrets
-.env
+app/.env
 .env.*
 
 # Local development artifacts
