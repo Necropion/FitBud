@@ -1,0 +1,40 @@
+# Node.js dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Vite cache
+.vite/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# IDE/editor config
+.vscode/
+.idea/
+
+# Tailwind JIT cache
+.tailwind/
+
+# OS files
+*.swp
+*.swo
+
+# Optional: local SSL certs
+*.pem
+*.key
+*.crt
