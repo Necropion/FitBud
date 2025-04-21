@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react";
+import { Button } from "@/components/ui/button"
 
 const Home = () => {
 
@@ -26,6 +27,7 @@ const Home = () => {
     return(
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
             <h1>Hello {name}</h1>
+            <Button>Shad Button</Button>
         </div>
     )
 }
