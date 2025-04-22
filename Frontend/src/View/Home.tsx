@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import { Button } from "@/components/ui/button"
+import { Button } from "../components/ui/button"
 
 const Home = () => {
 
@@ -8,11 +8,11 @@ const Home = () => {
     const fetchMsg = async () => {
 
         try {
-            const response = await fetch("http://localhost:5500/api/authentication/users/")
+            const response = await fetch("http://localhost:8000/authentication/user/")
             const data = await response.json();
 
             if (response.ok) {
-                setName(data[0].name);
+                setName(data.Name);
                 console.log("Fetch call made: ", + data)
             }
         } catch (error) {
