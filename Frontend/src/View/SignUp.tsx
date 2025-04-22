@@ -11,14 +11,14 @@ import { Label } from "../components/ui/label";
 import {Link, useNavigate} from "react-router-dom";
 import * as React from "react";
 
-const Login = () => {
+const SignUp = () => {
 
     const navigate = useNavigate();
 
-    const handleClick = async (e : React.MouseEvent<HTMLAnchorElement>) => {
+    const handleEvent = async (e : React.MouseEvent<HTMLAnchorElement>) => {
 
-        if (e.currentTarget.id == "signUpBtn"){
-            navigate("/sign-up")
+        if (e.currentTarget.id == "loginBtn"){
+            navigate("/login")
         }
     }
 
@@ -27,19 +27,28 @@ const Login = () => {
             <Card className="w-full max-w-md bg-zinc-900 text-white shadow-lg rounded-lg border border-zinc-800">
                 <CardHeader className="text-center">
                     <CardTitle className="text-2xl font-bold tracking-tight text-white">
-                        Welcome Back!
+                        Create an Account
                     </CardTitle>
                     <CardDescription className="text-zinc-400">
-                        Log in to track your progress and smash your goals.
+                        Join FitBud to stay on top of your goals.
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="grid gap-4">
+                    <div className="grid gap-2">
+                        <Label htmlFor="name">Full Name</Label>
+                        <Input
+                            id="name"
+                            type="text"
+                            placeholder="Your Name"
+                            className="bg-zinc-800 border border-zinc-700 text-white placeholder:text-zinc-400"
+                        />
+                    </div>
                     <div className="grid gap-2">
                         <Label htmlFor="email">Email</Label>
                         <Input
                             id="email"
                             type="email"
-                            placeholder="Username or E-mail"
+                            placeholder="you@example.com"
                             className="bg-zinc-800 border border-zinc-700 text-white placeholder:text-zinc-400"
                         />
                     </div>
@@ -48,22 +57,17 @@ const Login = () => {
                         <Input
                             id="password"
                             type="password"
-                            placeholder="Password"
+                            placeholder="Create a password"
                             className="bg-zinc-800 border border-zinc-700 text-white placeholder:text-zinc-400"
                         />
                     </div>
                     <Button className="bg-black hover:bg-orange-500 text-white transition">
-                        Log In
+                        Sign Up
                     </Button>
                     <div className="text-center text-sm text-zinc-400">
-                        Don't have an account?{" "}
-                        <Link id="signUpBtn" to="/sign-up" className="text-orange-500 hover:underline" onClick={handleClick}>
-                            Sign up
-                        </Link>
-                    </div>
-                    <div className="text-center text-xs text-zinc-500">
-                        <Link to="/forgot-password" className="text-orange-500 hover:underline">
-                            Forgot password?
+                        Already have an account?{" "}
+                        <Link id="loginBtn" to="/login" className="text-orange-500 hover:underline" onClick={handleEvent}>
+                            Log in
                         </Link>
                     </div>
                 </CardContent>
@@ -72,4 +76,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default SignUp;
