@@ -5,6 +5,7 @@ import Login from "./View/Login.tsx";
 import SignUp from "./View/SignUp.tsx";
 import {createContext} from "react";
 import AppContextType from "./types/AppContextType.tsx";
+import Landing from "./View/Landing.tsx";
 
 export const AppContext = createContext<AppContextType>({
     gateway: ""
@@ -20,6 +21,7 @@ const App = () =>  {
       }}>
           <BrowserRouter>
               <Routes>
+                  <Route path="/" element={<Landing />}/>
                   <Route path="/login" element={<Login />}/>
                   <Route path="/sign-up" element={<SignUp />}/>
                   <Route path="/home" element={<Home />}/>
