@@ -8,19 +8,18 @@ import {
 } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
-import {Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import * as React from "react";
+import { FaGoogle, FaFacebook, FaApple } from "react-icons/fa";
 
 const SignUp = () => {
-
     const navigate = useNavigate();
 
-    const handleEvent = async (e : React.MouseEvent<HTMLAnchorElement>) => {
-
-        if (e.currentTarget.id == "loginBtn"){
-            navigate("/login")
+    const handleEvent = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+        if (e.currentTarget.id === "loginBtn") {
+            navigate("/login");
         }
-    }
+    };
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-black text-white">
@@ -64,9 +63,32 @@ const SignUp = () => {
                     <Button className="bg-black hover:bg-orange-500 text-white transition">
                         Sign Up
                     </Button>
-                    <div className="text-center text-sm text-zinc-400">
+
+                    <div className="text-center text-sm text-zinc-400">or sign up with</div>
+
+                    <div className="grid gap-2">
+                        <Button className="flex items-center justify-center gap-2 bg-white text-black hover:bg-zinc-100 transition">
+                            <FaGoogle className="text-red-500" />
+                            Google
+                        </Button>
+                        <Button className="flex items-center justify-center gap-2 bg-blue-600 text-white hover:bg-blue-700 transition">
+                            <FaFacebook />
+                            Facebook
+                        </Button>
+                        <Button className="flex items-center justify-center gap-2 bg-zinc-100 text-black hover:bg-zinc-300 transition">
+                            <FaApple className="text-black" />
+                            Apple
+                        </Button>
+                    </div>
+
+                    <div className="text-center text-sm text-zinc-400 mt-2">
                         Already have an account?{" "}
-                        <Link id="loginBtn" to="/login" className="text-orange-500 hover:underline" onClick={handleEvent}>
+                        <Link
+                            id="loginBtn"
+                            to="/login"
+                            className="text-orange-500 hover:underline"
+                            onClick={handleEvent}
+                        >
                             Log in
                         </Link>
                     </div>
