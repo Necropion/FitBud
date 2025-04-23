@@ -7,25 +7,23 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FaDumbbell, FaClock, FaChartLine, FaUserCircle } from "react-icons/fa";
-import DashboardLayout from "@/components/Home/DashboardLayout.tsx";
-import {useContext, useEffect} from "react";
+import DashboardLayout from "@/components/Home/Dashboard/DashboardLayout.tsx";
+import { useContext, useEffect } from "react";
 import AppContext from "@/context/AppContext.tsx";
+import Calendar from "@/components/Home/Dashboard/Calendar.tsx";
 
 const Home = () => {
-
     const { gateway, user, setUser } = useContext(AppContext);
 
     const fetchUser = async () => {
-
-        const getUser = await fetch(`${gateway.authentication}user/${user.Email}`)
+        const getUser = await fetch(`${gateway.authentication}user/${user.Email}`);
         const data = await getUser.json();
 
         if (getUser.ok) {
-            setUser(data)
-            localStorage.setItem("user", JSON.stringify(data))
+            setUser(data);
+            localStorage.setItem("user", JSON.stringify(data));
         }
-
-    }
+    };
 
     useEffect(() => {
         fetchUser();
@@ -33,15 +31,15 @@ const Home = () => {
 
     return (
         <DashboardLayout>
-            <div className="w-full max-w-[1600px] mx-auto px-4 xl:px-12">
+            <div className="w-full max-w-screen-2xl mx-auto px-4 xl:px-12 space-y-10">
                 {/* Header */}
-                <header className="mb-10">
+                <header>
                     <h1 className="text-4xl xl:text-5xl font-bold tracking-tight mb-2">Welcome Back {user.Name}! 👋</h1>
                     <p className="text-zinc-400 text-lg xl:text-xl">Here’s your fitness overview.</p>
                 </header>
 
-                {/* Dashboard Cards */}
-                <div className="grid gap-6 xl:gap-8 md:grid-cols-3">
+                {/* Top Dashboard Cards */}
+                <div className="grid gap-6 xl:gap-8 sm:grid-cols-2 lg:grid-cols-3">
                     <Card className="bg-zinc-900 border-zinc-800">
                         <CardHeader>
                             <CardTitle className="text-orange-500 flex items-center gap-2">
@@ -85,30 +83,38 @@ const Home = () => {
                     </Card>
                 </div>
 
-                {/* Profile Card */}
-                <aside className="mt-10 max-w-sm mx-auto md:mx-0">
-                    <Card className="bg-zinc-900 border-zinc-800">
-                        <CardHeader className="text-center">
-                            <FaUserCircle className="text-6xl mx-auto text-orange-500 mb-2" />
-                            <CardTitle className="text-xl font-semibold text-white">{user.Name}</CardTitle>
-                            <CardDescription className="text-zinc-400">Member since 2024</CardDescription>
-                        </CardHeader>
-                        <CardContent className="text-sm text-zinc-300 space-y-2">
-                            <p>
-                                <span className="font-semibold text-white">Email:</span> {user.Email}
-                            </p>
-                            <p>
-                                <span className="font-semibold text-white">Goal:</span> Muscle Gain
-                            </p>
-                            <p>
-                                <span className="font-semibold text-white">Next Workout:</span> Leg Day (Tomorrow)
-                            </p>
-                            <Button className="w-full mt-4 bg-orange-500 hover:bg-orange-600 text-white">
-                                Edit Profile
-                            </Button>
-                        </CardContent>
-                    </Card>
-                </aside>
+                {/* Bottom Section: Calendar + Profile Side by Side */}
+                <div className="grid gap-8 lg:grid-cols-2">
+                    {/* Calendar */}
+                    <div className="w-full">
+                        <Calendar />
+                    </div>
+
+                    {/* Profile Card */}
+                    <div className="w-full">
+                        <Card className="bg-zinc-900 border-zinc-800">
+                            <CardHeader className="text-center">
+                                <FaUserCircle className="text-6xl mx-auto text-orange-500 mb-2" />
+                                <CardTitle className="text-xl font-semibold text-white">{user.Name}</CardTitle>
+                                <CardDescription className="text-zinc-400">Member since 2024</CardDescription>
+                            </CardHeader>
+                            <CardContent className="text-sm text-zinc-300 space-y-2">
+                                <p>
+                                    <span className="font-semibold text-white">Email:</span> {user.Email}
+                                </p>
+                                <p>
+                                    <span className="font-semibold text-white">Goal:</span> Muscle Gain
+                                </p>
+                                <p>
+                                    <span className="font-semibold text-white">Next Workout:</span> Leg Day (Tomorrow)
+                                </p>
+                                <Button className="w-full mt-4 bg-orange-500 hover:bg-orange-600 text-white">
+                                    Edit Profile
+                                </Button>
+                            </CardContent>
+                        </Card>
+                    </div>
+                </div>
             </div>
         </DashboardLayout>
     );

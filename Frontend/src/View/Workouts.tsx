@@ -5,7 +5,7 @@ import {
     CardContent,
     CardDescription,
 } from "@/components/ui/card";
-import DashboardLayout from "@/components/Home/DashboardLayout";
+import DashboardLayout from "@/components/Home/Dashboard/DashboardLayout.tsx";
 import { Button } from "@/components/ui/button";
 import {useContext, useEffect, useState} from "react";
 import WorkoutDTO from "@/types/api/WorkoutDTO.tsx";
