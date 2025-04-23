@@ -15,11 +15,11 @@ const Sidebar = ({ sidebarOpen }: SidebarProps) => {
         e.preventDefault();
 
         if (e.currentTarget.id == "dashboardBtn") {
-
+            navigate("/home")
         }
 
-        if (e.currentTarget.id == "workoutBtn") {
-
+        if (e.currentTarget.id == "workoutsBtn") {
+            navigate("/workouts")
         }
 
         if (e.currentTarget.id == "progressBtn") {

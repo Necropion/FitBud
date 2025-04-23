@@ -5,6 +5,7 @@ import Login from "./View/Login.tsx";
 import SignUp from "./View/SignUp.tsx";
 import {useState} from "react";
 import Landing from "./View/Landing.tsx";
+import Workouts from "./View/Workouts.tsx"
 import AppContext from "./context/AppContext.tsx"
 
 const App = () =>  {
@@ -37,6 +38,7 @@ const App = () =>  {
                   <Route path="/login" element={<Login />}/>
                   <Route path="/sign-up" element={<SignUp />}/>
                   <Route path="/home" element={<Home />}/>
+                  <Route path="/workouts" element={<Workouts />}/>
               </Routes>
           </BrowserRouter>
     </AppContext.Provider>
