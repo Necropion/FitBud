@@ -3,21 +3,33 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Home from "./View/Home.tsx";
 import Login from "./View/Login.tsx";
 import SignUp from "./View/SignUp.tsx";
-import {createContext} from "react";
-import AppContextType from "./types/AppContextType.tsx";
+import {useState} from "react";
 import Landing from "./View/Landing.tsx";
-
-export const AppContext = createContext<AppContextType>({
-    gateway: ""
-});
+import AppContext from "./context/AppContext.tsx"
 
 const App = () =>  {
 
-    const gateway : string = import.meta.env.VITE_API_URL
+    const gateway = {
+        authentication: import.meta.env.VITE_AUTHENTICATION_URL,
+        exercise: import.meta.env.VITE_EXERCISE_URL
+    }
+
+    const [authenticated, setAuthenticated] = useState<boolean>(() => {
+        const storedAuthenticated = localStorage.getItem("authenticated");
+        return storedAuthenticated ? JSON.parse(storedAuthenticated) : false;
+    });
+
+    const [user, setUser] = useState<object>(() => {
+        const storedUser = localStorage.getItem("user");
+        return storedUser ? JSON.parse(storedUser) : {};
+    });
 
   return (
       <AppContext.Provider value={{
-          gateway
+          gateway,
+          user, setUser,
+          authenticated, setAuthenticated,
+
       }}>
           <BrowserRouter>
               <Routes>

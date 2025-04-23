@@ -3,10 +3,13 @@ import {Button} from "@/components/ui/button.tsx";
 import * as React from "react";
 import SidebarProps from "@/types/SidebarProps.tsx";
 import {useNavigate} from "react-router-dom";
+import {useContext} from "react";
+import AppContext from "@/context/AppContext.tsx";
 
 const Sidebar = ({ sidebarOpen }: SidebarProps) => {
 
     const navigate = useNavigate();
+    const { setAuthenticated } = useContext(AppContext);
 
     const handleClick = async (e : React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -24,6 +27,8 @@ const Sidebar = ({ sidebarOpen }: SidebarProps) => {
         }
 
         if (e.currentTarget.id == "signOutBtn") {
+            setAuthenticated(false)
+            localStorage.setItem("authenticated", JSON.stringify(false))
             navigate("/")
         }
     }

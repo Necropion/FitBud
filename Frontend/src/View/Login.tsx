@@ -12,11 +12,11 @@ import { Link, useNavigate } from "react-router-dom";
 import * as React from "react";
 import { FaGoogle, FaFacebook, FaApple } from "react-icons/fa";
 import {useContext, useState} from "react";
-import {AppContext} from "@/App.tsx";
+import AppContext from "@//context/AppContext.tsx";
 
 const Login = () => {
 
-    const { gateway } = useContext(AppContext);
+    const { gateway, setAuthenticated } = useContext(AppContext);
     const navigate = useNavigate();
 
     // Form Variables
@@ -40,7 +40,7 @@ const Login = () => {
         }
 
         if (email && password) {
-            const checkUser = await fetch(`${gateway}/authentication/user/authenticate/`, {
+            const checkUser = await fetch(`${gateway.authentication}user/authenticate/`, {
                 method: "POST",
                 body: JSON.stringify({
                     Email: email,
@@ -54,6 +54,8 @@ const Login = () => {
 
             if (checkUser.ok) {
                 if (response.authentication == "true") {
+                    setAuthenticated(true);
+                    localStorage.setItem("authenticated", JSON.stringify(true))
                     navigate("/home")
                 }
 

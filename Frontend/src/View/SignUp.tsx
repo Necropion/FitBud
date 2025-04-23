@@ -12,7 +12,7 @@ import { Link, useNavigate } from "react-router-dom";
 import * as React from "react";
 import { FaGoogle, FaFacebook, FaApple } from "react-icons/fa";
 import {useContext, useState} from "react";
-import {AppContext} from "../App.tsx";
+import AppContext from "@/context/AppContext.tsx";
 
 const SignUp = () => {
 
@@ -37,7 +37,7 @@ const SignUp = () => {
 
         if (password == passwordCheck) {
 
-            const postUserForm = await fetch(`${gateway}/authentication/user/create/`, {
+            const postUserForm = await fetch(`${gateway.authentication}user/create/`, {
                 method: "POST",
                 body: JSON.stringify({
                     Name: name,

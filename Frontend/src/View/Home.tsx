@@ -11,6 +11,8 @@ import DashboardLayout from "@/components/Home/DashboardLayout.tsx";
 
 const Home = () => {
 
+
+
     return (
         <DashboardLayout>
             <div className="w-full max-w-[1600px] mx-auto px-4 xl:px-12">
