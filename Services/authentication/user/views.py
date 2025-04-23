@@ -12,10 +12,10 @@ def get_users(request):
 
     return Response(serialized.data)
 
-# Get Single User
+# Get Single User by Email
 @api_view(['GET'])
-def get_user(request, user_id):
-    user = User.objects.get(pk=user_id)
+def get_user_by_email(request, user_email):
+    user = User.objects.get(Email=user_email)
     serialized = UserSerializer(user)
     return Response(serialized.data)
 
