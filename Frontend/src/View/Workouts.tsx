@@ -7,38 +7,28 @@ import {
 } from "@/components/ui/card";
 import DashboardLayout from "@/components/Home/DashboardLayout";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import {useContext, useEffect, useState} from "react";
 import WorkoutDTO from "@/types/api/WorkoutDTO.tsx";
+import AppContext from "@/context/AppContext.tsx";
 
 const Workouts = () => {
+
+    const { gateway } = useContext(AppContext);
+
     const [workouts, setWorkouts] = useState<WorkoutDTO[]>([]);
 
-    // Placeholder effect — you’ll add your own fetch logic here.
+    const fetchWorkouts = async () => {
+
+        const getWorkouts = await fetch(`${gateway.exercise}/exercises/`)
+        const workoutsList = await getWorkouts.json();
+
+        if (getWorkouts.ok) {
+            setWorkouts(workoutsList);
+        }
+    }
+
     useEffect(() => {
-        // Example dummy data
-        setWorkouts([
-            {
-                id: 1,
-                name: "Leg Day Strength",
-                category: "Legs",
-                duration: 45,
-                intensity: "High",
-            },
-            {
-                id: 2,
-                name: "Core Crusher",
-                category: "Core",
-                duration: 30,
-                intensity: "Medium",
-            },
-            {
-                id: 3,
-                name: "Push Power",
-                category: "Upper Body",
-                duration: 40,
-                intensity: "Medium",
-            },
-        ]);
+        fetchWorkouts();
     }, []);
 
     return (
@@ -53,19 +43,19 @@ const Workouts = () => {
 
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     {workouts.map((workout) => (
-                        <Card key={workout.id} className="bg-zinc-900 border border-zinc-800">
+                        <Card key={workout.Id} className="bg-zinc-900 border border-zinc-800">
                             <CardHeader>
-                                <CardTitle className="text-orange-500 text-lg">{workout.name}</CardTitle>
+                                <CardTitle className="text-orange-500 text-lg">{workout.Name}</CardTitle>
                                 <CardDescription className="text-zinc-400">
-                                    {workout.category}
+                                    {workout.Category}
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="text-sm text-white space-y-1">
                                 <p>
-                                    <span className="text-zinc-400">Duration:</span> {workout.duration} min
+                                    <span className="text-zinc-400">Duration:</span> {workout.Duration} min
                                 </p>
                                 <p>
-                                    <span className="text-zinc-400">Intensity:</span> {workout.intensity}
+                                    <span className="text-zinc-400">Intensity:</span> {workout.Intensity}
                                 </p>
                                 <Button className="mt-4 w-full bg-orange-500 hover:bg-orange-600 text-white">
                                     Start Workout

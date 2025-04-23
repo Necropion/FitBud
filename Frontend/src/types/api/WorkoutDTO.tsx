@@ -1,9 +1,10 @@
 type WorkoutDTO = {
-    id: number;
-    name: string;
-    category: string;
-    duration: number;
-    intensity: string;
+    Id: number;
+    Name: string;
+    Category: string;
+    Duration: number;
+    Intensity: string;
+    Description: string;
 };
 
 export default WorkoutDTO;

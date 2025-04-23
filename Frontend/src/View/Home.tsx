@@ -36,7 +36,7 @@ const Home = () => {
             <div className="w-full max-w-[1600px] mx-auto px-4 xl:px-12">
                 {/* Header */}
                 <header className="mb-10">
-                    <h1 className="text-4xl xl:text-5xl font-bold tracking-tight mb-2">Welcome Back 👋</h1>
+                    <h1 className="text-4xl xl:text-5xl font-bold tracking-tight mb-2">Welcome Back {user.Name}! 👋</h1>
                     <p className="text-zinc-400 text-lg xl:text-xl">Here’s your fitness overview.</p>
                 </header>
 
