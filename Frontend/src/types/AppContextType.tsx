@@ -1,4 +1,5 @@
 import * as React from "react";
+import {UserDTO} from "@/types/api/UserDTO.tsx"
 
 type AppContextType = {
     gateway: {
@@ -7,7 +8,7 @@ type AppContextType = {
     };
 
     // User Variables
-    user: object,
+    user: UserDTO,
     setUser: React.Dispatch<React.SetStateAction<object>>,
     authenticated: boolean;
     setAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;

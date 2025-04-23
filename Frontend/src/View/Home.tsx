@@ -8,10 +8,28 @@ import {
 import { Button } from "@/components/ui/button";
 import { FaDumbbell, FaClock, FaChartLine, FaUserCircle } from "react-icons/fa";
 import DashboardLayout from "@/components/Home/DashboardLayout.tsx";
+import {useContext, useEffect} from "react";
+import AppContext from "@/context/AppContext.tsx";
 
 const Home = () => {
 
+    const { gateway, user, setUser } = useContext(AppContext);
 
+    const fetchUser = async () => {
+
+        const getUser = await fetch(`${gateway.authentication}user/${user.Email}`)
+        const data = await getUser.json();
+
+        if (getUser.ok) {
+            setUser(data)
+            localStorage.setItem("user", JSON.stringify(data))
+        }
+
+    }
+
+    useEffect(() => {
+        fetchUser();
+    }, []);
 
     return (
         <DashboardLayout>
@@ -72,12 +90,12 @@ const Home = () => {
                     <Card className="bg-zinc-900 border-zinc-800">
                         <CardHeader className="text-center">
                             <FaUserCircle className="text-6xl mx-auto text-orange-500 mb-2" />
-                            <CardTitle className="text-xl font-semibold text-white">Jokubas</CardTitle>
+                            <CardTitle className="text-xl font-semibold text-white">{user.Name}</CardTitle>
                             <CardDescription className="text-zinc-400">Member since 2024</CardDescription>
                         </CardHeader>
                         <CardContent className="text-sm text-zinc-300 space-y-2">
                             <p>
-                                <span className="font-semibold text-white">Email:</span> you@example.com
+                                <span className="font-semibold text-white">Email:</span> {user.Email}
                             </p>
                             <p>
                                 <span className="font-semibold text-white">Goal:</span> Muscle Gain

@@ -16,7 +16,7 @@ import AppContext from "@//context/AppContext.tsx";
 
 const Login = () => {
 
-    const { gateway, setAuthenticated } = useContext(AppContext);
+    const { gateway, setAuthenticated, setUser } = useContext(AppContext);
     const navigate = useNavigate();
 
     // Form Variables
@@ -54,8 +54,16 @@ const Login = () => {
 
             if (checkUser.ok) {
                 if (response.authentication == "true") {
+
+                    const user = {
+                        Email: email
+                    }
+
                     setAuthenticated(true);
                     localStorage.setItem("authenticated", JSON.stringify(true))
+                    setUser(user)
+                    localStorage.setItem("user", JSON.stringify(user))
+
                     navigate("/home")
                 }
 
