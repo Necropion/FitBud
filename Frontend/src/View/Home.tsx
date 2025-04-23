@@ -6,12 +6,10 @@ import {
     CardDescription,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
 import { FaDumbbell, FaClock, FaChartLine, FaUserCircle } from "react-icons/fa";
 import DashboardLayout from "@/components/Home/DashboardLayout.tsx";
 
 const Home = () => {
-    const navigate = useNavigate();
 
     return (
         <DashboardLayout>
