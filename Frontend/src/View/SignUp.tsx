@@ -13,11 +13,12 @@ import * as React from "react";
 import { FaGoogle, FaFacebook, FaApple } from "react-icons/fa";
 import {useContext, useState} from "react";
 import AppContext from "@/context/AppContext.tsx";
+import { postUser } from "@/api/AuthApi";
 
 const SignUp = () => {
 
     const navigate = useNavigate();
-    const { gateway } = useContext(AppContext);
+    const { gateway, setUser } = useContext(AppContext);
 
     // Form Variables
     const [name, setName] = useState<string>("");
@@ -37,22 +38,18 @@ const SignUp = () => {
 
         if (password == passwordCheck) {
 
-            const postUserForm = await fetch(`${gateway.authentication}user/create/`, {
-                method: "POST",
-                body: JSON.stringify({
-                    Name: name,
-                    Email: email,
-                    Password: password
-                }),
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            });
-            const response = await postUserForm.json()
+            const postResult = await postUser(gateway, name, email, password);
 
-            if (postUserForm.ok) {
-                console.log(`User with E-mail: ${response.Email}`)
+            if (postResult) {
+                console.log(`User with E-mail: ${postResult.Email}`)
+                setUser(postResult);
+                localStorage.setItem("user", JSON.stringify(postResult));
                 navigate("/home")
+            }
+
+            if (!postResult) {
+                console.log("Something went wrong in postUser in SignUp Page.")
+                setMessage("Something went wrong, please try again later.")
             }
         }
 

@@ -1,11 +1,9 @@
 import * as React from "react";
 import UserDTO from "@/types/api/UserDTO"
+import { Gateway } from "./Gateway";
 
 type AppContextType = {
-    gateway: {
-        authentication: string;
-        training: string;
-    };
+    gateway: Gateway;
 
     // User Variables
     user: UserDTO,

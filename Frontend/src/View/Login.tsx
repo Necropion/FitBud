@@ -13,6 +13,7 @@ import * as React from "react";
 import { FaGoogle, FaFacebook, FaApple } from "react-icons/fa";
 import {useContext, useState} from "react";
 import AppContext from "@//context/AppContext.tsx";
+import { authenticateUser } from "@/api/AuthApi";
 
 const Login = () => {
 
@@ -40,36 +41,31 @@ const Login = () => {
         }
 
         if (email && password) {
-            const checkUser = await fetch(`${gateway.authentication}user/authenticate/`, {
-                method: "POST",
-                body: JSON.stringify({
-                    Email: email,
-                    Password: password
-                }),
-                headers: {
-                    "Content-Type":"application/json"
-                }
-            });
-            const response = await checkUser.json();
+            
+            const authResult = await authenticateUser(gateway, email, password)
 
-            if (checkUser.ok) {
-                if (response.authentication == "true") {
+            if (authResult == "true") {
 
-                    const user = {
-                        Email: email
-                    }
-
-                    setAuthenticated(true);
-                    localStorage.setItem("authenticated", JSON.stringify(true))
-                    setUser(user)
-                    localStorage.setItem("user", JSON.stringify(user))
-
-                    navigate("/home")
+                const user = {
+                    Email: email
                 }
 
-                if (response.authentication == "false") {
-                    setMessage("Email/Password or both were incorrect, please try again.")
-                }
+                setAuthenticated(true);
+                localStorage.setItem("authenticated", JSON.stringify(true));
+                setUser(user);
+                localStorage.setItem("user", JSON.stringify(user));
+
+                navigate("/home")
+            }
+
+            if (authResult == "false") {
+                setAuthenticated(false);
+                localStorage.setItem("authenticated", JSON.stringify(false));
+                setMessage("Email/Password or both were incorrect, please try again.");
+            }
+
+            if (authResult == "error") {
+                setMessage("There was an error that occured, please try again later.");
             }
         }
     }
