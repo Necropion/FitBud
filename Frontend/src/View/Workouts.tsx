@@ -19,7 +19,7 @@ const Workouts = () => {
 
     const fetchWorkouts = async () => {
 
-        const getWorkouts = await fetch(`${gateway.exercise}/exercises/`)
+        const getWorkouts = await fetch(`${gateway.training}exercise/`)
         const workoutsList = await getWorkouts.json();
 
         if (getWorkouts.ok) {

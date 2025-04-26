@@ -12,7 +12,7 @@ const App = () =>  {
 
     const gateway = {
         authentication: import.meta.env.VITE_AUTHENTICATION_URL,
-        exercise: import.meta.env.VITE_EXERCISE_URL
+        training: import.meta.env.VITE_TRAINING_URL,
     }
 
     const [authenticated, setAuthenticated] = useState<boolean>(() => {

@@ -1,0 +1,64 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Virtual environments
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# PyCharm project files
+.idea/
+
+# VS Code project files (if you switch editors)
+.vscode/
+
+# Python cache and test files
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.pycache/
+*.coverage
+coverage.xml
+.cache/
+nosetests.xml
+test-results.xml
+junit-*.xml
+
+# MyPy and Pytest cache
+.mypy_cache/
+.pytest_cache/
+
+# pipenv/poetry
+Pipfile.lock
+poetry.lock
+
+# Environment variables and secrets
+app/.env
+.env.*
+
+# Local development artifacts
+*.db
+*.sqlite3
+instance/
+*.pid
+*.log
+*.pem
+
+# Docker
+*.pid
+docker-compose.override.yml
+**/__pycache__/
+
+# Mac/Linux/Windows system files
+.DS_Store
+Thumbs.db

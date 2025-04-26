@@ -4,7 +4,7 @@ import AppContextType from "@/types/AppContextType.tsx";
 const AppContext = createContext<AppContextType>({
     gateway: {
         authentication: "",
-        exercise: "",
+        training: "",
     },
 
     // User Variables

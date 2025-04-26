@@ -1,5 +1,3 @@
-from http.client import responses
-
 from fastapi import FastAPI, HTTPException, Request, Response
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -16,7 +14,7 @@ app.add_middleware(
 
 services = {
     "authentication": "http://localhost:8010",
-    "exercise": "http://localhost:8020",
+    "training": "http://localhost:8020",
 }
 
 async def forward_request(service_url: str, method: str, path: str, body=None, headers=None):
