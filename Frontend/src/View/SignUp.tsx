@@ -11,14 +11,13 @@ import { Label } from "../components/ui/label";
 import { Link, useNavigate } from "react-router-dom";
 import * as React from "react";
 import { FaGoogle, FaFacebook, FaApple } from "react-icons/fa";
-import {useContext, useState} from "react";
-import AppContext from "@/context/AppContext.tsx";
-import { postUser } from "@/api/AuthApi";
+import {useState} from "react";
+import { useAuth } from "@/hooks/useAuth.ts"
 
 const SignUp = () => {
 
+    const { registerUser, loading ,error } = useAuth();
     const navigate = useNavigate();
-    const { gateway, setUser } = useContext(AppContext);
 
     // Form Variables
     const [name, setName] = useState<string>("");
@@ -28,22 +27,21 @@ const SignUp = () => {
 
     // Message Variable
     const [message, setMessage] = useState<string>("Join FitBud to stay on top of your goals.")
+    const displayMessage = message || error;
 
     const handleClick = () => {
         navigate("/login");
     };
 
-    const handleSubmit = async (e : React.FormEvent<HTMLFormElement>)=> {
+    const handleSignUp = async (e : React.FormEvent<HTMLFormElement>)=> {
         e.preventDefault();
 
         if (password == passwordCheck) {
 
-            const postResult = await postUser(gateway, name, email, password);
+            const postResult = await registerUser(name, email, password)
 
-            if (postResult) {
-                console.log(`User with E-mail: ${postResult.Email}`)
-                setUser(postResult);
-                localStorage.setItem("user", JSON.stringify(postResult));
+            if (postResult == "registered") {
+                console.log("User registered!")
                 navigate("/home")
             }
 
@@ -70,13 +68,13 @@ const SignUp = () => {
                         Create an Account
                     </CardTitle>
                     <CardDescription className={`text-sm ${message.includes("Please") ? "text-red-500 animate-pulse drop-shadow-[0_0_5px_rgba(239,68,68,0.8)]" : "text-zinc-400"}`}>
-                        {message}
+                        {displayMessage}
                     </CardDescription>
                 </CardHeader>
 
                 <CardContent className="grid gap-6">
                     {/* Sign-up Form */}
-                    <form onSubmit={handleSubmit} className="grid gap-4">
+                    <form onSubmit={handleSignUp} className="grid gap-4">
                         <div className="grid gap-2">
                             <Label htmlFor="name">Full Name</Label>
                             <Input
@@ -121,7 +119,7 @@ const SignUp = () => {
                             type="submit"
                             className="w-full bg-black hover:bg-orange-500 text-white transition"
                         >
-                            Sign Up
+                            {loading ? "Registering..." : "Sign Up"}
                         </Button>
                     </form>
 

@@ -5,8 +5,9 @@ import Login from "./View/Login.tsx";
 import SignUp from "./View/SignUp.tsx";
 import {useState} from "react";
 import Landing from "./View/Landing.tsx";
-import Workouts from "./View/Workouts.tsx"
 import AppContext from "./context/AppContext.tsx"
+import Exercises from "./View/Exercises.tsx";
+import UserDTO from "@/types/api/UserDTO.tsx";
 
 const App = () =>  {
 
@@ -20,7 +21,7 @@ const App = () =>  {
         return storedAuthenticated ? JSON.parse(storedAuthenticated) : false;
     });
 
-    const [user, setUser] = useState<object>(() => {
+    const [user, setUser] = useState<UserDTO>(() => {
         const storedUser = localStorage.getItem("user");
         return storedUser ? JSON.parse(storedUser) : {};
     });
@@ -38,7 +39,7 @@ const App = () =>  {
                   <Route path="/login" element={<Login />}/>
                   <Route path="/sign-up" element={<SignUp />}/>
                   <Route path="/home" element={<Home />}/>
-                  <Route path="/workouts" element={<Workouts />}/>
+                  <Route path="/exercises" element={<Exercises />}/>
               </Routes>
           </BrowserRouter>
     </AppContext.Provider>

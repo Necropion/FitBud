@@ -11,13 +11,12 @@ import { Label } from "../components/ui/label";
 import { Link, useNavigate } from "react-router-dom";
 import * as React from "react";
 import { FaGoogle, FaFacebook, FaApple } from "react-icons/fa";
-import {useContext, useState} from "react";
-import AppContext from "@//context/AppContext.tsx";
-import { authenticateUser } from "@/api/AuthApi";
+import { useState} from "react";
+import { useAuth } from "@/hooks/useAuth.ts"
 
 const Login = () => {
 
-    const { gateway, setAuthenticated, setUser } = useContext(AppContext);
+    const { authenticateUser, loading, error } = useAuth();
     const navigate = useNavigate();
 
     // Form Variables
@@ -26,6 +25,7 @@ const Login = () => {
 
     // Message Variable
     const [message, setMessage] = useState<string>("Log in to track your progress and smash your goals.");
+    const displayMessage = message || error;
 
     const handleClick = async (e: React.MouseEvent<HTMLAnchorElement>) => {
         if (e.currentTarget.id === "signUpBtn") {
@@ -33,7 +33,7 @@ const Login = () => {
         }
     };
 
-    const handleSubmit = async (e : React.FormEvent<HTMLFormElement>) => {
+    const handleLogin = async (e : React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if (email == "" || password == ""){
@@ -42,30 +42,15 @@ const Login = () => {
 
         if (email && password) {
             
-            const authResult = await authenticateUser(gateway, email, password)
+            const authResult = await authenticateUser(email, password)
 
             if (authResult == "true") {
-
-                const user = {
-                    Email: email
-                }
-
-                setAuthenticated(true);
-                localStorage.setItem("authenticated", JSON.stringify(true));
-                setUser(user);
-                localStorage.setItem("user", JSON.stringify(user));
-
+                console.log("User logged in.")
                 navigate("/home")
             }
 
-            if (authResult == "false") {
-                setAuthenticated(false);
-                localStorage.setItem("authenticated", JSON.stringify(false));
-                setMessage("Email/Password or both were incorrect, please try again.");
-            }
-
-            if (authResult == "error") {
-                setMessage("There was an error that occured, please try again later.");
+            if (!authResult) {
+                setMessage("Email/password were both incorrect, please try again.");
             }
         }
     }
@@ -84,12 +69,12 @@ const Login = () => {
                                 : "text-zinc-400"
                         }`}
                     >
-                        {message}
+                        {displayMessage}
                     </CardDescription>
                 </CardHeader>
 
                 <CardContent className="grid gap-4">
-                    <form onSubmit={handleSubmit} className="grid gap-4">
+                    <form onSubmit={handleLogin} className="grid gap-4">
                         <div className="grid gap-2">
                             <Label htmlFor="email">Email</Label>
                             <Input
@@ -116,7 +101,7 @@ const Login = () => {
                             type="submit"
                             className="bg-black hover:bg-orange-500 text-white transition"
                         >
-                            Log In
+                            {loading ? "Logging in..." : "Log in"}
                         </Button>
                     </form>
 

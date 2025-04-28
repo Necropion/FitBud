@@ -18,8 +18,8 @@ const Sidebar = ({ sidebarOpen }: SidebarProps) => {
             navigate("/home")
         }
 
-        if (e.currentTarget.id == "workoutsBtn") {
-            navigate("/workouts")
+        if (e.currentTarget.id == "exercisesBtn") {
+            navigate("/exercises")
         }
 
         if (e.currentTarget.id == "progressBtn") {
@@ -44,7 +44,7 @@ const Sidebar = ({ sidebarOpen }: SidebarProps) => {
                 <h2 className="text-2xl font-bold text-orange-500">FitBud</h2>
                 <nav className="space-y-2">
                     <Button id="dashboardBtn" variant="ghost" className="w-full justify-start text-white" onClick={handleClick}>Dashboard</Button>
-                    <Button id="workoutsBtn" variant="ghost" className="w-full justify-start text-white" onClick={handleClick}>Workouts</Button>
+                    <Button id="exercisesBtn" variant="ghost" className="w-full justify-start text-white" onClick={handleClick}>Exercises</Button>
                     <Button id="progressBtn" variant="ghost" className="w-full justify-start text-white" onClick={handleClick}>Progress</Button>
                     <Button id="signOutBtn" variant="ghost" className="w-full justify-start text-red-500" onClick={handleClick}>Sign out</Button>
                 </nav>

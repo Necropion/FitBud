@@ -1,4 +1,4 @@
-type WorkoutDTO = {
+type ExerciseDTO = {
     Id: number;
     Name: string;
     Category: string;
@@ -7,4 +7,4 @@ type WorkoutDTO = {
     Description: string;
 };
 
-export default WorkoutDTO;
+export default ExerciseDTO;

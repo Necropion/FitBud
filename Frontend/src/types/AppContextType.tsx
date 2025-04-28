@@ -7,7 +7,7 @@ type AppContextType = {
 
     // User Variables
     user: UserDTO,
-    setUser: React.Dispatch<React.SetStateAction<object>>,
+    setUser: React.Dispatch<React.SetStateAction<UserDTO>>,
     authenticated: boolean;
     setAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
 }
