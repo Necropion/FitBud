@@ -1,3 +1,4 @@
+from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from . import services
@@ -24,11 +25,17 @@ def get_exercise_by_id(request, exercise_id):
 @api_view(['POST'])
 def post_exercise(request):
 
-    created_exercise = services.create_exercise(request.data)
+    serializer = serializers.ExerciseSerializer(data=request.data)
+    if serializer.is_valid():
+        created_exercise = services.create_exercise(serializer.validated_data)
+        response_serializer = serializers.ExerciseSerializer(created_exercise)
+        return Response(response_serializer.data, status=status.HTTP_201_CREATED)
 
-    serialized_exercise = serializers.ExerciseSerializer(data=created_exercise)
-    if serialized_exercise.is_valid():
-        serialized_exercise.save()
-        return Response(serialized_exercise.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    return Response(serialized_exercise.errors, status=400)
+@api_view(['DELETE'])
+def delete_exercise(request, exercise_id):
+
+    services.remove_exercise(exercise_id)
+
+    return Response({"message": "Exercise deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
