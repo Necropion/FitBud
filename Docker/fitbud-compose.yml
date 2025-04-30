@@ -1,0 +1,38 @@
+name: FitBud
+
+services:
+  authentication:
+    image: necropion/fit_bud-authentication:latest
+    container_name: authentication
+    ports:
+      - "8010:8010"
+    env_file:
+      - ../Services/authentication/.env.Production
+
+  training:
+    image: necropion/fit_bud-training:latest
+    container_name: training
+    ports:
+      - "8020:8020"
+    env_file:
+      - ../Services/training/.env.Production
+
+  gateway:
+    image: necropion/fit_bud-gateway:latest
+    container_name: gateway
+    ports:
+      - "8000:8000"
+    env_file:
+      - ../Services/gateway/.env.Production
+    depends_on:
+      - authentication
+      - training
+
+  frontend:
+    build:
+      context: ../Frontend
+      args:
+        VITE_AUTHENTICATION_URL: http://localhost:8000/authentication/
+        VITE_TRAINING_URL: http://localhost:8000/training/
+    ports:
+      - "5173:5173"
