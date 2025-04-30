@@ -21,7 +21,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
-          context: .
+          context: ./Frontend
           push: true
           tags: necropion/fit_bud-frontend:latest
 
