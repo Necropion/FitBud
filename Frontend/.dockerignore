@@ -1,0 +1,24 @@
+# Node modules and local env
+node_modules
+dist
+.env
+.env
+
+# IDE/editor settings
+.vscode
+.idea
+
+# System files
+.DS_Store
+Thumbs.db
+
+# OS or shell files
+*.log
+*.swp
+*.swo
+
+# Git & Docker
+.git
+.gitignore
+.dockerignore
+Dockerfile
