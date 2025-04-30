@@ -18,30 +18,30 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push
+      - name: Build and push Frontend Service
         uses: docker/build-push-action@v4
         with:
           context: ./Frontend
           push: true
           tags: necropion/fit_bud-frontend:latest
 
-      - name: Build and push
+      - name: Build and push Gateway Service
         uses: docker/build-push-action@v4
         with:
-          context: ./Services
+          context: ./Services/gateway
           push: true
           tags: necropion/fit_bud-gateway:latest
 
-      - name: Build and push
+      - name: Build and push Authentication Service
         uses: docker/build-push-action@v4
         with:
-          context: ./Services
+          context: ./Services/authentication
           push: true
           tags: necropion/fit_bud-authentication:latest
           
-      - name: Build and push
+      - name: Build and push Training Service
         uses: docker/build-push-action@v4
         with:
-          context: ./Services
+          context: ./Services/training
           push: true
           tags: necropion/fit_bud-training:latest
