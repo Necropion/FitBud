@@ -45,7 +45,7 @@ poetry.lock
 # Environment variables and secrets
 app/.env
 .env.*
-.env
+.env.Development
 
 # Local development artifacts
 *.db

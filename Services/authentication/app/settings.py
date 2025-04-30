@@ -13,7 +13,14 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-load_dotenv()
+# Decide Environment
+env = os.getenv("ENV", "Development")
+
+if env == "Production":
+    load_dotenv(".env.Production")
+
+if env == "Development":
+    load_dotenv(".env.Development")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -87,6 +94,7 @@ DATABASES = {
         'PORT': os.environ['POSTGRESQL_PORT'],
     }
 }
+
 
 
 # Password validation
