@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-anrsz_v2)po+i=te$h-jb=bdc!!1jxur13o!o^@88_6g3xklw$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -80,11 +80,11 @@ WSGI_APPLICATION = 'app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('POSTGRESQL_DB_NAME'),
-        'USER': os.environ.get('POSTGRESQL_USER'),
-        'PASSWORD': os.environ.get('POSTGRESQL_PASSWORD'),
-        'HOST': os.environ.get('POSTGRESQL_HOST'),
-        'PORT': os.environ.get('POSTGRESQL_PORT'),
+        'NAME': os.environ['POSTGRESQL_DB_NAME'],
+        'USER': os.environ['POSTGRESQL_USER'],
+        'PASSWORD': os.environ['POSTGRESQL_PASSWORD'],
+        'HOST': os.environ['POSTGRESQL_HOST'],
+        'PORT': os.environ['POSTGRESQL_PORT'],
     }
 }
 
