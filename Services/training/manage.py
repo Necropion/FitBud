@@ -9,10 +9,17 @@ def main():
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'app.settings')
     try:
-        load_dotenv()
+        # Decide Environment
+        env = os.getenv("ENV", "Development")
 
-        host = os.getenv('DJANGO_HOST')
-        port = os.getenv('DJANGO_PORT')
+        if env == "Production":
+            load_dotenv(".env.Production")
+
+        if env == "Development":
+            load_dotenv(".env.Development")
+
+        host = os.environ['DJANGO_HOST']
+        port = os.environ['DJANGO_PORT']
 
 
         from django.core.management import execute_from_command_line
