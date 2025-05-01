@@ -12,11 +12,11 @@ import { Link, useNavigate } from "react-router-dom";
 import * as React from "react";
 import { FaGoogle, FaFacebook, FaApple } from "react-icons/fa";
 import {useState} from "react";
-import { useAuth } from "@/hooks/useAuth.ts"
+import { useAuthUser } from "@/hooks/authentication/useAuthUser.ts"
 
 const SignUp = () => {
 
-    const { registerUser, loading ,error } = useAuth();
+    const { registerUser, loading ,error } = useAuthUser();
     const navigate = useNavigate();
 
     // Form Variables

@@ -8,6 +8,7 @@ import Landing from "./View/Landing.tsx";
 import AppContext from "./context/AppContext.tsx"
 import Exercises from "./View/Exercises.tsx";
 import UserDTO from "@/types/api/UserDTO.tsx";
+import Callback from "@/View/Callback.tsx";
 
 const App = () =>  {
 
@@ -37,6 +38,7 @@ const App = () =>  {
               <Routes>
                   <Route path="/" element={<Landing />}/>
                   <Route path="/login" element={<Login />}/>
+                  <Route path="/callback" element={<Callback />}/>
                   <Route path="/sign-up" element={<SignUp />}/>
                   <Route path="/home" element={<Home />}/>
                   <Route path="/exercises" element={<Exercises />}/>

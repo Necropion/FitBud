@@ -1,5 +1,5 @@
 import {useContext, useState} from "react";
-import AppContext from "../context/AppContext.tsx";
+import AppContext from "../../context/AppContext.tsx";
 
 export const useAuthUser = () => {
 
@@ -12,7 +12,7 @@ export const useAuthUser = () => {
         setError(null);
 
         try {
-            const authCheck = await fetch(`${gateway.authentication}/api/user/authenticate/`, {
+            const authCheck = await fetch(`${gateway.authentication}api/user/authenticate/`, {
                 method: "POST",
                 body: JSON.stringify({
                     Email,

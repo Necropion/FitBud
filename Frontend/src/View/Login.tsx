@@ -12,11 +12,13 @@ import { Link, useNavigate } from "react-router-dom";
 import * as React from "react";
 import { FaGoogle, FaFacebook, FaApple } from "react-icons/fa";
 import { useState} from "react";
-import { useAuth } from "@/hooks/useAuth.ts"
+import { useAuthUser } from "@/hooks/authentication/useAuthUser.ts"
+import { useAuthGoogle } from "@/hooks/authentication/useAuthGoogle.ts";
 
 const Login = () => {
 
-    const { authenticateUser, loading, error } = useAuth();
+    const { authenticateUser, loading, error } = useAuthUser();
+    const { fetchOAuthURL } = useAuthGoogle();
     const navigate = useNavigate();
 
     // Form Variables
@@ -27,31 +29,53 @@ const Login = () => {
     const [message, setMessage] = useState<string>("Log in to track your progress and smash your goals.");
     const displayMessage = message || error;
 
-    const handleClick = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const handleFormEvent = async (e : React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        // Login Form
+        if(e.currentTarget.id === "loginForm") {
+
+            if (email == "" || password == "") {
+                setMessage("Please fill out all the fields to proceed!")
+            }
+
+            if (email && password) {
+
+                const authResult = await authenticateUser(email, password)
+
+                if (authResult == "true") {
+                    console.log("User logged in.")
+                    navigate("/home")
+                }
+
+                if (!authResult) {
+                    setMessage("Email/password were both incorrect, please try again.");
+                }
+            }
+        }
+    }
+
+    const handleClickEvent = async (e : React.MouseEvent<HTMLButtonElement> | React.MouseEvent<HTMLAnchorElement>) => {
+
+        // Sign up Button
         if (e.currentTarget.id === "signUpBtn") {
             navigate("/sign-up");
         }
-    };
 
-    const handleLogin = async (e : React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+        // Google Login Button
+        if (e.currentTarget.id === "googleBtn") {
 
-        if (email == "" || password == ""){
-            setMessage("Please fill out all the fields to proceed!")
+            window.location.href = await fetchOAuthURL();
         }
 
-        if (email && password) {
-            
-            const authResult = await authenticateUser(email, password)
+        // Facebook Login Button
+        if (e.currentTarget.id === "facebookBtn") {
 
-            if (authResult == "true") {
-                console.log("User logged in.")
-                navigate("/home")
-            }
+        }
 
-            if (!authResult) {
-                setMessage("Email/password were both incorrect, please try again.");
-            }
+        // Apple Login Button
+        if (e.currentTarget.id === "appleBtn") {
+
         }
     }
 
@@ -74,7 +98,7 @@ const Login = () => {
                 </CardHeader>
 
                 <CardContent className="grid gap-4">
-                    <form onSubmit={handleLogin} className="grid gap-4">
+                    <form id="loginForm" onSubmit={handleFormEvent} className="grid gap-4">
                         <div className="grid gap-2">
                             <Label htmlFor="email">Email</Label>
                             <Input
@@ -98,6 +122,7 @@ const Login = () => {
                             />
                         </div>
                         <Button
+                            id="loginBtn"
                             type="submit"
                             className="bg-black hover:bg-orange-500 text-white transition"
                         >
@@ -108,27 +133,27 @@ const Login = () => {
                     <div className="text-center text-sm text-zinc-400">or continue with</div>
 
                     <div className="grid gap-2">
-                        <Button className="flex items-center justify-center gap-2 bg-white text-black hover:bg-zinc-100 transition">
+                        <Button id="googleBtn" onClick={handleClickEvent} className="flex items-center justify-center gap-2 bg-white text-black hover:bg-zinc-100 transition">
                             <FaGoogle className="text-red-500" />
                             Google
                         </Button>
-                        <Button className="flex items-center justify-center gap-2 bg-blue-600 text-white hover:bg-blue-700 transition">
+                        <Button id="facebookBtn" onClick={handleClickEvent} className="flex items-center justify-center gap-2 bg-blue-600 text-white hover:bg-blue-700 transition">
                             <FaFacebook />
                             Facebook
                         </Button>
-                        <Button className="flex items-center justify-center gap-2 bg-zinc-100 text-black hover:bg-zinc-300 transition">
+                        <Button id="appleBtn" onClick={handleClickEvent} className="flex items-center justify-center gap-2 bg-zinc-100 text-black hover:bg-zinc-300 transition">
                             <FaApple className="text-black" />
                             Apple
                         </Button>
                     </div>
 
                     <div className="text-center text-sm text-zinc-400 mt-2">
-                        Don&apos;t have an account?{" "}
+                        Dont have an account?{" "}
                         <Link
                             id="signUpBtn"
                             to="/sign-up"
                             className="text-orange-500 hover:underline"
-                            onClick={handleClick}
+                            onClick={handleClickEvent}
                         >
                             Sign up
                         </Link>
