@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import User
-from .serializers import UserSerializer
+from auth_user.models import User
+from auth_user.serializers import UserSerializer
 
 # Get All Users
 @api_view(['GET'])
@@ -46,3 +46,4 @@ def post_user(request):
         return Response(serializer.data)
 
     return Response(serializer.errors, status=400)
+

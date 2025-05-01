@@ -1,7 +1,7 @@
 import {useContext, useState} from "react";
 import AppContext from "../context/AppContext.tsx";
 
-export const useAuth = () => {
+export const useAuthUser = () => {
 
     const { gateway, setUser, setAuthenticated } = useContext(AppContext);
     const [loading, setLoading] = useState(false);
@@ -12,7 +12,7 @@ export const useAuth = () => {
         setError(null);
 
         try {
-            const authCheck = await fetch(`${gateway.authentication}user/authenticate/`, {
+            const authCheck = await fetch(`${gateway.authentication}/api/user/authenticate/`, {
                 method: "POST",
                 body: JSON.stringify({
                     Email,
@@ -51,7 +51,7 @@ export const useAuth = () => {
         setError(null)
 
         try {
-            const postUser = await fetch(`${gateway.authentication}user/create/`, {
+            const postUser = await fetch(`${gateway.authentication}/api/user/create/`, {
                 method: "POST",
                 body: JSON.stringify({
                     Name,
