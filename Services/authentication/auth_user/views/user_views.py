@@ -4,7 +4,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from ..models.user_model import User
 from ..serializers import UserSerializer
-from  ..serializers.dtos import AuthenticationSerializer
+from ..serializers.dtos import AuthenticationSerializer
 from ..services import user_service
 
 
@@ -17,21 +17,21 @@ class UserViewSet(ModelViewSet):
     # Override Post Single User
     def create(self, request, *args, **kwargs):
 
-        provider = request.data.get('provider')
-        user = request.data.get('user')
+        provider_data = request.data.get('provider_data')
+        user_data = request.data.get('user_data')
 
         # Error if body is missing data
-        if not user:
+        if not user_data:
             return Response({'message': 'Missing user data'}, status=status.HTTP_400_BAD_REQUEST)
 
-        if not provider:
+        if not provider_data:
             return Response({'message': 'Missing provider data'}, status=status.HTTP_400_BAD_REQUEST)
 
         # Validate User Object
-        user_object = UserSerializer(data=user)
+        user_object = UserSerializer(data=user_data)
         if user_object.is_valid(raise_exception=True):
-            user_created = user_service.create_user(user_object.validated_data, provider)
-            return Response(user_created)
+            user_created = user_service.create_user(user_object.validated_data, provider_data)
+            return Response(user_created, status=status.HTTP_201_CREATED)
 
         return Response({"message": "Internal Server Error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
