@@ -13,6 +13,7 @@ import * as React from "react";
 import { FaGoogle, FaFacebook, FaApple } from "react-icons/fa";
 import {useState} from "react";
 import { useAuthUser } from "@/hooks/authentication/useAuthUser.ts"
+import userFormDTO from "@/types/api/UserFormDTO.ts";
 
 const SignUp = () => {
 
@@ -38,7 +39,9 @@ const SignUp = () => {
 
         if (password == passwordCheck) {
 
-            const postResult = await registerUser(name, email, password)
+            const provider: string = "none"
+            const user: userFormDTO = { name, email, password }
+            const postResult = await registerUser(provider, user)
 
             if (postResult == "registered") {
                 console.log("User registered!")

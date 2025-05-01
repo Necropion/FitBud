@@ -1,7 +1,7 @@
 type UserDTO = {
-    Id?: number;
-    Name?: string;
-    Email?: string;
+    id?: number;
+    name?: string;
+    email?: string;
 }
 
 export default UserDTO;

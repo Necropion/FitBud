@@ -1,5 +1,6 @@
 import {useContext, useState} from "react";
 import AppContext from "../../context/AppContext.tsx";
+import UserFormDTO from "@/types/api/UserFormDTO.tsx";
 
 export const useAuthUser = () => {
 
@@ -7,7 +8,7 @@ export const useAuthUser = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const authenticateUser = async (Email: string, Password: string) => {
+    const authenticateUser = async (email: string, password: string) => {
         setLoading(true);
         setError(null);
 
@@ -15,8 +16,8 @@ export const useAuthUser = () => {
             const authCheck = await fetch(`${gateway.authentication}api/user/authenticate/`, {
                 method: "POST",
                 body: JSON.stringify({
-                    Email,
-                    Password
+                    email,
+                    password
                 }),
                 headers: {
                     "Content-Type":"application/json"
@@ -30,8 +31,8 @@ export const useAuthUser = () => {
 
             setAuthenticated(true);
             localStorage.setItem("authenticated", JSON.stringify(true));
-            setUser({ Email });
-            localStorage.setItem("user", JSON.stringify({ Email }));
+            setUser(response);
+            localStorage.setItem("user", JSON.stringify(response));
 
             return "true"
 
@@ -46,17 +47,16 @@ export const useAuthUser = () => {
         }
     }
 
-    const registerUser = async (Name: string, Email: string, Password: string) => {
+    const registerUser = async (provider: string, user: UserFormDTO) => {
         setLoading(true)
         setError(null)
 
         try {
-            const postUser = await fetch(`${gateway.authentication}/api/user/create/`, {
+            const postUser = await fetch(`${gateway.authentication}api/user/`, {
                 method: "POST",
                 body: JSON.stringify({
-                    Name,
-                    Email,
-                    Password
+                    provider,
+                    user
                 }),
                 headers: {
                     "Content-Type":"application/json"
@@ -68,8 +68,8 @@ export const useAuthUser = () => {
                 throw new Error(response?.message || "Something went wrong when posting user data.")
             }
 
-            setUser(response);
-            localStorage.setItem("user", JSON.stringify(response));
+            setUser(response.data);
+            localStorage.setItem("user", JSON.stringify(response.data));
             setAuthenticated(true);
             localStorage.setItem("authenticated", JSON.stringify(true))
 

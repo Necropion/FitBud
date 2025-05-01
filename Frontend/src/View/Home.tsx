@@ -16,12 +16,12 @@ const Home = () => {
     const { gateway, user, setUser } = useContext(AppContext);
 
     const fetchUser = async () => {
-        const getUser = await fetch(`${gateway.authentication}user/${user.Email}`);
-        const data = await getUser.json();
+        const getUser = await fetch(`${gateway.authentication}user/${user.id}`);
+        const response = await getUser.json();
 
         if (getUser.ok) {
-            setUser(data);
-            localStorage.setItem("user", JSON.stringify(data));
+            setUser(response.data);
+            localStorage.setItem("user", JSON.stringify(response.data));
         }
     };
 
@@ -34,7 +34,7 @@ const Home = () => {
             <div className="w-full max-w-screen-2xl mx-auto px-4 xl:px-12 space-y-10">
                 {/* Header */}
                 <header>
-                    <h1 className="text-4xl xl:text-5xl font-bold tracking-tight mb-2">Welcome Back {user.Name}! 👋</h1>
+                    <h1 className="text-4xl xl:text-5xl font-bold tracking-tight mb-2">Welcome Back {user.name}! 👋</h1>
                     <p className="text-zinc-400 text-lg xl:text-xl">Here’s your fitness overview.</p>
                 </header>
 
@@ -95,12 +95,12 @@ const Home = () => {
                         <Card className="bg-zinc-900 border-zinc-800">
                             <CardHeader className="text-center">
                                 <FaUserCircle className="text-6xl mx-auto text-orange-500 mb-2" />
-                                <CardTitle className="text-xl font-semibold text-white">{user.Name}</CardTitle>
+                                <CardTitle className="text-xl font-semibold text-white">{user.name}</CardTitle>
                                 <CardDescription className="text-zinc-400">Member since 2024</CardDescription>
                             </CardHeader>
                             <CardContent className="text-sm text-zinc-300 space-y-2">
                                 <p>
-                                    <span className="font-semibold text-white">Email:</span> {user.Email}
+                                    <span className="font-semibold text-white">Email:</span> {user.email}
                                 </p>
                                 <p>
                                     <span className="font-semibold text-white">Goal:</span> Muscle Gain

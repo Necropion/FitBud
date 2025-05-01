@@ -56,7 +56,7 @@ export const useAuthGoogle = () => {
 
             const userData: UserDTO = { Id: response.id, Name: response.name, Email: response.email}
             setUser(userData);
-            localStorage.setItem("user", JSON.stringify(userData));
+            localStorage.setItem("user", JSON.stringify(response));
             setAuthenticated(true);
             localStorage.setItem("authenticated", JSON.stringify(true));
 
