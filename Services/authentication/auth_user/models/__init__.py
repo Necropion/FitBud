@@ -1,4 +1,4 @@
 from .user_model import User
-from .social_account_model import SocialAccount
+from .social_model import Social
 
-__all__ = ["User", "SocialAccount"]
+__all__ = ["User", "Social"]

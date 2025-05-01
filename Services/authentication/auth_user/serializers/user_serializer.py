@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from auth_user.models.user_model import User
-from auth_user.models import SocialAccount
+from auth_user.models.social_model import Social
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -13,8 +13,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 
-class SocialAccountSerializer(serializers.ModelSerializer):
+class SocialSerializer(serializers.ModelSerializer):
     class Meta:
-        model = SocialAccount
+        model = Social
         fields = '__all__'
 

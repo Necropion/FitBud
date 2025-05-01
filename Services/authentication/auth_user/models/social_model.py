@@ -1,7 +1,7 @@
 from django.db import models
 from .user_model import User
 
-class SocialAccount(models.Model):
+class Social(models.Model):
     PROVIDERS = [
         ("google", "Google"),
         ("facebook", "Facebook"),
