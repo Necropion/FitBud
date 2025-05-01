@@ -1,49 +1,29 @@
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from auth_user.models import User
-from auth_user.serializers import UserSerializer
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.decorators import action
+from auth_user.models.user_model import User
+from auth_user.serializers import user_serializer
 
-# Get All Users
-@api_view(['GET'])
-def get_users(request):
 
-    users = User.objects.all()
-    serialized = UserSerializer(users, many=True)
+class UserViewSet(ModelViewSet):
+    # GET All Users
+    # Get Single User by ID
+    # Post User
+    queryset = User.objects.all()
+    serializer_class = user_serializer.UserSerializer
 
-    return Response(serialized.data)
+    # Validate User
+    @action(detail=False, methods=['post'], url_path="authenticate")
+    def authenticate(self, request):
+        credentials = request.data
+        try:
+            user = User.objects.get(email=credentials['email'])
 
-# Get Single User by Email
-@api_view(['GET'])
-def get_user_by_email(request, user_email):
-    user = User.objects.get(Email=user_email)
-    serialized = UserSerializer(user)
-    return Response(serialized.data)
+            if user.password == credentials['password']:
+                return Response(user_serializer.UserSerializer(user).data)
+            else:
+                return Response({'authentication': 'false'})
 
-@api_view(['POST'])
-def authenticate_user(request):
-    credentials = request.data
-    try:
-        user = User.objects.get(Email=credentials['Email'])
-
-        if user.Password == credentials['Password']:
-            return Response({'authentication': 'true'})
-        else:
+        except User.DoesNotExist:
             return Response({'authentication': 'false'})
-
-    except User.DoesNotExist:
-        return Response({'authentication': 'false'})
-
-# Post User
-@api_view(['POST'])
-def post_user(request):
-
-    if User.objects.filter(Email=request.data['Email']).exists():
-        return Response({'message': 'User already exists'}, status=400)
-
-    serializer = UserSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
-
-    return Response(serializer.errors, status=400)
 
