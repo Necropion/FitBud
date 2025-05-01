@@ -7,7 +7,7 @@ import {useState} from "react";
 import Landing from "./View/Landing.tsx";
 import AppContext from "./context/AppContext.tsx"
 import Exercises from "./View/Exercises.tsx";
-import UserDTO from "@/types/api/UserDTO.tsx";
+import UserDTO from "@/types/api/Authentication/UserDTO.tsx";
 import Callback from "@/View/Callback.tsx";
 
 const App = () =>  {

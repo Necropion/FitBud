@@ -1,5 +1,5 @@
 import * as React from "react";
-import UserDTO from "@/types/api/UserDTO"
+import UserDTO from "@/types/api/Authentication/UserDTO.tsx"
 import { Gateway } from "./Gateway";
 
 type AppContextType = {

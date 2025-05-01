@@ -1,6 +1,7 @@
 import {useContext, useState} from "react";
 import AppContext from "@/context/AppContext.tsx";
-import UserDTO from "@/types/api/UserDTO.tsx";
+import UserGoogleDataDTO from "@/types/api/Authentication/GoogleUserDataDTO.tsx"
+import UserDTO from "@/types/api/Authentication/UserDTO.tsx";
 
 export const useAuthGoogle = () => {
 
@@ -9,7 +10,7 @@ export const useAuthGoogle = () => {
     const [error, setError] = useState<string | null>(null);
 
     // Direct user to google authentication url
-    const fetchOAuthURL = async () => {
+    const fetchGoogleOAuthURL = async () => {
         setLoading(true);
         setError(null);
 
@@ -48,15 +49,16 @@ export const useAuthGoogle = () => {
             });
             if (!fetchToken || !fetchToken.ok) throw new Error("Invalid response from server");
 
-            const response = await fetchToken.json();
+            const { id, given_name, family_name, name, email,  picture, verified_email } = await fetchToken.json();
 
-            if (!fetchToken.ok) {
-                throw new Error(response?.message || "Something went wrong when authenticating user data.");
-            }
+            const userGoogleData: UserGoogleDataDTO = { id, given_name, family_name, name, email, picture, verified_email}
 
-            const userData: UserDTO = { Id: response.id, Name: response.name, Email: response.email}
+            const linkUser = await linkUserDataWithGoogle(userGoogleData);
+
+            const userData: UserDTO = await linkUser.data;
+
             setUser(userData);
-            localStorage.setItem("user", JSON.stringify(response));
+            localStorage.setItem("user", JSON.stringify(userData));
             setAuthenticated(true);
             localStorage.setItem("authenticated", JSON.stringify(true));
 
@@ -72,8 +74,46 @@ export const useAuthGoogle = () => {
         }
     }
 
+    const linkUserDataWithGoogle = async (userGoogleData: UserGoogleDataDTO) => {
+        setLoading(true);
+        setError(null);
+
+        try {
+            const postUserGoogleData = await fetch(`${gateway.authentication}api/user/`, {
+                method: "POST",
+                body: JSON.stringify({
+                    provider_data: {
+                        provider: "google",
+                        provider_user_id: userGoogleData.id,
+                        provider_user_name: userGoogleData.name,
+                    },
+                    user_data: {
+                        email: userGoogleData.email
+                    }
+                }),
+                headers: {
+                    "Content-Type":"application/json"
+                }
+            })
+            if (!postUserGoogleData || !postUserGoogleData.ok) throw new Error("Invalid response from server");
+
+            const response = await postUserGoogleData.json();
+
+            return response;
+
+        } catch (error) {
+            if(error instanceof Error) {
+                setError(error.message);
+            } else {
+                setError("An error has occurred when linking user.")
+            }
+        } finally {
+            setLoading(false)
+        }
+    }
+
     return{
-        fetchOAuthURL,
+        fetchGoogleOAuthURL,
         exchangeCodeForToken,
         loading,
         error

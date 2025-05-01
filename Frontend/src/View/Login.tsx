@@ -18,7 +18,7 @@ import { useAuthGoogle } from "@/hooks/authentication/useAuthGoogle.ts";
 const Login = () => {
 
     const { authenticateUser, loading, error } = useAuthUser();
-    const { fetchOAuthURL } = useAuthGoogle();
+    const { fetchGoogleOAuthURL } = useAuthGoogle();
     const navigate = useNavigate();
 
     // Form Variables
@@ -65,7 +65,8 @@ const Login = () => {
         // Google Login Button
         if (e.currentTarget.id === "googleBtn") {
 
-            window.location.href = await fetchOAuthURL();
+            window.location.href = await fetchGoogleOAuthURL();
+            navigate('/home')
         }
 
         // Facebook Login Button

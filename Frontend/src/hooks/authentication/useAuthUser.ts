@@ -1,6 +1,7 @@
 import {useContext, useState} from "react";
 import AppContext from "../../context/AppContext.tsx";
-import UserFormDTO from "@/types/api/UserFormDTO.tsx";
+import UserFormDTO from "@/types/api/Authentication/UserFormDTO.tsx";
+import ProviderDTO from "@/types/api/Authentication/ProviderDTO.tsx";
 
 export const useAuthUser = () => {
 
@@ -47,7 +48,7 @@ export const useAuthUser = () => {
         }
     }
 
-    const registerUser = async (provider: string, user: UserFormDTO) => {
+    const registerUser = async (provider_data: ProviderDTO, user_data: UserFormDTO) => {
         setLoading(true)
         setError(null)
 
@@ -55,8 +56,8 @@ export const useAuthUser = () => {
             const postUser = await fetch(`${gateway.authentication}api/user/`, {
                 method: "POST",
                 body: JSON.stringify({
-                    provider,
-                    user
+                    provider_data,
+                    user_data
                 }),
                 headers: {
                     "Content-Type":"application/json"
