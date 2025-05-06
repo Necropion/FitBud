@@ -17,6 +17,8 @@ class UserViewSet(ModelViewSet):
     # Override Post Single User
     def create(self, request, *args, **kwargs):
 
+        print("Incoming request.data:", request.data)
+
         provider_data = request.data.get('provider_data')
         user_data = request.data.get('user_data')
 
@@ -27,8 +29,12 @@ class UserViewSet(ModelViewSet):
         if not provider_data:
             return Response({'message': 'Missing provider data'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Validate User Object
         user_object = UserSerializer(data=user_data)
+        if not user_object.is_valid():
+            print("Serializer validation error:", user_object.errors)
+            return Response(user_object.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        # Validate User Object
         if user_object.is_valid(raise_exception=True):
             user_created = user_service.create_user(user_object.validated_data, provider_data)
             return Response(user_created, status=status.HTTP_201_CREATED)

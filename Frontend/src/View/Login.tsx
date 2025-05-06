@@ -13,12 +13,12 @@ import * as React from "react";
 import { FaGoogle, FaFacebook, FaApple } from "react-icons/fa";
 import { useState} from "react";
 import { useAuthUser } from "@/hooks/authentication/useAuthUser.ts"
-import { useAuthGoogle } from "@/hooks/authentication/useAuthGoogle.ts";
+import {useAuthProviders} from "@/hooks/authentication/useAuthProviders.ts";
 
 const Login = () => {
 
     const { authenticateUser, loading, error } = useAuthUser();
-    const { fetchGoogleOAuthURL } = useAuthGoogle();
+    const { fetchOAuthURL } = useAuthProviders();
     const navigate = useNavigate();
 
     // Form Variables
@@ -65,13 +65,16 @@ const Login = () => {
         // Google Login Button
         if (e.currentTarget.id === "googleBtn") {
 
-            window.location.href = await fetchGoogleOAuthURL();
+            const provider: string = "google"
+            window.location.href = await fetchOAuthURL(provider);
             navigate('/home')
         }
 
         // Facebook Login Button
         if (e.currentTarget.id === "facebookBtn") {
-
+            const provider: string = "facebook"
+            window.location.href = await fetchOAuthURL(provider);
+            navigate('home')
         }
 
         // Apple Login Button

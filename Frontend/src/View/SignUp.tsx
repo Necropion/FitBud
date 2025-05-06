@@ -38,22 +38,6 @@ const SignUp = () => {
     const handleSignUp = async (e : React.FormEvent<HTMLFormElement>)=> {
         e.preventDefault();
 
-        if (password == passwordCheck) {
-
-            const provider_data: ProviderDTO = { provider: "none" }
-            const user_data: userFormDTO = { name, email, password }
-            const postResult = await registerUser(provider_data, user_data)
-
-            if (postResult == "registered") {
-                console.log("User registered!")
-                navigate("/home")
-            }
-
-            if (!postResult) {
-                console.log("Something went wrong in postUser in SignUp Page.")
-                setMessage("Something went wrong, please try again later.")
-            }
-        }
 
         if (name == "" || email == "" || password == "" || passwordCheck == "") {
             setMessage("Please fill out the whole form!")
@@ -61,6 +45,22 @@ const SignUp = () => {
 
         if (password != passwordCheck) {
             setMessage("Please make sure the passwords match!")
+        }
+
+        if (password == passwordCheck) {
+            const provider_data: ProviderDTO = { provider: "none" }
+
+            const user_data: userFormDTO = { name, email, password }
+            const postResult = await registerUser(provider_data, user_data)
+            if (postResult == "registered") {
+                console.log("User registered!")
+
+                navigate("/home")
+            }
+            if (!postResult) {
+                console.log("Something went wrong in postUser in SignUp Page.")
+                setMessage("Something went wrong, please try again later.")
+            }
         }
     }
 

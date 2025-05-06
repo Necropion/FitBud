@@ -9,7 +9,7 @@ import AppContext from "@/context/AppContext.tsx";
 const Sidebar = ({ sidebarOpen }: SidebarProps) => {
 
     const navigate = useNavigate();
-    const { setAuthenticated } = useContext(AppContext);
+    const { setAuthenticated, setUser } = useContext(AppContext);
 
     const handleClick = async (e : React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -29,6 +29,8 @@ const Sidebar = ({ sidebarOpen }: SidebarProps) => {
         if (e.currentTarget.id == "signOutBtn") {
             setAuthenticated(false)
             localStorage.setItem("authenticated", JSON.stringify(false))
+            setUser({});
+            localStorage.setItem("user", JSON.stringify({}))
             navigate("/")
         }
     }

@@ -1,13 +1,16 @@
-import {useEffect} from "react";
+import {useEffect, useRef} from "react";
 import {useNavigate} from "react-router-dom";
-import {useAuthGoogle} from "@/hooks/authentication/useAuthGoogle.ts";
+import {useAuthProviders} from "@/hooks/authentication/useAuthProviders.ts";
 
 const Callback = () => {
 
-    const { exchangeCodeForToken, loading, error } = useAuthGoogle();
+    const { exchangeCodeForToken, loading, error } = useAuthProviders();
     const navigate = useNavigate();
+    const hasRun = useRef(false);
 
     useEffect(() => {
+        if (hasRun.current) return;
+        hasRun.current = true;
         const doAuthentication = async () => {
             const params = new URLSearchParams(window.location.search);
             const code = params.get("code");
@@ -19,12 +22,16 @@ const Callback = () => {
                 return;
             }
 
+            // Check if states before call and after are matching
             if (state !== localStorage.getItem("state")) {
                 console.warn("⚠️ State mismatch between frontend and backend");
             }
 
+            const provider = state.split("_")[0];
+            console.log(state)
+
             try {
-                const res = await exchangeCodeForToken(code, state);
+                const res = await exchangeCodeForToken(code, state, provider);
 
                 if (!res) {
                     throw new Error(`Backend error: Something went wrong`);
