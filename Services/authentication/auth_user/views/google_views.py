@@ -1,12 +1,12 @@
 import secrets
-
-from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError
 from rest_framework.viewsets import ViewSet
 from rest_framework.decorators import action
 from django.conf import settings
 import google_auth_oauthlib.flow
 from django.http import JsonResponse
+from ..services import social_service, user_service
 import requests
 import json
 
@@ -54,12 +54,12 @@ class GoogleViewSet(ViewSet):
         })
 
 
-    # Get Google User Details
+    # Exchange Code for Access Token and Return User Google Details
     @action(detail=False, methods=['post'], url_path='callback')
     def google_callback(self, request):
         data = json.loads(request.body)
         code = data.get("code")
-        state = data.get("state")  # ✅ match with `code` source
+        state = data.get("state")
 
         if not code:
             return Response({"error": "Missing authorization code."}, status=400)
@@ -89,7 +89,7 @@ class GoogleViewSet(ViewSet):
             )
             flow.redirect_uri = "http://localhost:5173/callback"
 
-            flow.fetch_token(code=code)  # 💥 this is likely where it crashes
+            flow.fetch_token(code=code)
 
             credentials = flow.credentials
             access_token = credentials.token
@@ -99,11 +99,24 @@ class GoogleViewSet(ViewSet):
                 headers={'Authorization': f'Bearer {access_token}'}
             ).json()
 
-            return Response({
-                "message": "Google User Details Retrieved successfully",
-                "data": user_info
-            })
+            try:
+                provider = "google"
+                existing_user = social_service.get_social_by_email_and_provider(user_info['email'], provider)
+                return Response({
+                    "message": "Google User Details Retrieved Successfully!",
+                    "data": existing_user
+                })
+            except ValidationError:
+                provider = "google"
+                new_google_user = user_service.create_user(user_info, provider)
+                return Response({
+                    "message": "Google User Created Successfully",
+                    "data": new_google_user
+                })
 
         except Exception as e:
             print(f"OAuth error: {str(e)}")  # helpful in Django console
-            return Response({"error": str(e)}, status=500)
+            return Response({
+                "message": "OAuth Error in Google",
+                "error": str(e)
+            }, status=500)

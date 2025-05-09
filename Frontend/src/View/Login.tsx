@@ -10,7 +10,7 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Link, useNavigate } from "react-router-dom";
 import * as React from "react";
-import { FaGoogle, FaFacebook, FaApple } from "react-icons/fa";
+import { FaGoogle, FaFacebook } from "react-icons/fa";
 import { useState} from "react";
 import { useAuthUser } from "@/hooks/authentication/useAuthUser.ts"
 import {useAuthProviders} from "@/hooks/authentication/useAuthProviders.ts";
@@ -76,11 +76,6 @@ const Login = () => {
             window.location.href = await fetchOAuthURL(provider);
             navigate('home')
         }
-
-        // Apple Login Button
-        if (e.currentTarget.id === "appleBtn") {
-
-        }
     }
 
     return (
@@ -144,10 +139,6 @@ const Login = () => {
                         <Button id="facebookBtn" onClick={handleClickEvent} className="flex items-center justify-center gap-2 bg-blue-600 text-white hover:bg-blue-700 transition">
                             <FaFacebook />
                             Facebook
-                        </Button>
-                        <Button id="appleBtn" onClick={handleClickEvent} className="flex items-center justify-center gap-2 bg-zinc-100 text-black hover:bg-zinc-300 transition">
-                            <FaApple className="text-black" />
-                            Apple
                         </Button>
                     </div>
 

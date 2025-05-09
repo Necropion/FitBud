@@ -1,9 +1,6 @@
-import UserGoogleDataDTO from "@/types/api/Authentication/GoogleUserDataDTO.tsx";
 import UserDTO from "@/types/api/Authentication/UserDTO.tsx";
 import {useContext, useState} from "react";
 import AppContext from "@/context/AppContext.tsx";
-import FacebookUserDataDTO from "@/types/api/Authentication/FacebookUserDataDTO.tsx";
-import GoogleUserDataDTO from "@/types/api/Authentication/GoogleUserDataDTO.tsx";
 
 export const useAuthProviders = () => {
 
@@ -58,23 +55,16 @@ export const useAuthProviders = () => {
                 console.log("Backend response:", response);
 
 
-                const {id, given_name, family_name, name, email, picture, verified_email} = response.data;
+                const {id, name, email} = response.data;
 
-                const userGoogleData: UserGoogleDataDTO = {
+                const googleUser: UserDTO = {
                     id,
-                    given_name,
-                    family_name,
                     name,
                     email,
-                    picture,
-                    verified_email
                 }
 
-                const linkGoogle = await linkUserDataWithProvider(userGoogleData, provider);
-                if (!linkGoogle) {
-                    throw new Error("User linking failed");
-                }
-                userData = await linkGoogle;
+                console.log(`Message: ${response.data}`)
+                userData = googleUser;
             }
 
             // Facebook Data
@@ -86,25 +76,23 @@ export const useAuthProviders = () => {
                         "Content-Type":"application/json"
                     }
                 })
-
                 if (!fetchFacebookUser.ok){
                     throw new Error("Something went wrong while fetching facebook user details")
                 }
 
-                const { data } = await fetchFacebookUser.json();
-                const { id, name, email } = data;
+                const response = await fetchFacebookUser.json();
+                console.log("Facebook response:", response);
 
-                const userFacebookData: FacebookUserDataDTO = {
+                const { id, name , email} = response.data;
+
+                const facebookUser: UserDTO = {
                     id,
                     name,
                     email
                 }
 
-                const linkFacebook = await linkUserDataWithProvider(userFacebookData, provider);
-                if (!linkFacebook) {
-                    throw new Error("User linking failed");
-                }
-                userData = await linkFacebook;
+                console.log(`Message: ${JSON.stringify(response.data)}`)
+                userData = facebookUser;
             }
 
             if (!userData) {throw new Error("User linking failed.")}
@@ -126,72 +114,9 @@ export const useAuthProviders = () => {
         }
     }
 
-    const linkUserDataWithProvider = async (providerData: GoogleUserDataDTO | FacebookUserDataDTO, provider: string) => {
-        setLoading(true);
-        setError(null);
-
-        try {
-            let linkUserPayload;
-            console.log(`ProviderData: ${JSON.stringify(providerData)}`)
-
-            if (provider === "google") {
-
-                linkUserPayload = {
-                    provider_data: {
-                        provider: "google",
-                        provider_user_id: providerData.id,
-                        provider_user_name: providerData.name,
-                    },
-                    user_data: {
-                        email: providerData.email
-                    }
-                }
-            }
-
-            if (provider === "facebook") {
-
-                linkUserPayload = {
-                    provider_data: {
-                        provider: "facebook",
-                        provider_user_id: providerData.id,
-                        provider_user_name: providerData.name
-                    },
-                    user_data: {
-                        email: providerData.email
-                    }
-                }
-            }
-
-            console.log("Payload: " + JSON.stringify(linkUserPayload))
-
-            const postUserData = await fetch(`${gateway.authentication}api/user/`, {
-                method: "POST",
-                body: JSON.stringify(linkUserPayload),
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            })
-            if (!postUserData || !postUserData.ok) throw new Error("Invalid response from server");
-
-            const response = await postUserData.json();
-
-            return response.data;
-
-        } catch (error) {
-            if(error instanceof Error) {
-                setError(error.message);
-            } else {
-                setError("An error has occurred when linking user.")
-            }
-        } finally {
-            setLoading(false)
-        }
-    }
-
     return {
         fetchOAuthURL,
         exchangeCodeForToken,
-        linkUserDataWithProvider,
         loading,
         error
     }

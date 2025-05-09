@@ -1,11 +1,13 @@
 from rest_framework.viewsets import ViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError
 from django.conf import settings
 from django.http import JsonResponse
-import secrets
 from urllib.parse import urlencode
+import secrets
 import requests
+from ..services import user_service, social_service
 
 class FacebookViewSet(ViewSet):
 
@@ -41,6 +43,7 @@ class FacebookViewSet(ViewSet):
     # Exchange Code for Access Token and Return User Facebook Details
     @action(detail=False, methods=['post'], url_path='callback')
     def facebook_callback(self, request):
+        provider = "facebook"
         code = request.data.get('code')
         state = request.data.get('state')
 
@@ -81,10 +84,18 @@ class FacebookViewSet(ViewSet):
             if not fb_id or not fb_email:
                 return Response({"error": "Missing or expired facebook user info."}, status=400)
 
-            return Response({
-                "message": "Facebook user info was fetched",
-                "data": fb_data
-            }, status=200)
+            try:
+                existing_user = social_service.get_social_by_email_and_provider(fb_email, provider)
+                return  Response({
+                    "message": "Facebook User Details Retrieved Successfully!",
+                    "data": existing_user
+                })
+            except ValidationError:
+                new_facebook_user = user_service.create_user(fb_data, provider)
+                return Response({
+                    "message": "Facebook User Created Successfully!",
+                    "data": new_facebook_user
+                })
 
         except Exception as e:
             return Response({"error": str(e)}, status=500)

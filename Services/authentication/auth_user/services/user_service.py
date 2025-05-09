@@ -1,6 +1,16 @@
+from rest_framework.exceptions import ValidationError
 from ..models.user_model import User
 from ..serializers import UserSerializer
 from . import social_service
+
+# Get User By Email
+def get_user_by_email(email):
+
+    try:
+        user = User.objects.get(email=email)
+        return UserSerializer(user).data
+    except User.DoesNotExist:
+        raise ValidationError("User not found")
 
 def authenticate_user_credentials(credentials):
 
@@ -18,19 +28,15 @@ def authenticate_user_credentials(credentials):
     except User.DoesNotExist:
         return {'authentication': 'false'}
 
-def create_user(user_data, provider_data):
+
+def create_user(user_data, provider):
 
     email = user_data.get("email")
-    provider = provider_data.get("provider")
-    provider_user_id = provider_data.get("provider_user_id")
-    provider_user_name = provider_data.get("provider_user_name")
 
     # If no provider given
     if provider == "none":
         if not user_data.get("name") or not user_data.get("password"):
-            return {
-                "message": "Name and password are required for traditional signup."
-            }
+            return ValidationError("Name and password are required for traditional signup.")
 
         user, created = User.objects.get_or_create(
             email=email,
@@ -40,24 +46,12 @@ def create_user(user_data, provider_data):
             }
         )
 
-        return {
-            "message": "User created!" if created else "User already exists!",
-            "data": UserSerializer(user).data
-        }
+        return UserSerializer(user).data
 
-    # Check if this provider link already exists
-    social = social_service.get_social_by_provider(provider, provider_user_id)
-
-    if social["data"]:
-        return {
-            "message": f"User already logged in with {provider}",
-            "data": social["data"]
-        }
 
     user_defaults = {
-        "name": user_data.get("name") or provider_user_name
+        "name": user_data.get("name") or user_data["name"],
     }
-
 
     # Link existing user by email, or create a new user
     user_object, is_created = User.objects.get_or_create(
@@ -66,9 +60,6 @@ def create_user(user_data, provider_data):
     )
 
     # Create Social Link
-    social_service.create_social_link(user_object, provider, provider_user_id, email)
+    social_service.create_social_link(user_object, provider, user_data['id'], email)
 
-    return {
-        "message": f"{'User created!' if is_created else 'User linked!'}",
-        "data": UserSerializer(user_object).data
-    }
+    return UserSerializer(user_object).data

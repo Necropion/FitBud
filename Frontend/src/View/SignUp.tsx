@@ -10,15 +10,17 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Link, useNavigate } from "react-router-dom";
 import * as React from "react";
-import { FaGoogle, FaFacebook, FaApple } from "react-icons/fa";
+import { FaGoogle, FaFacebook } from "react-icons/fa";
 import {useState} from "react";
 import { useAuthUser } from "@/hooks/authentication/useAuthUser.ts"
+import {useAuthProviders} from "@/hooks/authentication/useAuthProviders.ts"
 import userFormDTO from "@/types/api/Authentication/UserFormDTO.tsx";
 import ProviderDTO from "@/types/api/Authentication/ProviderDTO.tsx";
 
 const SignUp = () => {
 
     const { registerUser, loading ,error } = useAuthUser();
+    const { fetchOAuthURL } = useAuthProviders();
     const navigate = useNavigate();
 
     // Form Variables
@@ -35,7 +37,7 @@ const SignUp = () => {
         navigate("/login");
     };
 
-    const handleSignUp = async (e : React.FormEvent<HTMLFormElement>)=> {
+    const handleFormEvent = async (e: React.FormEvent<HTMLFormElement>)=> {
         e.preventDefault();
 
 
@@ -64,6 +66,25 @@ const SignUp = () => {
         }
     }
 
+    const handleButtonEvent = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+
+        // Google Sign Up Button
+        if (e.currentTarget.id === "googleBtn") {
+
+            const provider: string = "google"
+            window.location.href = await fetchOAuthURL(provider);
+            navigate('/home')
+        }
+
+        // Facebook Sign Up Button
+        if (e.currentTarget.id === "facebookBtn") {
+            const provider: string = "facebook"
+            window.location.href = await fetchOAuthURL(provider);
+            navigate('/home')
+        }
+    }
+
     return (
         <div className="flex items-center justify-center min-h-screen bg-black text-white px-4">
             <Card className="w-full max-w-md bg-zinc-900 text-white shadow-lg rounded-lg border border-zinc-800">
@@ -78,7 +99,7 @@ const SignUp = () => {
 
                 <CardContent className="grid gap-6">
                     {/* Sign-up Form */}
-                    <form onSubmit={handleSignUp} className="grid gap-4">
+                    <form onSubmit={handleFormEvent} className="grid gap-4">
                         <div className="grid gap-2">
                             <Label htmlFor="name">Full Name</Label>
                             <Input
@@ -134,17 +155,13 @@ const SignUp = () => {
 
                     {/* OAuth Buttons */}
                     <div className="grid gap-2">
-                        <Button className="flex items-center justify-center gap-2 bg-white text-black hover:bg-zinc-100 transition">
+                        <Button id="googleBtn" onClick={handleButtonEvent} className="flex items-center justify-center gap-2 bg-white text-black hover:bg-zinc-100 transition">
                             <FaGoogle className="text-red-500" />
                             Sign up with Google
                         </Button>
-                        <Button className="flex items-center justify-center gap-2 bg-blue-600 text-white hover:bg-blue-700 transition">
+                        <Button id="facebookBtn" onClick={handleButtonEvent} className="flex items-center justify-center gap-2 bg-blue-600 text-white hover:bg-blue-700 transition">
                             <FaFacebook />
                             Sign up with Facebook
-                        </Button>
-                        <Button className="flex items-center justify-center gap-2 bg-zinc-100 text-black hover:bg-zinc-300 transition">
-                            <FaApple className="text-black" />
-                            Sign up with Apple
                         </Button>
                     </div>
 
