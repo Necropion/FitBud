@@ -49,7 +49,7 @@ const SignUp = () => {
             setMessage("Please make sure the passwords match!")
         }
 
-        if (password == passwordCheck) {
+        if (password == passwordCheck && password != "" && passwordCheck != "") {
             const provider_data: ProviderDTO = { provider: "none" }
 
             const user_data: userFormDTO = { name, email, password }
@@ -86,13 +86,13 @@ const SignUp = () => {
     }
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-black text-white px-4">
-            <Card className="w-full max-w-md bg-zinc-900 text-white shadow-lg rounded-lg border border-zinc-800">
+        <div className="flex items-center justify-center min-h-screen bg-[#0E0E0E] text-white px-4">
+            <Card className="w-full max-w-md bg-[#1A1A1A] text-white shadow-lg rounded-lg border border-[#2A2A2A]">
                 <CardHeader className="text-center">
                     <CardTitle className="text-2xl font-bold tracking-tight">
                         Create an Account
                     </CardTitle>
-                    <CardDescription className={`text-sm ${message.includes("Please") ? "text-red-500 animate-pulse drop-shadow-[0_0_5px_rgba(239,68,68,0.8)]" : "text-zinc-400"}`}>
+                    <CardDescription className={`text-sm ${message.includes("Please") ? "text-[#B52230] animate-pulse drop-shadow-[0_0_5px_rgba(181,34,48,0.8)]" : "text-[#AFAFAF]"}`}>
                         {displayMessage}
                     </CardDescription>
                 </CardHeader>
@@ -106,7 +106,7 @@ const SignUp = () => {
                                 id="name"
                                 type="text"
                                 placeholder="Your Name"
-                                className="bg-zinc-800 border border-zinc-700 text-white placeholder:text-zinc-400"
+                                className="bg-[#2A2A2A] border border-[#3A3A3A] text-white placeholder:text-[#777]"
                                 onChange={(e) => setName(e.currentTarget.value)}
                             />
                         </div>
@@ -116,7 +116,7 @@ const SignUp = () => {
                                 id="email"
                                 type="email"
                                 placeholder="you@example.com"
-                                className="bg-zinc-800 border border-zinc-700 text-white placeholder:text-zinc-400"
+                                className="bg-[#2A2A2A] border border-[#3A3A3A] text-white placeholder:text-[#777]"
                                 onChange={(e) => setEmail(e.currentTarget.value)}
                             />
                         </div>
@@ -126,7 +126,7 @@ const SignUp = () => {
                                 id="password"
                                 type="password"
                                 placeholder="Create a password"
-                                className="bg-zinc-800 border border-zinc-700 text-white placeholder:text-zinc-400"
+                                className="bg-[#2A2A2A] border border-[#3A3A3A] text-white placeholder:text-[#777]"
                                 onChange={(e) => setPassword(e.currentTarget.value)}
                             />
                         </div>
@@ -136,27 +136,27 @@ const SignUp = () => {
                                 id="confirm-password"
                                 type="password"
                                 placeholder="Confirm password"
-                                className="bg-zinc-800 border border-zinc-700 text-white placeholder:text-zinc-400"
+                                className="bg-[#2A2A2A] border border-[#3A3A3A] text-white placeholder:text-[#777]"
                                 onChange={(e) => setPasswordCheck(e.currentTarget.value)}
                             />
                         </div>
                         <Button
                             type="submit"
-                            className="w-full bg-black hover:bg-orange-500 text-white transition"
+                            className="w-full bg-[#E6AC00] hover:bg-[#cc9900] text-black transition"
                         >
                             {loading ? "Registering..." : "Sign Up"}
                         </Button>
                     </form>
 
                     {/* Divider */}
-                    <div className="text-center text-sm text-zinc-400">
+                    <div className="text-center text-sm text-[#AFAFAF]">
                         or sign up with
                     </div>
 
                     {/* OAuth Buttons */}
                     <div className="grid gap-2">
                         <Button id="googleBtn" onClick={handleButtonEvent} className="flex items-center justify-center gap-2 bg-white text-black hover:bg-zinc-100 transition">
-                            <FaGoogle className="text-red-500" />
+                            <FaGoogle className="text-[#B52230]" />
                             Sign up with Google
                         </Button>
                         <Button id="facebookBtn" onClick={handleButtonEvent} className="flex items-center justify-center gap-2 bg-blue-600 text-white hover:bg-blue-700 transition">
@@ -166,12 +166,12 @@ const SignUp = () => {
                     </div>
 
                     {/* Already have an account? */}
-                    <div className="text-center text-sm text-zinc-400 mt-4">
+                    <div className="text-center text-sm text-[#AFAFAF] mt-4">
                         Already have an account?{" "}
                         <Link
                             id="loginBtn"
                             to="/login"
-                            className="text-orange-500 hover:underline"
+                            className="text-[#E6AC00] hover:underline"
                             onClick={handleClick}
                         >
                             Log in
@@ -181,6 +181,7 @@ const SignUp = () => {
             </Card>
         </div>
     );
+
 };
 
 export default SignUp;

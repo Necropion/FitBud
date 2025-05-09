@@ -9,6 +9,10 @@ import AppContext from "./context/AppContext.tsx"
 import Exercises from "./View/Exercises.tsx";
 import UserDTO from "@/types/api/Authentication/UserDTO.tsx";
 import Callback from "@/View/Callback.tsx";
+import Profile from "@/View/Profile.tsx";
+import Progress from "@/View/Progress.tsx";
+import AppShell from "@/AppShell.tsx";
+import DashboardLayout from "@/components/Home/Dashboard/DashboardLayout.tsx";
 
 const App = () =>  {
 
@@ -40,8 +44,12 @@ const App = () =>  {
                   <Route path="/login" element={<Login />}/>
                   <Route path="/callback" element={<Callback />}/>
                   <Route path="/sign-up" element={<SignUp />}/>
-                  <Route path="/home" element={<Home />}/>
-                  <Route path="/exercises" element={<Exercises />}/>
+                  <Route element={<AppShell />}>
+                      <Route path="/home" element={<DashboardLayout><Home /></DashboardLayout>}/>
+                      <Route path="/profile" element={<DashboardLayout><Profile /></DashboardLayout>}/>
+                      <Route path="/exercises" element={<DashboardLayout><Exercises /></DashboardLayout>}/>
+                      <Route path="/progress" element={<DashboardLayout><Progress /></DashboardLayout>}/>
+                  </Route>
               </Routes>
           </BrowserRouter>
     </AppContext.Provider>

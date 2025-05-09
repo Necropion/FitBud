@@ -79,8 +79,8 @@ const Login = () => {
     }
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-black text-white">
-            <Card className="w-full max-w-md bg-zinc-900 text-white shadow-lg rounded-lg border border-zinc-800">
+        <div className="flex items-center justify-center min-h-screen bg-[#0E0E0E] text-white">
+            <Card className="w-full max-w-md bg-[#1A1A1A] text-white shadow-lg rounded-lg border border-[#2A2A2A]">
                 <CardHeader className="text-center">
                     <CardTitle className="text-2xl font-bold tracking-tight text-white">
                         Welcome Back!
@@ -88,8 +88,8 @@ const Login = () => {
                     <CardDescription
                         className={`text-sm ${
                             /please|incorrect/i.test(message)
-                                ? "text-red-500 animate-pulse drop-shadow-[0_0_5px_rgba(239,68,68,0.8)]"
-                                : "text-zinc-400"
+                                ? "text-[#B52230] animate-pulse drop-shadow-[0_0_5px_rgba(181,34,48,0.8)]"
+                                : "text-[#AFAFAF]"
                         }`}
                     >
                         {displayMessage}
@@ -104,7 +104,7 @@ const Login = () => {
                                 id="email"
                                 type="email"
                                 placeholder="Username or E-mail"
-                                className="bg-zinc-800 border border-zinc-700 text-white placeholder:text-zinc-400"
+                                className="bg-[#2A2A2A] border border-[#3A3A3A] text-white placeholder:text-[#777]"
                                 value={email}
                                 onChange={(e) => setEmail(e.currentTarget.value)}
                             />
@@ -115,7 +115,7 @@ const Login = () => {
                                 id="password"
                                 type="password"
                                 placeholder="Password"
-                                className="bg-zinc-800 border border-zinc-700 text-white placeholder:text-zinc-400"
+                                className="bg-[#2A2A2A] border border-[#3A3A3A] text-white placeholder:text-[#777]"
                                 value={password}
                                 onChange={(e) => setPassword(e.currentTarget.value)}
                             />
@@ -123,17 +123,17 @@ const Login = () => {
                         <Button
                             id="loginBtn"
                             type="submit"
-                            className="bg-black hover:bg-orange-500 text-white transition"
+                            className="bg-[#E6AC00] hover:bg-[#cc9900] text-black transition"
                         >
                             {loading ? "Logging in..." : "Log in"}
                         </Button>
                     </form>
 
-                    <div className="text-center text-sm text-zinc-400">or continue with</div>
+                    <div className="text-center text-sm text-[#AFAFAF]">or continue with</div>
 
                     <div className="grid gap-2">
                         <Button id="googleBtn" onClick={handleClickEvent} className="flex items-center justify-center gap-2 bg-white text-black hover:bg-zinc-100 transition">
-                            <FaGoogle className="text-red-500" />
+                            <FaGoogle className="text-[#B52230]" />
                             Google
                         </Button>
                         <Button id="facebookBtn" onClick={handleClickEvent} className="flex items-center justify-center gap-2 bg-blue-600 text-white hover:bg-blue-700 transition">
@@ -142,19 +142,19 @@ const Login = () => {
                         </Button>
                     </div>
 
-                    <div className="text-center text-sm text-zinc-400 mt-2">
+                    <div className="text-center text-sm text-[#AFAFAF] mt-2">
                         Dont have an account?{" "}
                         <Link
                             id="signUpBtn"
                             to="/sign-up"
-                            className="text-orange-500 hover:underline"
+                            className="text-[#E6AC00] hover:underline"
                             onClick={handleClickEvent}
                         >
                             Sign up
                         </Link>
                     </div>
-                    <div className="text-center text-xs text-zinc-500">
-                        <Link to="/forgot-password" className="text-orange-500 hover:underline">
+                    <div className="text-center text-xs text-[#AFAFAF]">
+                        <Link to="/forgot-password" className="text-[#E6AC00] hover:underline">
                             Forgot password?
                         </Link>
                     </div>

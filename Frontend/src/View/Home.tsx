@@ -6,14 +6,35 @@ import {
     CardDescription,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FaDumbbell, FaClock, FaChartLine, FaUserCircle } from "react-icons/fa";
-import DashboardLayout from "@/components/Home/Dashboard/DashboardLayout.tsx";
-import { useContext, useEffect } from "react";
+import { FaDumbbell, FaClock, FaChartLine } from "react-icons/fa";
+import { useContext, useEffect, useState } from "react";
 import AppContext from "@/context/AppContext.tsx";
-import Calendar from "@/components/Home/Dashboard/Calendar.tsx";
+import DashboardLayout from "@/components/Home/Dashboard/DashboardLayout.tsx";
+
+const dummyFeed = [
+    {
+        id: 1,
+        user: "Alex Johnson",
+        activity: "Completed a 5K run in 24 minutes! 🏃‍♂️",
+        timestamp: "2 hours ago",
+    },
+    {
+        id: 2,
+        user: "Samantha Lee",
+        activity: "Hit a new PR: 100kg deadlift 💪",
+        timestamp: "Yesterday",
+    },
+    {
+        id: 3,
+        user: "Derek Chen",
+        activity: "Completed Chest & Triceps workout",
+        timestamp: "2 days ago",
+    },
+];
 
 const Home = () => {
     const { gateway, user, setUser } = useContext(AppContext);
+    const [feed, setFeed] = useState(dummyFeed);
 
     const fetchUser = async () => {
         const getUser = await fetch(`${gateway.authentication}user/${user.id}`);
@@ -30,93 +51,70 @@ const Home = () => {
     }, []);
 
     return (
-        <DashboardLayout>
-            <div className="w-full max-w-screen-2xl mx-auto px-4 xl:px-12 space-y-10">
-                {/* Header */}
-                <header>
-                    <h1 className="text-4xl xl:text-5xl font-bold tracking-tight mb-2">Welcome Back {user.name}! 👋</h1>
-                    <p className="text-zinc-400 text-lg xl:text-xl">Here’s your fitness overview.</p>
-                </header>
+        <div className="w-full max-w-screen-xl mx-auto px-6 lg:px-12 pt-8 space-y-10 text-white">
+            {/* Header */}
+            <header>
+                <h1 className="text-4xl font-bold tracking-tight mb-2 text-center">Welcome Back {user.name}! 👋</h1>
+                <p className="text-[#AFAFAF] text-lg text-center">Here’s what’s happening today.</p>
+            </header>
 
-                {/* Top Dashboard Cards */}
-                <div className="grid gap-6 xl:gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                    <Card className="bg-zinc-900 border-zinc-800">
-                        <CardHeader>
-                            <CardTitle className="text-orange-500 flex items-center gap-2">
-                                <FaDumbbell /> Active Streak
-                            </CardTitle>
-                            <CardDescription className="text-zinc-400">
-                                You’ve worked out 5 days in a row!
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <p className="text-4xl font-bold text-white">🔥 5 Days</p>
-                        </CardContent>
-                    </Card>
+            {/* Top Stats Cards */}
+            <div className="grid gap-6 md:grid-cols-3">
+                <Card className="bg-[#1A1A1A] border-[#2A2A2A]">
+                    <CardHeader>
+                        <CardTitle className="text-[#E6AC00] flex items-center gap-2">
+                            <FaDumbbell /> Active Streak
+                        </CardTitle>
+                        <CardDescription className="text-[#AFAFAF]">You’ve worked out 5 days in a row!</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-4xl font-bold text-white">🔥 5 Days</p>
+                    </CardContent>
+                </Card>
 
-                    <Card className="bg-zinc-900 border-zinc-800">
-                        <CardHeader>
-                            <CardTitle className="text-orange-500 flex items-center gap-2">
-                                <FaClock /> Weekly Time
-                            </CardTitle>
-                            <CardDescription className="text-zinc-400">
-                                Hours spent training this week
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <p className="text-4xl font-bold text-white">7h 45m</p>
-                        </CardContent>
-                    </Card>
+                <Card className="bg-[#1A1A1A] border-[#2A2A2A]">
+                    <CardHeader>
+                        <CardTitle className="text-[#E6AC00] flex items-center gap-2">
+                            <FaClock /> Weekly Time
+                        </CardTitle>
+                        <CardDescription className="text-[#AFAFAF]">Hours spent training this week</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-4xl font-bold text-white">7h 45m</p>
+                    </CardContent>
+                </Card>
 
-                    <Card className="bg-zinc-900 border-zinc-800">
-                        <CardHeader>
-                            <CardTitle className="text-orange-500 flex items-center gap-2">
-                                <FaChartLine /> Progress
-                            </CardTitle>
-                            <CardDescription className="text-zinc-400">
-                                You’re making solid gains 💪
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <p className="text-4xl font-bold text-white">+12%</p>
-                        </CardContent>
-                    </Card>
-                </div>
+                <Card className="bg-[#1A1A1A] border-[#2A2A2A]">
+                    <CardHeader>
+                        <CardTitle className="text-[#E6AC00] flex items-center gap-2">
+                            <FaChartLine /> Progress
+                        </CardTitle>
+                        <CardDescription className="text-[#AFAFAF]">You’re making solid gains 💪</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-4xl font-bold text-white">+12%</p>
+                    </CardContent>
+                </Card>
+            </div>
 
-                {/* Bottom Section: Calendar + Profile Side by Side */}
-                <div className="grid gap-8 lg:grid-cols-2">
-                    {/* Calendar */}
-                    <div className="w-full">
-                        <Calendar />
-                    </div>
-
-                    {/* Profile Card */}
-                    <div className="w-full">
-                        <Card className="bg-zinc-900 border-zinc-800">
-                            <CardHeader className="text-center">
-                                <FaUserCircle className="text-6xl mx-auto text-orange-500 mb-2" />
-                                <CardTitle className="text-xl font-semibold text-white">{user.name}</CardTitle>
-                                <CardDescription className="text-zinc-400">Member since 2024</CardDescription>
+            {/* Feed Section */}
+            <section>
+                <h2 className="text-2xl font-semibold text-white mb-4 text-center">Recent Activity</h2>
+                <div className="space-y-4">
+                    {feed.map(post => (
+                        <Card key={post.id} className="bg-[#2A2A2A] border-[#3A3A3A]">
+                            <CardHeader className="pb-2">
+                                <CardTitle className="text-white text-lg">{post.user}</CardTitle>
+                                <CardDescription className="text-[#AFAFAF] text-sm">{post.timestamp}</CardDescription>
                             </CardHeader>
-                            <CardContent className="text-sm text-zinc-300 space-y-2">
-                                <p>
-                                    <span className="font-semibold text-white">Email:</span> {user.email}
-                                </p>
-                                <p>
-                                    <span className="font-semibold text-white">Goal:</span> Muscle Gain
-                                </p>
-                                <p>
-                                    <span className="font-semibold text-white">Next Workout:</span> Leg Day (Tomorrow)
-                                </p>
-                                <Button className="w-full mt-4 bg-orange-500 hover:bg-orange-600 text-white">
-                                    Edit Profile
-                                </Button>
+                            <CardContent>
+                                <p className="text-[#E0DED9] text-base">{post.activity}</p>
                             </CardContent>
                         </Card>
-                    </div>
+                    ))}
                 </div>
-            </div>
-        </DashboardLayout>
+            </section>
+        </div>
     );
 };
 
