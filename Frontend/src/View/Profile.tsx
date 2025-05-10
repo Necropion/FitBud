@@ -5,17 +5,35 @@ import {
     CardContent,
     CardDescription,
 } from "@/components/ui/card";
+import { format } from "date-fns";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { useAuthUser } from "@/hooks/authentication/useAuthUser.ts";
+import {useContext, useEffect} from "react";
+import AppContext from "@/context/AppContext.tsx";
+import * as React from "react";
+import {useNavigate} from "react-router-dom";
 
 const Profile = () => {
-    const handleDelete = () => {
-        if (confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
-            // TODO: Implement delete logic (API call)
-            console.log("Account deletion triggered");
+    const navigate = useNavigate();
+    const { user } = useContext(AppContext);
+    const { fetchUser, deleteUser } = useAuthUser();
+
+    const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+
+        if(e.currentTarget.id === "deleteBtn"){
+            const response = await deleteUser(user.id)
+            if (response === "User Deleted"){
+                navigate('/')
+            }
         }
     };
+
+    useEffect(() => {
+        fetchUser();
+    }, []);
 
     return (
         <div className="w-full max-w-4xl mx-auto px-6 lg:px-12 pt-8 space-y-10 text-white">
@@ -34,14 +52,14 @@ const Profile = () => {
                         className="mx-auto w-24 h-24 rounded-full border-4 border-[#E6AC00]"
                     />
                     <CardTitle className="mt-4 text-2xl font-semibold text-[#E6AC00]">
-                        John Doe
+                        {user.name}
                     </CardTitle>
                     <CardDescription className="text-[#AFAFAF]">
-                        Member since 2023
+                        Joined: {user.created_at ? format(new Date(user.created_at), "PPP") : "N/A"}
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="grid grid-cols-2 gap-4 text-sm text-[#E0DED9] mt-4">
-                    <p><strong>Email:</strong> johndoe@example.com</p>
+                    <p><strong>Email:</strong> {user.email}</p>
                     <p><strong>Goal:</strong> Build Muscle</p>
                     <p><strong>Workouts Completed:</strong> 132</p>
                     <p><strong>Current Streak:</strong> 5 days</p>
@@ -93,8 +111,9 @@ const Profile = () => {
             {/* Danger Zone */}
             <div className="text-center">
                 <Button
+                    id="deleteBtn"
                     variant="destructive"
-                    onClick={handleDelete}
+                    onClick={handleClick}
                     className="bg-[#B52230] hover:bg-red-700 w-full max-w-sm mx-auto"
                 >
                     Delete Account

@@ -5,7 +5,7 @@ import ProviderDTO from "@/types/api/Authentication/ProviderDTO.tsx";
 
 export const useAuthUser = () => {
 
-    const { gateway, setUser, setAuthenticated } = useContext(AppContext);
+    const { gateway, user, setUser, setAuthenticated } = useContext(AppContext);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -87,9 +87,67 @@ export const useAuthUser = () => {
         }
     }
 
+    const fetchUser = async () => {
+        setLoading(true)
+        setError(null)
+
+        try {
+        const getUser = await fetch(`${gateway.authentication}user/${user.id}`);
+        const response = await getUser.json();
+
+        if (getUser.ok) {
+            setUser(response.data);
+            localStorage.setItem("user", JSON.stringify(response.data));
+        }
+
+        } catch(error) {
+            if(error instanceof Error) {
+                setError(error.message);
+            } else {
+                setError("An error has occurred when registering user.")
+            }
+        } finally {
+            setLoading(false)
+        }
+    };
+
+    const deleteUser = async (userId: number | undefined) => {
+        setLoading(true)
+        setError(null)
+
+        try {
+        const userDelete = await fetch(`${gateway.authentication}api/user/${userId}/`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type":"application/json"
+            },
+        });
+
+        if (userDelete.ok) {
+            setAuthenticated(false);
+            localStorage.setItem("authenticated", JSON.stringify(false))
+            setUser({})
+            localStorage.setItem("user", JSON.stringify({}))
+            return "User Deleted"
+        }
+
+        return null;
+        } catch(error) {
+            if(error instanceof Error) {
+                setError(error.message);
+            } else {
+                setError("An error has occurred when registering user.")
+            }
+        } finally {
+            setLoading(false)
+        }
+    }
+
     return {
         authenticateUser,
         registerUser,
+        fetchUser,
+        deleteUser,
         loading,
         error
     }

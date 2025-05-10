@@ -64,7 +64,7 @@ const Navbar = () => {
                     return (
                         <button
                             key={href}
-                            ref={(el) => (refs.current[href] = el)}
+                            ref={(el) => {refs.current[href] = el;}}
                             onClick={() => handleClick(href)}
                             className={`relative z-10 px-4 py-2 text-sm font-medium rounded-full transition-colors ${
                                 isActive ? "text-black" : "text-white hover:text-[#E6AC00]"}`

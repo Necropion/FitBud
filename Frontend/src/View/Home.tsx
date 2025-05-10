@@ -5,11 +5,10 @@ import {
     CardContent,
     CardDescription,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { FaDumbbell, FaClock, FaChartLine } from "react-icons/fa";
 import { useContext, useEffect, useState } from "react";
 import AppContext from "@/context/AppContext.tsx";
-import DashboardLayout from "@/components/Home/Dashboard/DashboardLayout.tsx";
+import { useAuthUser } from "@/hooks/authentication/useAuthUser.ts"
 
 const dummyFeed = [
     {
@@ -33,18 +32,9 @@ const dummyFeed = [
 ];
 
 const Home = () => {
-    const { gateway, user, setUser } = useContext(AppContext);
+    const { user } = useContext(AppContext);
+    const { fetchUser } = useAuthUser();
     const [feed, setFeed] = useState(dummyFeed);
-
-    const fetchUser = async () => {
-        const getUser = await fetch(`${gateway.authentication}user/${user.id}`);
-        const response = await getUser.json();
-
-        if (getUser.ok) {
-            setUser(response.data);
-            localStorage.setItem("user", JSON.stringify(response.data));
-        }
-    };
 
     useEffect(() => {
         fetchUser();

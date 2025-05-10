@@ -55,12 +55,13 @@ export const useAuthProviders = () => {
                 console.log("Backend response:", response);
 
 
-                const {id, name, email} = response.data;
+                const {id, name, email, created_at} = response.data;
 
                 const googleUser: UserDTO = {
                     id,
                     name,
                     email,
+                    created_at
                 }
 
                 console.log(`Message: ${response.data}`)
@@ -83,12 +84,13 @@ export const useAuthProviders = () => {
                 const response = await fetchFacebookUser.json();
                 console.log("Facebook response:", response);
 
-                const { id, name , email} = response.data;
+                const { id, name , email, created_at} = response.data;
 
                 const facebookUser: UserDTO = {
                     id,
                     name,
-                    email
+                    email,
+                    created_at
                 }
 
                 console.log(`Message: ${JSON.stringify(response.data)}`)
