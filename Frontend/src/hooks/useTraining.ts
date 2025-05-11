@@ -15,7 +15,7 @@ export const useTraining = () => {
         setError(null);
 
         try {
-            const exerciseList = await fetch(`${gateway.training}exercise/`);
+            const exerciseList = await fetch(`${gateway.training}/api/exercise/`);
             const response = await exerciseList.json();
 
             if(!exerciseList.ok) {

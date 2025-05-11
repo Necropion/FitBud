@@ -47,7 +47,7 @@ const Profile = () => {
             <Card className="bg-[#1A1A1A] border border-[#2A2A2A]">
                 <CardHeader className="text-center">
                     <img
-                        src="/avatar-placeholder.png"
+                        src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || "User")}`}
                         alt="User avatar"
                         className="mx-auto w-24 h-24 rounded-full border-4 border-[#E6AC00]"
                     />

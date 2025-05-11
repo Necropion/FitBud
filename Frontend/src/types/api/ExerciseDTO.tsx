@@ -1,10 +1,11 @@
 type ExerciseDTO = {
-    Id: number;
-    Name: string;
-    Category: string;
-    Duration: number;
-    Intensity: string;
-    Description: string;
+    id: number;
+    name: string;
+    category: string;
+    duration: number;
+    intensity: string;
+    description: string;
+    equipment_required: string;
 };
 
 export default ExerciseDTO;
