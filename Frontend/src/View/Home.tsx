@@ -8,7 +8,7 @@ import {
 import { FaDumbbell, FaClock, FaChartLine } from "react-icons/fa";
 import { useContext, useEffect, useState } from "react";
 import AppContext from "@/context/AppContext.tsx";
-import { useAuthUser } from "@/hooks/authentication/useAuthUser.ts"
+import { useAuthUser } from "@/hooks/Authentication/useAuthUser.ts"
 
 const dummyFeed = [
     {

@@ -9,7 +9,7 @@ import { format } from "date-fns";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { useAuthUser } from "@/hooks/authentication/useAuthUser.ts";
+import { useAuthUser } from "@/hooks/Authentication/useAuthUser.ts";
 import {useContext, useEffect} from "react";
 import AppContext from "@/context/AppContext.tsx";
 import * as React from "react";

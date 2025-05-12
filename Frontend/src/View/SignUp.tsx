@@ -12,8 +12,8 @@ import { Link, useNavigate } from "react-router-dom";
 import * as React from "react";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
 import {useState} from "react";
-import { useAuthUser } from "@/hooks/authentication/useAuthUser.ts"
-import {useAuthProviders} from "@/hooks/authentication/useAuthProviders.ts"
+import { useAuthUser } from "@/hooks/Authentication/useAuthUser.ts"
+import {useAuthProviders} from "@/hooks/Authentication/useAuthProviders.ts"
 import userFormDTO from "@/types/api/Authentication/UserFormDTO.tsx";
 import ProviderDTO from "@/types/api/Authentication/ProviderDTO.tsx";
 

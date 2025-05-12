@@ -45,9 +45,12 @@ const Navbar = () => {
     };
 
     return (
-        <header className="w-full px-6 py-4 border-b border-[#1A1A1A] flex items-center justify-between">
-            {/* Logo */}
-            <div className="text-2xl font-bold text-[#E6AC00]">FitBud</div>
+        <header className="w-full px-6 py-4 border-b border-[#1A1A1A] flex items-center justify-between bg-[#0E0E0E]">
+            {/* Left: Logo + Brand */}
+            <div className="flex items-center gap-3">
+                <img src="/logo.png" alt="FitBud Logo" className="w-[40px] h-[40px]" />
+                <div className="text-2xl font-bold text-[#E6AC00]">FitBud</div>
+            </div>
 
             {/* Center Nav with Animated Bubble */}
             <div

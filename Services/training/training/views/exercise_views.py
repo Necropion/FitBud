@@ -1,35 +1,43 @@
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import status
-from training.data.db import SessionLocal
-from training.models.exercise_model import Exercise
 from training.serializers import ExerciseSerializer
+from training.services import exercise_service
 
 class ExerciseViewSet(ViewSet):
 
+    # Get All Exercises
     def list(self, request):
-        db = SessionLocal()
-        try:
-            exercises = db.query(Exercise).all()
-            serializer = ExerciseSerializer(exercises, many=True)
-            return Response(serializer.data)
-        finally:
-            db.close()
+        exercises = exercise_service.get_exercises()
+        return Response({
+            "message": "Exercises fetched successfully",
+            "data": exercises
+        }, status=status.HTTP_200_OK)
 
+    # Post Exercise
     def create(self, request):
-        db = SessionLocal()
+       serializer = ExerciseSerializer(data=request.data)
+       if serializer.is_valid():
+           exercise = exercise_service.create_exercise(serializer.validated_data)
+           return Response({
+               "message": "Exercise created",
+               "data": exercise.to_dict()
+           }, status=status.HTTP_201_CREATED)
+       return Response({
+           "message": "Failed to create exercise",
+           "errors": serializer.errors
+       }, status=status.HTTP_400_BAD_REQUEST)
+
+    # Delete Exercise
+    def destroy(self, request, pk=None):
         try:
-            serializer = ExerciseSerializer(data=request.data)
-            if serializer.is_valid():
-                # Create SQLAlchemy object manually
-                exercise_data = serializer.validated_data
-                exercise = Exercise(**exercise_data)
-
-                db.add(exercise)
-                db.commit()
-                db.refresh(exercise)
-
-                return Response(ExerciseSerializer(exercise).data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        finally:
-            db.close()
+            deleted_exercise = exercise_service.delete_exercise(pk)
+            return Response({
+                "message": "Exercise deleted",
+                "data": deleted_exercise.to_dict()
+            }, status=status.HTTP_200_OK)
+        except Exception as ex:
+            return Response({
+                "message": "Failed to delete exercise",
+                "errors": str(ex)
+            }, status=status.HTTP_400_BAD_REQUEST)

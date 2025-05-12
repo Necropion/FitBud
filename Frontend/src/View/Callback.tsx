@@ -1,6 +1,6 @@
 import {useEffect, useRef} from "react";
 import {useNavigate} from "react-router-dom";
-import {useAuthProviders} from "@/hooks/authentication/useAuthProviders.ts";
+import {useAuthProviders} from "@/hooks/Authentication/useAuthProviders.ts";
 
 const Callback = () => {
 
