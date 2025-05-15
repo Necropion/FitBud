@@ -10,7 +10,7 @@ import { useContext, useEffect } from "react";
 import AppContext from "@/context/AppContext.tsx";
 import { useAuthUser } from "@/hooks/Authentication/useAuthUser.ts"
 import {useTrainingWorkout} from "@/hooks/Training/useTrainingWorkout.ts";
-import {format} from "date-fns";
+import {format, formatDistanceStrict, differenceInMinutes} from "date-fns";
 
 const Home = () => {
     const { user } = useContext(AppContext);
@@ -76,7 +76,7 @@ const Home = () => {
                 </Card>
             </div>
 
-            {/* Feed Section */}
+            {/* Workouts Section */}
             <section>
                 <h2 className="text-2xl font-semibold text-white mb-4 text-center">Recent Activity</h2>
                 <div className="space-y-4">
@@ -87,7 +87,13 @@ const Home = () => {
                         <Card key={workout.id} className="bg-[#2A2A2A] border-[#3A3A3A]">
                             <CardHeader className="pb-2">
                                 <CardTitle className="text-white text-lg">{workout.name}</CardTitle>
-                                <CardDescription className="text-[#AFAFAF] text-sm">{workout.created_at ? format(new Date(workout.created_at), "HH:mm PPP") : "N/A"}</CardDescription>
+                                <CardDescription className="text-[#AFAFAF] text-sm">Started: {workout.created_at ? format(new Date(workout.created_at), "HH:mm PPP") : "N/A"}</CardDescription>
+                                <CardDescription className="text-[#AFAFAF] text-sm">Ended: {workout.ended_at ? format(new Date(workout.ended_at), "HH:mm PPP") : "N/A"}</CardDescription>
+                                {workout.ended_at && workout.created_at && (
+                                    <CardDescription className="text-[#AFAFAF] text-sm">
+                                        Duration: {formatDistanceStrict(new Date(workout.created_at), new Date(workout.ended_at))}
+                                    </CardDescription>
+                                )}
                             </CardHeader>
                             <CardContent>
                                 <p className="text-[#E0DED9] text-base">{workout.description}</p>

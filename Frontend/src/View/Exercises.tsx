@@ -12,9 +12,11 @@ import * as React from "react";
 import ActiveExerciseModal from "@/components/Exercises/ActiveExerciseModal.tsx";
 import AddExercise from "@/components/Exercises/AddExercise.tsx";
 import ExerciseFormDTO from "@/types/api/Training/ExerciseFormDTO.tsx";
+import {useTrainingWorkout} from "@/hooks/Training/useTrainingWorkout.ts";
 
 const Exercises = () => {
     const { getExercises, addExercise, startExercise, stopExercise, addingExercise, deleteExercise, setAddingExercise, formattedRemainingTime, exercises, activeExercise, isRunning, progress, loading } = useTraining();
+    const { endWorkout } = useTrainingWorkout();
 
     // State Variables
     const [exerciseFormData, setExerciseFormData] = useState<ExerciseFormDTO>({
@@ -57,7 +59,8 @@ const Exercises = () => {
         }
 
         if (e.currentTarget.id === "stopBtn"){
-            stopExercise();
+            await stopExercise();
+            await endWorkout();
         }
     }
 

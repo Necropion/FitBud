@@ -4,7 +4,7 @@ import ExerciseDTO from "@/types/api/Training/ExerciseDTO.tsx";
 
 export const useTraining = () => {
 
-    const { gateway, user } = useContext(AppContext);
+    const { gateway, user, setCurrentWorkout } = useContext(AppContext);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -128,6 +128,9 @@ export const useTraining = () => {
                 throw new Error(response?.error || "Something went wrong when posting quick workout")
             }
 
+            console.log(`Current Workout: ${response.data}`)
+            setCurrentWorkout(response.data)
+            localStorage.setItem("currentWorkout", JSON.stringify(response.data))
             return response.data;
         } catch(error) {
             if (error instanceof Error) {
@@ -175,7 +178,7 @@ export const useTraining = () => {
         }, interval);
     };
 
-    const stopExercise = () => {
+    const stopExercise = async () => {
         if (timerRef.current) {
             clearInterval(timerRef.current);
             timerRef.current = null;

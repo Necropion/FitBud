@@ -4,6 +4,8 @@ type WorkoutDTO = {
     name: string;
     description: string;
     created_at: string;
+    ended_at: string;
+    notes: string;
 }
 
 export default WorkoutDTO;

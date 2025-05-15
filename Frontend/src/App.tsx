@@ -13,6 +13,7 @@ import Profile from "@/View/Profile.tsx";
 import Progress from "@/View/Progress.tsx";
 import AppShell from "@/AppShell.tsx";
 import DashboardLayout from "@/components/Home/Dashboard/DashboardLayout.tsx";
+import WorkoutDTO from "@/types/api/Training/WorkoutDTO.tsx";
 
 const App = () =>  {
 
@@ -31,13 +32,18 @@ const App = () =>  {
         return storedUser ? JSON.parse(storedUser) : {};
     });
 
-    
+    const [currentWorkout, setCurrentWorkout] = useState<WorkoutDTO>(() => {
+        const storedWorkout = localStorage.getItem("currentWorkout");
+        return storedWorkout ? JSON.parse(storedWorkout) : {};
+    });
+
 
   return (
       <AppContext.Provider value={{
           gateway,
           user, setUser,
           authenticated, setAuthenticated,
+          currentWorkout, setCurrentWorkout
 
       }}>
           <BrowserRouter>

@@ -1,4 +1,5 @@
 from dataclasses import asdict
+from sqlalchemy import DateTime
 from training.data.db import SessionLocal
 from training.models.workout_model import Workout
 from training.serializers.workout_serializer import WorkoutSerializer
@@ -72,6 +73,39 @@ def create_with_exercise(exercise, user_id, exercise_id):
         return asdict(workout_dto)
     finally:
         db.close()
+
+
+# Update Workout
+from datetime import datetime
+
+def update_workout(workout_update):
+    db = SessionLocal()
+    try:
+        workout = db.query(Workout).get(workout_update["id"])
+        if not workout:
+            raise ValueError("Workout not found")
+
+        # Define immutable or protected fields
+        protected_fields = {"id", "user_id", "created_at"}
+
+        for key, value in workout_update.items():
+            if key in protected_fields:
+                continue
+
+            if hasattr(workout, key):
+                # Handle special case: "ended_at": "now"
+                if key == "ended_at" and value == "now":
+                    setattr(workout, key, datetime.utcnow())
+                else:
+                    setattr(workout, key, value)
+
+        db.commit()
+        db.refresh(workout)
+        return workout
+
+    finally:
+        db.close()
+
 
 
 # Delete Workout

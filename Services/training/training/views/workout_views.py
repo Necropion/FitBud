@@ -63,6 +63,36 @@ class WorkoutViewSet(ViewSet):
                 "error": serialized_exercise.errors
             })
 
+    # Update Workout
+    @action(detail=False, methods=['put'], url_path='update')
+    def put_workout(self, request):
+        workout = request.data.get('workout')
+
+        if not workout or workout.get('id') is None:
+            return Response({
+                "message": "No workout id provided",
+                "error": "No workout id provided"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            updated_workout = workout_service.update_workout(workout)
+
+            return Response({
+                "message": "Workout updated successfully",
+                "data": updated_workout.to_dict()
+            }, status=status.HTTP_200_OK)
+
+        except ValueError as ve:
+            return Response({
+                "message": "Error updating workout",
+                "error": str(ve)
+            }, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as ex:
+            return Response({
+                "message": "Error updating workout",
+                "error": str(ex)
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
     # Delete Workout
     def destroy(self, request, pk=None):
         try:

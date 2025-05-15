@@ -12,6 +12,8 @@ class Workout(Base):
     name = Column(String, nullable=False)
     description = Column(Text)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    ended_at = Column(DateTime)
+    notes = Column(Text)
 
     exercises = relationship(
         "WorkoutExercise",
@@ -23,8 +25,10 @@ class Workout(Base):
     def to_dict(self):
         return {
             'id': self.id,
-            'user_id': self.user_id,
+            'user_id': str(self.user_id) if self.user_id else None,
             'name': self.name,
             'description': self.description,
             'created_at': self.created_at.isoformat() if self.created_at else None,
+            'ended_at': self.ended_at.isoformat() if self.ended_at else None,
+            'notes': self.notes,
         }

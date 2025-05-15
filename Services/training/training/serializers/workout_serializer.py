@@ -6,3 +6,5 @@ class WorkoutSerializer(serializers.Serializer):
     name = serializers.CharField()
     description = serializers.CharField()
     created_at = serializers.DateTimeField(read_only=True)
+    ended_at = serializers.DateTimeField(read_only=True)
+    notes = serializers.CharField()
