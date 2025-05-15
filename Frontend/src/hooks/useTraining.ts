@@ -1,6 +1,6 @@
-import {useContext, useState} from "react";
+import {useContext, useRef, useState} from "react";
 import AppContext from "@/context/AppContext.tsx";
-import ExerciseDTO from "@/types/api/ExerciseDTO.tsx";
+import ExerciseDTO from "@/types/api/Training/ExerciseDTO.tsx";
 
 export const useTraining = () => {
 
@@ -8,12 +8,26 @@ export const useTraining = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
+    const formatTime = (seconds: number): string => {
+        const totalSeconds = Math.floor(seconds); // ← round down to whole seconds
+        const minutes = Math.floor(totalSeconds / 60);
+        const remainingSeconds = totalSeconds % 60;
+
+        return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+    };
+
+
+    // State Refs
+    const timerRef = useRef<NodeJS.Timeout | null>(null);
+
     // State variables
     const [exercises, setExercises] = useState<ExerciseDTO[]>([]);
+    const [addingExercise, setAddingExercise] = useState(false);
     const [remainingTime, setRemainingTime] = useState(0);
     const [activeExercise, setActiveExercise] = useState<ExerciseDTO | null>(null);
     const [progress, setProgress] = useState(0);
     const [isRunning, setIsRunning] = useState(false);
+    const formattedRemainingTime = formatTime(remainingTime);
 
     const getExercises = async () => {
         setLoading(true);
@@ -39,8 +53,62 @@ export const useTraining = () => {
         }
     }
 
+    const addExercise = async (exercise: object) => {
+        setError(null);
+
+        try {
+            const postExercise = await fetch(`${gateway.training}api/exercise/`, {
+                method: "POST",
+                body: JSON.stringify(exercise),
+                headers: {
+                    "Content-Type":"application/json"
+                }
+            })
+            const response = await postExercise.json();
+
+            if (!postExercise.ok) {
+                throw new Error(response?.error || "Something went wrong posting exercise!")
+            }
+
+            await getExercises();
+        } catch(error) {
+            if(error instanceof Error) {
+                setError(error.message);
+            } else {
+                setError("An error has occurred when posting quick workout.")
+            }
+        } finally {
+            setAddingExercise(false);
+        }
+    }
+
+    const deleteExercise = async (exerciseId: string | undefined)=>  {
+        setError(null);
+
+        try {
+            const deleteOperation = await fetch(`${gateway.training}api/exercise/${exerciseId}/`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type":"application/json"
+                }
+            })
+            const response = await deleteOperation.json();
+
+            if (!deleteOperation.ok) {
+                throw new Error(response?.error || "Something went wrong deleting exercise!")
+            }
+
+            await getExercises();
+        } catch(error) {
+            if(error instanceof Error) {
+                setError(error.message);
+            } else {
+                setError("An error has occurred when posting quick workout.")
+            }
+        }
+    }
+
     const postQuickWorkout = async (exercise: ExerciseDTO) => {
-        setLoading(true);
         setError(null);
 
         try {
@@ -62,60 +130,79 @@ export const useTraining = () => {
 
             return response.data;
         } catch(error) {
-            if(error instanceof Error) {
+            if (error instanceof Error) {
                 setError(error.message);
             } else {
                 setError("An error has occurred when posting quick workout.")
             }
-        } finally {
-            setLoading(false)
         }
     }
 
     const startExercise = async (exercise: ExerciseDTO) => {
-        await postQuickWorkout(exercise)
+        await postQuickWorkout(exercise);
 
         setActiveExercise(exercise);
         setProgress(0);
         setIsRunning(true);
-        setRemainingTime(exercise.duration * 60); // duration in seconds
 
-        const durationMs = exercise.duration * 60 * 1000;
-        const startTime = Date.now();
+        const totalSeconds = exercise.duration * 60;
+        setRemainingTime(totalSeconds);
 
-        const interval = setInterval(() => {
-            const elapsed = Date.now() - startTime;
-            const percent = Math.min((elapsed / durationMs) * 100, 100);
-            setProgress(percent);
-            setRemainingTime(Math.ceil((durationMs - elapsed) / 1000));
+        const totalDuration = totalSeconds * 1000;
+        const interval = 100;
+        const increment = 100 / (totalDuration / interval);
 
-            if (percent >= 100) {
-                clearInterval(interval);
-                setTimeout(() => {
+        if (timerRef.current) {
+            clearInterval(timerRef.current);
+        }
+
+        timerRef.current = setInterval(() => {
+            setProgress(prev => {
+                const next = prev + increment;
+                if (next >= 100) {
+                    clearInterval(timerRef.current!);
                     setIsRunning(false);
-                    setActiveExercise(null);
                     setRemainingTime(0);
-                }, 1000);
-            }
-        }, 100);
+                    return 100;
+                }
+                return next;
+            });
+
+            setRemainingTime(prev => {
+                if (prev <= 1) return 0;
+                return prev - interval / 1000;
+            });
+        }, interval);
     };
 
-    const formatTime = (seconds: number) => {
-        const mins = Math.floor(seconds / 60);
-        const secs = seconds % 60;
-        return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    const stopExercise = () => {
+        if (timerRef.current) {
+            clearInterval(timerRef.current);
+            timerRef.current = null;
+        }
+        setIsRunning(false);
+        setProgress(0);
+        setRemainingTime(0);
+        setActiveExercise(null);
     };
 
     return {
         getExercises,
+        addExercise,
+        deleteExercise,
         startExercise,
-        formatTime,
+        stopExercise,
+        formattedRemainingTime,
         postQuickWorkout,
+        addingExercise,
+        setAddingExercise,
         exercises,
         remainingTime,
         activeExercise,
+        setActiveExercise,
         progress,
         isRunning,
+        setIsRunning,
         loading,
         error,
     }

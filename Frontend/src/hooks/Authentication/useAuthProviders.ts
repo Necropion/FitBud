@@ -20,6 +20,7 @@ export const useAuthProviders = () => {
             localStorage.setItem("state", data.state);
             console.log(`${message}: ${data.state}`);
 
+            console.log(`${provider} auth URL fetched successfully!`)
             return data.url;
         } catch (error) {
             if(error instanceof Error) {
@@ -64,7 +65,7 @@ export const useAuthProviders = () => {
                     created_at
                 }
 
-                console.log(`Message: ${response.data}`)
+                console.log("User facebook details fetched successfully!")
                 userData = googleUser;
             }
 
@@ -93,7 +94,7 @@ export const useAuthProviders = () => {
                     created_at
                 }
 
-                console.log(`Message: ${JSON.stringify(response.data)}`)
+                console.log("User facebook details fetched successfully!")
                 userData = facebookUser;
             }
 

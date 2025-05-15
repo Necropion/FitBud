@@ -5,12 +5,20 @@ from training.data.db import Base
 class WorkoutExercise(Base):
     __tablename__ = 'workout_exercise'
     id = Column(BigInteger, primary_key=True)
-    workout_id = Column(BigInteger, ForeignKey('workout.id'), nullable=False)
-    exercise_id = Column(BigInteger, ForeignKey('exercise.id'), nullable=False)
+    workout_id = Column(
+        BigInteger,
+        ForeignKey('workout.id', ondelete="CASCADE"),  # ✅ key part
+        nullable=False
+    )
+    exercise_id = Column(
+        BigInteger,
+        ForeignKey('exercise.id'),  # ✅ no ondelete here
+        nullable=False
+    )
     order = Column(Integer)
     sets = Column(Integer)
     reps = Column(Integer)
-    duration = Column(Integer)  # In seconds
+    duration = Column(Integer)
 
     workout = relationship("Workout", back_populates="exercises")
-    exercise = relationship("Exercise")
+    exercise = relationship("Exercise")  # ✅ no cascade here

@@ -6,38 +6,27 @@ import {
     CardDescription,
 } from "@/components/ui/card";
 import { FaDumbbell, FaClock, FaChartLine } from "react-icons/fa";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import AppContext from "@/context/AppContext.tsx";
 import { useAuthUser } from "@/hooks/Authentication/useAuthUser.ts"
-
-const dummyFeed = [
-    {
-        id: 1,
-        user: "Alex Johnson",
-        activity: "Completed a 5K run in 24 minutes! 🏃‍♂️",
-        timestamp: "2 hours ago",
-    },
-    {
-        id: 2,
-        user: "Samantha Lee",
-        activity: "Hit a new PR: 100kg deadlift 💪",
-        timestamp: "Yesterday",
-    },
-    {
-        id: 3,
-        user: "Derek Chen",
-        activity: "Completed Chest & Triceps workout",
-        timestamp: "2 days ago",
-    },
-];
+import {useTrainingWorkout} from "@/hooks/Training/useTrainingWorkout.ts";
+import {format} from "date-fns";
 
 const Home = () => {
     const { user } = useContext(AppContext);
     const { fetchUser } = useAuthUser();
-    const [feed, setFeed] = useState(dummyFeed);
+    const { fetchUserWorkouts, workouts, loading } = useTrainingWorkout();
 
+    // Re-render if user details not present
     useEffect(() => {
-        fetchUser();
+        if (!user?.id) {
+            fetchUser();
+        }
+    }, [user]);
+
+    // Re-render if user workouts not present
+    useEffect(() => {
+        fetchUserWorkouts();
     }, []);
 
     return (
@@ -91,14 +80,17 @@ const Home = () => {
             <section>
                 <h2 className="text-2xl font-semibold text-white mb-4 text-center">Recent Activity</h2>
                 <div className="space-y-4">
-                    {feed.map(post => (
-                        <Card key={post.id} className="bg-[#2A2A2A] border-[#3A3A3A]">
+                    {loading ? "Loading activity" : workouts
+                        .slice()
+                        .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+                        .map(workout => (
+                        <Card key={workout.id} className="bg-[#2A2A2A] border-[#3A3A3A]">
                             <CardHeader className="pb-2">
-                                <CardTitle className="text-white text-lg">{post.user}</CardTitle>
-                                <CardDescription className="text-[#AFAFAF] text-sm">{post.timestamp}</CardDescription>
+                                <CardTitle className="text-white text-lg">{workout.name}</CardTitle>
+                                <CardDescription className="text-[#AFAFAF] text-sm">{workout.created_at ? format(new Date(workout.created_at), "HH:mm PPP") : "N/A"}</CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <p className="text-[#E0DED9] text-base">{post.activity}</p>
+                                <p className="text-[#E0DED9] text-base">{workout.description}</p>
                             </CardContent>
                         </Card>
                     ))}

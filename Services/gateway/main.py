@@ -35,11 +35,18 @@ services = {
     "training": os.environ["TRAINING_SERVICE_URL"],
 }
 
-async def forward_request(service_url: str, method: str, path: str, body=None, headers=None):
+async def forward_request(service_url: str, method: str, path: str, body=None, headers=None, query_params=None):
     async with httpx.AsyncClient() as client:
         url = f"{service_url}{path}"
-        response = await client.request(method, url, json=body, headers=headers)
+        response = await client.request(
+            method,
+            url,
+            params=query_params,  # ✅ Pass query params here
+            json=body,
+            headers=headers
+        )
         return response
+
 
 @app.api_route("/{service}/{path:path}", methods=["GET", "POST", "PUT", "PATCH", "DELETE"])
 async def gateway(service: str, path: str, request: Request):
@@ -49,11 +56,20 @@ async def gateway(service: str, path: str, request: Request):
     service_url = services[service]
     body = await request.json() if request.method in ["POST", "PUT", "PATCH"] else None
     headers = dict(request.headers)
+    query_params = dict(request.query_params)  # ✅ Extract query params
 
-    response = await forward_request(service_url, request.method, f"/{path}", body, headers)
+    response = await forward_request(
+        service_url,
+        request.method,
+        f"/{path}",
+        body,
+        headers,
+        query_params
+    )
 
     try:
         content = response.json()
         return JSONResponse(status_code=response.status_code, content=content)
     except Exception:
         return Response(status_code=response.status_code, content=response.text)
+

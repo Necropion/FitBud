@@ -92,13 +92,15 @@ export const useAuthUser = () => {
         setError(null)
 
         try {
-        const getUser = await fetch(`${gateway.authentication}user/${user.id}`);
-        const response = await getUser.json();
+            console.log("fetchUser activated")
+            const getUser = await fetch(`${gateway.authentication}api/user/${user.id}`);
+            const response = await getUser.json();
 
-        if (getUser.ok) {
-            setUser(response.data);
-            localStorage.setItem("user", JSON.stringify(response.data));
-        }
+            if (getUser.ok) {
+                setUser(response.data);
+                localStorage.setItem("user", JSON.stringify(response.data));
+                console.log("User data fetched successfully!")
+            }
 
         } catch(error) {
             if(error instanceof Error) {
@@ -116,7 +118,7 @@ export const useAuthUser = () => {
         setError(null)
 
         try {
-        const userDelete = await fetch(`${gateway.authentication}api/user/${userId}/`, {
+        const userDelete = await fetch(`${gateway.authentication}api/user/${userId}`, {
             method: "DELETE",
             headers: {
                 "Content-Type":"application/json"

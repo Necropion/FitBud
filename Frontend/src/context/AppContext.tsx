@@ -9,9 +9,9 @@ const AppContext = createContext<AppContextType>({
 
     // User Variables
     user: {
-        Id: NaN,
-        Name: "",
-        Email: ""
+        id: NaN,
+        name: "",
+        email: ""
     },
     setUser: () => {},
     authenticated: false,

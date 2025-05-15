@@ -3,19 +3,19 @@ import AppContext from "@/context/AppContext.tsx";
 import WorkoutDTO from "@/types/api/Training/WorkoutDTO.tsx";
 
 export const useTrainingWorkout = () => {
-    const { gateway } = useContext(AppContext);
+    const { gateway, user } = useContext(AppContext);
 
     // Variable States
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [workouts, setWorkouts] = useState<WorkoutDTO[]>([]);
 
-    const fetchWorkouts = async () => {
+    const fetchUserWorkouts = async () => {
         setLoading(true);
         setError(null);
 
         try{
-            const getWorkouts = await fetch(`${gateway.training}api/workout/`)
+            const getWorkouts = await fetch(`${gateway.training}api/workout/user-workouts/?user_id=${user.id}`)
             const response = await getWorkouts.json()
 
             if (!getWorkouts.ok) {
@@ -23,6 +23,7 @@ export const useTrainingWorkout = () => {
             }
 
             setWorkouts(response.data);
+            console.log("User Workouts fetched successfully!")
         } catch(error) {
             if(error instanceof Error) {
                 setError(error.message);
@@ -35,7 +36,7 @@ export const useTrainingWorkout = () => {
     }
 
     return {
-        fetchWorkouts,
+        fetchUserWorkouts,
         workouts,
         loading,
         error

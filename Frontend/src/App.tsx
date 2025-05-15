@@ -31,6 +31,8 @@ const App = () =>  {
         return storedUser ? JSON.parse(storedUser) : {};
     });
 
+    
+
   return (
       <AppContext.Provider value={{
           gateway,

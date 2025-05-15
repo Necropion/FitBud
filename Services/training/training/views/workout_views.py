@@ -14,10 +14,22 @@ class WorkoutViewSet(ViewSet):
 
     # Get All Workouts
     def list(self, request):
-        workouts = workout_service.get_workouts()
+        workouts = workout_service.fetch_workouts()
         return Response({
             "message": "Workouts fetched successfully",
             "data": workouts
+        }, status=status.HTTP_200_OK)
+
+    # Get User Workouts
+    @action(detail=False, methods=['get'], url_path='user-workouts')
+    def get_user_workouts(self, request):
+        print("Query params:", request.query_params)
+        print("Path:", request.path)
+        user_id = request.query_params.get('user_id')
+        user_workouts = workout_service.fetch_user_workouts(user_id)
+        return Response({
+            "message": "Workouts fetched successfully",
+            "data": user_workouts
         }, status=status.HTTP_200_OK)
 
     # Post Workout
@@ -50,3 +62,17 @@ class WorkoutViewSet(ViewSet):
                 "message": "Error creating workout",
                 "error": serialized_exercise.errors
             })
+
+    # Delete Workout
+    def destroy(self, request, pk=None):
+        try:
+            deleted_workout = workout_service.delete_workout(pk)
+            return Response({
+                "message": "Workout deleted successfully",
+                "data": deleted_workout.to_dict()
+            }, status=status.HTTP_200_OK)
+        except Exception as ex:
+            return Response({
+                "message": "Failed to delete workout",
+                "error": str(ex)
+            }, status=status.HTTP_400_BAD_REQUEST)

@@ -5,17 +5,32 @@ from training.serializers.workout_serializer import WorkoutSerializer
 from . import workout_exercise_service
 from training.models.dtos.workout_details_dto import WorkoutDetailsDTO
 
+
 # Fetch All Workouts
-def get_workouts():
+def fetch_workouts():
     db = SessionLocal()
     try:
         workouts = db.query(Workout).all()
         serializer = WorkoutSerializer(workouts, many=True)
         return serializer.data
     except Exception as ex:
-        return ex
+        return str(ex)
     finally:
         db.close()
+
+
+# Fetch User Workouts
+def fetch_user_workouts(user_id):
+    db = SessionLocal()
+    try:
+        user_workouts = db.query(Workout).filter(Workout.user_id == user_id).all()
+        serializer = WorkoutSerializer(user_workouts, many=True)
+        return serializer.data
+    except Exception as ex:
+        return str(ex)
+    finally:
+        db.close()
+
 
 # Create Workout
 def create_workout(workout):
@@ -58,3 +73,16 @@ def create_with_exercise(exercise, user_id, exercise_id):
     finally:
         db.close()
 
+
+# Delete Workout
+def delete_workout(workout_id):
+    db = SessionLocal()
+    try:
+        workout = db.query(Workout).get(workout_id)
+        db.delete(workout)
+        db.commit()
+        return workout
+    except Exception as ex:
+        raise ex
+    finally:
+        db.close()

@@ -1,13 +1,14 @@
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import {useEffect} from "react";
 import {useTrainingWorkout} from "@/hooks/Training/useTrainingWorkout.ts";
+import {format} from "date-fns";
 
 const Progress = () => {
 
-    const { fetchWorkouts, workouts, loading } = useTrainingWorkout();
+    const { fetchUserWorkouts, workouts, loading } = useTrainingWorkout();
 
     useEffect(() => {
-        fetchWorkouts();
+        fetchUserWorkouts();
     }, []);
 
     return (
@@ -20,7 +21,10 @@ const Progress = () => {
             </div>
 
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {loading ? "Loading..." : workouts.map((workout) => (
+                {loading ? "Loading..." : workouts
+                    .slice()
+                    .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+                    .map((workout) => (
                     <Card key={workout.id} className="bg-[#1A1A1A] border border-[#2A2A2A]">
                         <CardHeader>
                             <CardTitle className="text-[#E6AC00] text-lg">{workout.name}</CardTitle>
@@ -30,11 +34,10 @@ const Progress = () => {
                         </CardHeader>
                         <CardContent className="text-sm text-white space-y-1">
                             <p>
-                                <span className="text-[#AFAFAF]">Created: </span> {workout.created_at}
+                                <span className="text-[#AFAFAF]">Created: </span> {workout.created_at ? format(new Date(workout.created_at), "HH:mm,  PPP") : "N/A"}
                             </p>
                         </CardContent>
                     </Card>
-
                 ))}
             </div>
         </div>

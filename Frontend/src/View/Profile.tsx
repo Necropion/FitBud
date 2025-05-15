@@ -32,8 +32,10 @@ const Profile = () => {
     };
 
     useEffect(() => {
-        fetchUser();
-    }, []);
+        if (!user?.id) {
+            fetchUser();
+        }
+    }, [user]);
 
     return (
         <div className="w-full max-w-4xl mx-auto px-6 lg:px-12 pt-8 space-y-10 text-white">
