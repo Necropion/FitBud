@@ -14,6 +14,7 @@ import Progress from "@/View/Progress.tsx";
 import AppShell from "@/AppShell.tsx";
 import DashboardLayout from "@/components/Home/Dashboard/DashboardLayout.tsx";
 import WorkoutDTO from "@/types/api/Training/WorkoutDTO.tsx";
+import ExerciseDTO from "@/types/api/Training/ExerciseDTO.tsx";
 
 const App = () =>  {
 
@@ -27,9 +28,19 @@ const App = () =>  {
         return storedAuthenticated ? JSON.parse(storedAuthenticated) : false;
     });
 
+    const [exercises, setExercises] = useState<ExerciseDTO[]>(() => {
+        const storedExercises = localStorage.getItem("exercises");
+        return storedExercises ? JSON.parse(storedExercises) : [];
+    });
+
     const [user, setUser] = useState<UserDTO>(() => {
         const storedUser = localStorage.getItem("user");
         return storedUser ? JSON.parse(storedUser) : {};
+    });
+
+    const [userWorkouts, setUserWorkouts] = useState<WorkoutDTO[]>(() => {
+        const storedUserWorkouts = localStorage.getItem("userWorkouts");
+        return storedUserWorkouts ? JSON.parse(storedUserWorkouts) : [];
     });
 
     const [currentWorkout, setCurrentWorkout] = useState<WorkoutDTO>(() => {
@@ -43,7 +54,9 @@ const App = () =>  {
           gateway,
           user, setUser,
           authenticated, setAuthenticated,
-          currentWorkout, setCurrentWorkout
+          currentWorkout, setCurrentWorkout,
+          userWorkouts, setUserWorkouts,
+          exercises, setExercises
 
       }}>
           <BrowserRouter>

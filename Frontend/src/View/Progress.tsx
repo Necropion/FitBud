@@ -1,15 +1,20 @@
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card.tsx";
-import {useEffect} from "react";
+import {useContext, useEffect} from "react";
 import {useTrainingWorkout} from "@/hooks/Training/useTrainingWorkout.ts";
 import {format} from "date-fns";
+import AppContext from "@/context/AppContext.tsx";
 
 const Progress = () => {
 
-    const { fetchUserWorkouts, workouts, loading } = useTrainingWorkout();
+    const { userWorkouts } = useContext(AppContext);
+    const { fetchUserWorkouts, loading } = useTrainingWorkout();
 
+    // Re-render if user workouts not present
     useEffect(() => {
-        fetchUserWorkouts();
-    }, []);
+        if (userWorkouts.length === 0 || !userWorkouts) {
+            fetchUserWorkouts();
+        }
+    }, [userWorkouts]);
 
     return (
         <div className="w-full max-w-screen-xl mx-auto px-6 lg:px-12 pt-8 flex flex-col gap-8 text-white">
@@ -21,7 +26,7 @@ const Progress = () => {
             </div>
 
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {loading ? "Loading..." : workouts
+                {loading ? "Loading..." : userWorkouts
                     .slice()
                     .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
                     .map((workout) => (

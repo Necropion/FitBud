@@ -4,7 +4,7 @@ import ExerciseDTO from "@/types/api/Training/ExerciseDTO.tsx";
 
 export const useTraining = () => {
 
-    const { gateway, user, setCurrentWorkout } = useContext(AppContext);
+    const { gateway, user, setCurrentWorkout, exercises, setExercises } = useContext(AppContext);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -21,7 +21,6 @@ export const useTraining = () => {
     const timerRef = useRef<NodeJS.Timeout | null>(null);
 
     // State variables
-    const [exercises, setExercises] = useState<ExerciseDTO[]>([]);
     const [addingExercise, setAddingExercise] = useState(false);
     const [remainingTime, setRemainingTime] = useState(0);
     const [activeExercise, setActiveExercise] = useState<ExerciseDTO | null>(null);
@@ -42,6 +41,7 @@ export const useTraining = () => {
             }
 
             setExercises(response.data);
+            localStorage.setItem("exercises", JSON.stringify(response.data))
         } catch(error) {
             if(error instanceof Error) {
                 setError(error.message);

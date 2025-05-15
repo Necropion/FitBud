@@ -6,16 +6,18 @@ import {
     CardDescription,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import { useTraining } from "@/hooks/useTraining.ts";
 import * as React from "react";
 import ActiveExerciseModal from "@/components/Exercises/ActiveExerciseModal.tsx";
 import AddExercise from "@/components/Exercises/AddExercise.tsx";
 import ExerciseFormDTO from "@/types/api/Training/ExerciseFormDTO.tsx";
 import {useTrainingWorkout} from "@/hooks/Training/useTrainingWorkout.ts";
+import AppContext from "@/context/AppContext.tsx";
 
 const Exercises = () => {
-    const { getExercises, addExercise, startExercise, stopExercise, addingExercise, deleteExercise, setAddingExercise, formattedRemainingTime, exercises, activeExercise, isRunning, progress, loading } = useTraining();
+    const { exercises } = useContext(AppContext)
+    const { getExercises, addExercise, startExercise, stopExercise, addingExercise, deleteExercise, setAddingExercise, formattedRemainingTime, activeExercise, isRunning, progress, loading } = useTraining();
     const { endWorkout } = useTrainingWorkout();
 
     // State Variables
@@ -65,8 +67,10 @@ const Exercises = () => {
     }
 
     useEffect(() => {
-        getExercises();
-    }, []);
+        if (exercises.length === 0 || !exercises) {
+            getExercises();
+        }
+    }, [exercises]);
 
     return (
         <div className="w-full max-w-screen-xl mx-auto px-6 lg:px-12 pt-8 flex flex-col gap-8 text-white">

@@ -10,12 +10,12 @@ import { useContext, useEffect } from "react";
 import AppContext from "@/context/AppContext.tsx";
 import { useAuthUser } from "@/hooks/Authentication/useAuthUser.ts"
 import {useTrainingWorkout} from "@/hooks/Training/useTrainingWorkout.ts";
-import {format, formatDistanceStrict, differenceInMinutes} from "date-fns";
+import {format, formatDistanceStrict} from "date-fns";
 
 const Home = () => {
-    const { user } = useContext(AppContext);
+    const { user, userWorkouts } = useContext(AppContext);
     const { fetchUser } = useAuthUser();
-    const { fetchUserWorkouts, workouts, loading } = useTrainingWorkout();
+    const { fetchUserWorkouts, loading } = useTrainingWorkout();
 
     // Re-render if user details not present
     useEffect(() => {
@@ -26,8 +26,10 @@ const Home = () => {
 
     // Re-render if user workouts not present
     useEffect(() => {
-        fetchUserWorkouts();
-    }, []);
+        if (userWorkouts.length === 0 || !userWorkouts) {
+            fetchUserWorkouts();
+        }
+    }, [userWorkouts]);
 
     return (
         <div className="w-full max-w-screen-xl mx-auto px-6 lg:px-12 pt-8 space-y-10 text-white">
@@ -80,7 +82,7 @@ const Home = () => {
             <section>
                 <h2 className="text-2xl font-semibold text-white mb-4 text-center">Recent Activity</h2>
                 <div className="space-y-4">
-                    {loading ? "Loading activity" : workouts
+                    {loading ? "Loading activity" : userWorkouts
                         .slice()
                         .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
                         .map(workout => (

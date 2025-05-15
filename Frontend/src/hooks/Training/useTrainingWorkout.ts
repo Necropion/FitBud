@@ -1,14 +1,12 @@
 import {useContext, useState} from "react";
 import AppContext from "@/context/AppContext.tsx";
-import WorkoutDTO from "@/types/api/Training/WorkoutDTO.tsx";
 
 export const useTrainingWorkout = () => {
-    const { gateway, user, currentWorkout } = useContext(AppContext);
+    const { gateway, user, currentWorkout, setUserWorkouts } = useContext(AppContext);
 
     // Variable States
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [workouts, setWorkouts] = useState<WorkoutDTO[]>([]);
 
     const fetchUserWorkouts = async () => {
         setLoading(true);
@@ -22,7 +20,8 @@ export const useTrainingWorkout = () => {
                 throw new Error (response.error || "Something went wrong when fetching workout list")
             }
 
-            setWorkouts(response.data);
+            setUserWorkouts(response.data);
+            localStorage.setItem("userWorkouts", JSON.stringify(response.data))
             console.log("User Workouts fetched successfully!", JSON.stringify(response.data))
         } catch(error) {
             if(error instanceof Error) {
@@ -57,6 +56,7 @@ export const useTrainingWorkout = () => {
                 throw new Error(response?.error || "Something went wrong when ending workout")
             }
 
+            await fetchUserWorkouts();
             console.log(`Updated Workout: ${JSON.stringify(response.data)}`)
             return response.data;
         } catch(error) {
@@ -71,7 +71,6 @@ export const useTrainingWorkout = () => {
     return {
         fetchUserWorkouts,
         endWorkout,
-        workouts,
         loading,
         error
     }
