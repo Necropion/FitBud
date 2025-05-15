@@ -62,13 +62,22 @@ const ActiveExerciseModal: React.FC<ActiveExerciseModalProps> = ({ handleClickEv
                     Intensity: {activeExercise.intensity}
                 </div>
 
-                <Button
-                    id="stopBtn"
-                    onClick={handleClickEvent}
-                    className="self-center mt-4 w-[30%] bg-[#E6AC00] hover:bg-[#cc9900] text-black"
-                >
-                    Stop Workout
-                </Button>
+                <div className={'flex items-center justify-center'}>
+                    <Button
+                        id="stopBtn"
+                        onClick={handleClickEvent}
+                        className="self-center mt-4 mr-4 w-[30%] bg-[#E6AC00] hover:bg-[#cc9900] text-black"
+                    >
+                        Stop Workout
+                    </Button>
+                    <Button
+                        id="cancelWorkoutBtn"
+                        onClick={handleClickEvent}
+                        className="mt-4 w-[30%] self-center bg-[#B52230] hover:bg-[#FFFFFF] text-black"
+                    >
+                        Cancel Workout
+                    </Button>
+                </div>
             </div>
         </div>
     );

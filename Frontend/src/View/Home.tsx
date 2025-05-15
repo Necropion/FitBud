@@ -11,11 +11,21 @@ import AppContext from "@/context/AppContext.tsx";
 import { useAuthUser } from "@/hooks/Authentication/useAuthUser.ts"
 import {useTrainingWorkout} from "@/hooks/Training/useTrainingWorkout.ts";
 import {format, formatDistanceStrict} from "date-fns";
+import {Button} from "@/components/ui/button.tsx";
+import * as React from "react";
 
 const Home = () => {
     const { user, userWorkouts } = useContext(AppContext);
     const { fetchUser } = useAuthUser();
-    const { fetchUserWorkouts, loading } = useTrainingWorkout();
+    const { fetchUserWorkouts, loading, deleteWorkout } = useTrainingWorkout();
+
+    const handleClickEvent = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+
+        if (e.currentTarget.id === "deleteWorkoutBtn") {
+            await deleteWorkout(e.currentTarget.dataset.workoutId);
+        }
+    }
 
     // Re-render if user details not present
     useEffect(() => {
@@ -97,9 +107,18 @@ const Home = () => {
                                     </CardDescription>
                                 )}
                             </CardHeader>
-                            <CardContent>
-                                <p className="text-[#E0DED9] text-base">{workout.description}</p>
-                            </CardContent>
+                            <div className={'flex'}>
+                                <CardContent>
+                                    <p className="text-[#E0DED9] text-base">{workout.description}</p>
+                                </CardContent>
+                                <Button
+                                    id="deleteWorkoutBtn"
+                                    data-workout-id={workout.id}
+                                    onClick={handleClickEvent}
+                                    className="mt-4 w-[10%] bg-[#B52230] hover:bg-[#FFFFFF] text-black"
+                                >
+                                    Delete</Button>
+                            </div>
                         </Card>
                     ))}
                 </div>

@@ -68,9 +68,35 @@ export const useTrainingWorkout = () => {
         }
     }
 
+    const deleteWorkout = async (workoutId: string | undefined) => {
+        setError(null);
+
+        try{
+            const deleteOperation = await fetch(`${gateway.training}api/workout/${workoutId}/`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            const response = await deleteOperation.json();
+
+            if (!deleteOperation.ok) {
+                throw new Error(response?.error || "Something went wrong while deleting active workout")
+            }
+            await fetchUserWorkouts();
+        } catch(error) {
+            if(error instanceof Error) {
+                setError(error.message);
+            } else {
+                setError("An error has occurred when fetching workouts.")
+            }
+        }
+    }
+
     return {
         fetchUserWorkouts,
         endWorkout,
+        deleteWorkout,
         loading,
         error
     }

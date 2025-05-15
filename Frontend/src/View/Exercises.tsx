@@ -16,9 +16,9 @@ import {useTrainingWorkout} from "@/hooks/Training/useTrainingWorkout.ts";
 import AppContext from "@/context/AppContext.tsx";
 
 const Exercises = () => {
-    const { exercises } = useContext(AppContext)
+    const { exercises, currentWorkout } = useContext(AppContext)
     const { getExercises, addExercise, startExercise, stopExercise, addingExercise, deleteExercise, setAddingExercise, formattedRemainingTime, activeExercise, isRunning, progress, loading } = useTraining();
-    const { endWorkout } = useTrainingWorkout();
+    const { endWorkout, deleteWorkout } = useTrainingWorkout();
 
     // State Variables
     const [exerciseFormData, setExerciseFormData] = useState<ExerciseFormDTO>({
@@ -58,6 +58,11 @@ const Exercises = () => {
                     await startExercise(selectedExercise);
                 }
             }
+        }
+
+        if (e.currentTarget.id === "cancelWorkoutBtn"){
+            await deleteWorkout(currentWorkout.id);
+            await stopExercise();
         }
 
         if (e.currentTarget.id === "stopBtn"){
