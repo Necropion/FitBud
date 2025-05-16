@@ -7,12 +7,17 @@ class WorkoutExercise(Base):
     id = Column(BigInteger, primary_key=True)
     workout_id = Column(
         BigInteger,
-        ForeignKey('workout.id', ondelete="CASCADE"),  # ✅ key part
-        nullable=False
+        ForeignKey('workout.id', ondelete="CASCADE"),
+        nullable=True
+    )
+    workout_plan_id = Column(
+        BigInteger,
+        ForeignKey('workout_plan.id', ondelete="CASCADE"),
+        nullable=True
     )
     exercise_id = Column(
         BigInteger,
-        ForeignKey('exercise.id'),  # ✅ no ondelete here
+        ForeignKey('exercise.id'),
         nullable=False
     )
     order = Column(Integer)
@@ -21,4 +26,5 @@ class WorkoutExercise(Base):
     duration = Column(Integer)
 
     workout = relationship("Workout", back_populates="exercises")
-    exercise = relationship("Exercise")  # ✅ no cascade here
+    workout_plan = relationship("WorkoutPlan", back_populates="exercises")
+    exercise = relationship("Exercise")

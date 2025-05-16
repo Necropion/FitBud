@@ -17,7 +17,7 @@ import {useNavigate} from "react-router-dom";
 
 const Profile = () => {
     const navigate = useNavigate();
-    const { user } = useContext(AppContext);
+    const { user, userWorkouts } = useContext(AppContext);
     const { fetchUser, deleteUser } = useAuthUser();
 
     const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -63,7 +63,7 @@ const Profile = () => {
                 <CardContent className="grid grid-cols-2 gap-4 text-sm text-[#E0DED9] mt-4">
                     <p><strong>Email:</strong> {user.email}</p>
                     <p><strong>Goal:</strong> Build Muscle</p>
-                    <p><strong>Workouts Completed:</strong> 132</p>
+                    <p><strong>Workouts Completed:</strong> {userWorkouts.length}</p>
                     <p><strong>Current Streak:</strong> 5 days</p>
                 </CardContent>
             </Card>

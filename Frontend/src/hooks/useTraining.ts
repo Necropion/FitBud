@@ -22,6 +22,7 @@ export const useTraining = () => {
 
     // State variables
     const [addingExercise, setAddingExercise] = useState(false);
+    const [addingWorkout, setAddingWorkout] = useState(false);
     const [remainingTime, setRemainingTime] = useState(0);
     const [activeExercise, setActiveExercise] = useState<ExerciseDTO | null>(null);
     const [progress, setProgress] = useState(0);
@@ -199,6 +200,8 @@ export const useTraining = () => {
         postQuickWorkout,
         addingExercise,
         setAddingExercise,
+        addingWorkout,
+        setAddingWorkout,
         exercises,
         remainingTime,
         activeExercise,
