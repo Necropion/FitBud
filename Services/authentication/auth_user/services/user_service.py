@@ -29,14 +29,14 @@ def authenticate_user_credentials(credentials):
         return {'authentication': 'false'}
 
 
-def create_user(user_data, provider):
+def create_user(user_data, provider_data):
 
     email = user_data.get("email")
+    provider = provider_data.get("provider")
 
-    # If no provider given
     if provider == "none":
         if not user_data.get("name") or not user_data.get("password"):
-            return ValidationError("Name and password are required for traditional signup.")
+            raise ValidationError("Name and password are required for traditional signup.")
 
         user, created = User.objects.get_or_create(
             email=email,
@@ -48,18 +48,17 @@ def create_user(user_data, provider):
 
         return UserSerializer(user).data
 
-
+    # Provider flow
     user_defaults = {
-        "name": user_data.get("name") or user_data["name"],
+        "name": user_data.get("name"),
     }
 
-    # Link existing user by email, or create a new user
     user_object, is_created = User.objects.get_or_create(
         email=email,
         defaults=user_defaults
     )
 
-    # Create Social Link
-    social_service.create_social_link(user_object, provider, user_data['id'], email)
+    # Correct: Get the ID from user_object, not from input
+    social_service.create_social_link(user_object, provider, user_object.id, email)
 
     return UserSerializer(user_object).data
