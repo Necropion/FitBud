@@ -61,7 +61,7 @@ const Exercises = () => {
         }
 
         if (e.currentTarget.id === "cancelWorkoutBtn"){
-            await deleteWorkout(currentWorkout.id);
+            await deleteWorkout(currentWorkout?.id);
             await stopExercise();
         }
 

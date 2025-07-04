@@ -69,7 +69,7 @@ export const useTrainingWorkout = () => {
                 method: "PUT",
                 body: JSON.stringify({
                     workout: {
-                        id: currentWorkout.id,
+                        id: currentWorkout?.id,
                         ended_at: "now"
                     }
                 }),

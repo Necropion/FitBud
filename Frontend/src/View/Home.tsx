@@ -23,7 +23,11 @@ const Home = () => {
         e.preventDefault();
 
         if (e.currentTarget.id === "deleteWorkoutBtn") {
-            await deleteWorkout(e.currentTarget.dataset.workoutId);
+            const workoutId = e.currentTarget.dataset.workoutId
+                ? parseInt(e.currentTarget.dataset.workoutId)
+                : undefined;
+
+            await deleteWorkout(workoutId);
         }
     }
 

@@ -13,7 +13,7 @@ type AppContextType = {
     setUser: React.Dispatch<React.SetStateAction<UserDTO>>,
     authenticated: boolean;
     setAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
-    currentWorkout: WorkoutDTO,
+    currentWorkout: WorkoutDTO | null,
     setCurrentWorkout: React.Dispatch<React.SetStateAction<WorkoutDTO>>
     userWorkouts: WorkoutDTO[],
     setUserWorkouts: React.Dispatch<React.SetStateAction<WorkoutDTO[]>>
