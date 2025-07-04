@@ -5,7 +5,7 @@ import ProviderDTO from "@/types/api/Authentication/ProviderDTO.tsx";
 
 export const useAuthUser = () => {
 
-    const { gateway, user, setUser, setAuthenticated } = useContext(AppContext);
+    const { user, setUser, setAuthenticated } = useContext(AppContext);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -14,7 +14,7 @@ export const useAuthUser = () => {
         setError(null);
 
         try {
-            const authCheck = await fetch(`${gateway.authentication}api/user/authenticate/`, {
+            const authCheck = await fetch(`/api/user/authenticate/`, {
                 method: "POST",
                 body: JSON.stringify({
                     email,
@@ -53,7 +53,7 @@ export const useAuthUser = () => {
         setError(null)
 
         try {
-            const postUser = await fetch(`${gateway.authentication}api/user/`, {
+            const postUser = await fetch(`/api/user/`, {
                 method: "POST",
                 body: JSON.stringify({
                     provider_data,
@@ -93,7 +93,7 @@ export const useAuthUser = () => {
 
         try {
             console.log("fetchUser activated")
-            const getUser = await fetch(`${gateway.authentication}api/user/${user.id}`);
+            const getUser = await fetch(`/api/user/${user.id}`);
             const response = await getUser.json();
 
             if (getUser.ok) {
@@ -118,7 +118,7 @@ export const useAuthUser = () => {
         setError(null)
 
         try {
-        const userDelete = await fetch(`${gateway.authentication}api/user/${userId}`, {
+        const userDelete = await fetch(`/api/user/${userId}`, {
             method: "DELETE",
             headers: {
                 "Content-Type":"application/json"
