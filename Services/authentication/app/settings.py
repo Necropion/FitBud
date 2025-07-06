@@ -53,7 +53,7 @@ SECRET_KEY = 'django-insecure-anrsz_v2)po+i=te$h-jb=bdc!!1jxur13o!o^@88_6g3xklw$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = os.environ.get('CORS_ALLOWED_HOSTS', '').split(',')
 
 # Application definition
 
