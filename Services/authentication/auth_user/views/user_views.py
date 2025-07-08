@@ -37,7 +37,11 @@ class UserViewSet(ModelViewSet):
         # Validate User Object
         if user_object.is_valid(raise_exception=True):
             user_created = user_service.create_user(user_object.validated_data, provider_data)
-            return Response(user_created, status=status.HTTP_201_CREATED)
+            return Response({
+                "data": user_created,
+                "message": "User created successfully"
+                },
+                status=status.HTTP_201_CREATED)
 
         return Response({"message": "Internal Server Error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 

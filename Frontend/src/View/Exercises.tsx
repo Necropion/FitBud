@@ -16,8 +16,8 @@ import {useTrainingWorkout} from "@/hooks/Training/useTrainingWorkout.ts";
 import AppContext from "@/context/AppContext.tsx";
 
 const Exercises = () => {
-    const { exercises, currentWorkout } = useContext(AppContext)
-    const { getExercises, addExercise, startExercise, stopExercise, addingExercise, deleteExercise, setAddingExercise, formattedRemainingTime, activeExercise, isRunning, progress, loading } = useTraining();
+    const { exercises, muscleGroups, currentWorkout } = useContext(AppContext)
+    const { getExercises, addExercise, getMuscleGroups, startExercise, stopExercise, addingExercise, deleteExercise, setAddingExercise, formattedRemainingTime, activeExercise, isRunning, progress, loading } = useTraining();
     const { endWorkout, deleteWorkout } = useTrainingWorkout();
 
     // State Variables
@@ -34,7 +34,7 @@ const Exercises = () => {
         e.preventDefault();
 
         if (e.currentTarget.id === "addBtn"){
-            setAddingExercise(true)
+            setAddingExercise(true);
         }
 
         if (e.currentTarget.id === "cancelBtn") {
@@ -76,6 +76,10 @@ const Exercises = () => {
             getExercises();
         }
     }, [exercises]);
+
+    useEffect(() => {
+        getMuscleGroups();
+    }, [muscleGroups]);
 
     return (
         <div className="w-full max-w-screen-xl mx-auto px-6 lg:px-12 pt-8 flex flex-col gap-8 text-white">
@@ -139,6 +143,7 @@ const Exercises = () => {
             )}
             {addingExercise && (
                 <AddExercise
+                    muscleGroups={muscleGroups}
                     handleClickEvent={handleClickEvent}
                     exerciseFormData={exerciseFormData}
                     setExerciseFormData={setExerciseFormData}

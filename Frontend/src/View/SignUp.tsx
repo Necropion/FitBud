@@ -60,7 +60,7 @@ const SignUp = () => {
                 navigate("/home")
             }
             if (!postResult) {
-                console.log("Something went wrong in postUser in SignUp Page.")
+                console.log("Something went wrong in postUser in SignUp Page." + postResult)
                 setMessage("Something went wrong, please try again later.")
             }
         }

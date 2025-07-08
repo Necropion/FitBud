@@ -1,14 +1,17 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import ExerciseFormDTO from "@/types/api/Training/ExerciseFormDTO.tsx";
+import DiagonalIconGrid from "@/components/Background/DiagonalIconGrid.tsx";
+import MuscleGroupDTO from "@/types/api/Training/MuscleGroupDTO.tsx";
 
 interface AddExerciseProps {
+    muscleGroups: MuscleGroupDTO[]
     handleClickEvent: (e: React.MouseEvent<HTMLButtonElement>) => void;
     exerciseFormData: ExerciseFormDTO;
     setExerciseFormData: React.Dispatch<React.SetStateAction<ExerciseFormDTO>>;
 }
 
-const AddExercise: React.FC<AddExerciseProps> = ({ handleClickEvent, exerciseFormData, setExerciseFormData }) => {
+const AddExercise: React.FC<AddExerciseProps> = ({ muscleGroups ,handleClickEvent, exerciseFormData, setExerciseFormData }) => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -18,7 +21,11 @@ const AddExercise: React.FC<AddExerciseProps> = ({ handleClickEvent, exerciseFor
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
             <div className="bg-[#1A1A1A] text-white rounded-2xl shadow-lg flex flex-col justify-between w-[80%] h-[80%] p-6 relative border border-[#333] overflow-y-auto">
-                <h2 className="text-2xl font-bold mb-6">Add New Exercise</h2>
+
+                {/* Background Design */}
+                <DiagonalIconGrid/>
+
+                <h2 className="text-2xl font-bold mb-6 text-center">Add New Exercise</h2>
 
                 <div className="grid grid-cols-2 gap-4 mb-6">
                     <div>
@@ -60,14 +67,19 @@ const AddExercise: React.FC<AddExerciseProps> = ({ handleClickEvent, exerciseFor
                     </div>
 
                     <div>
-                        <label className="block mb-1">Category</label>
-                        <input
-                            type="text"
-                            name="category"
+                        <label className="block mb-1">Muscle Group</label>
+                        <select
+                            name="muscle_group_id"
                             className="w-full p-2 rounded bg-[#2A2A2A] text-white"
                             value={exerciseFormData.category}
-                            onChange={handleChange}
-                        />
+                            onChange={handleChange}>
+                            <option value="">Select Muscle Group</option>
+                            {muscleGroups.map((mg: MuscleGroupDTO) => (
+                                <option key={mg.id} value={mg.id}>
+                                    {mg.name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     <div className="col-span-2">

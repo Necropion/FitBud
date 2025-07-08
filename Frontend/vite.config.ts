@@ -10,6 +10,6 @@ export default defineConfig({
     },
   },
   server: {
-    port: 80, // Change to desired port
+    port: 5173, // Change to desired port
   },
 })

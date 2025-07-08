@@ -25,7 +25,7 @@ class ExerciseViewSet(ViewSet):
            }, status=status.HTTP_201_CREATED)
        return Response({
            "message": "Failed to create exercise",
-           "errors": serializer.errors
+           "error": serializer.errors
        }, status=status.HTTP_400_BAD_REQUEST)
 
     # Delete Exercise
@@ -39,5 +39,5 @@ class ExerciseViewSet(ViewSet):
         except Exception as ex:
             return Response({
                 "message": "Failed to delete exercise",
-                "errors": str(ex)
+                "error": str(ex)
             }, status=status.HTTP_400_BAD_REQUEST)

@@ -5,7 +5,9 @@ from training.models.workout_model import Workout
 from training.serializers.workout_serializer import WorkoutSerializer
 from . import workout_exercise_service
 from training.models.dtos.workout_details_dto import WorkoutDetailsDTO
+import logging
 
+logger = logging.getLogger(__name__)
 
 # Fetch All Workouts
 def fetch_workouts():
@@ -20,7 +22,7 @@ def fetch_workouts():
         db.close()
 
 
-# Fetch User Workouts
+# Fetch AllUser Workouts
 def fetch_user_workouts(user_id):
     db = SessionLocal()
     try:
@@ -28,7 +30,8 @@ def fetch_user_workouts(user_id):
         serializer = WorkoutSerializer(user_workouts, many=True)
         return serializer.data
     except Exception as ex:
-        return str(ex)
+        logger.error(f"fetch_user_workouts error {ex}")
+        raise Exception("Error fetching workouts")
     finally:
         db.close()
 

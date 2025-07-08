@@ -5,5 +5,6 @@ class GoalSerializer(serializers.Serializer):
     user_id = serializers.UUIDField()
     type = serializers.CharField()
     target = serializers.CharField()
+    description = serializers.CharField()
     deadline = serializers.DateTimeField()
-    created_at = serializers.DateTimeField()
+    created_at = serializers.DateTimeField(read_only=True)

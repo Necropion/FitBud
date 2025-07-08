@@ -16,6 +16,8 @@ import DashboardLayout from "@/components/Home/Dashboard/DashboardLayout.tsx";
 import WorkoutDTO from "@/types/api/Training/WorkoutDTO.tsx";
 import ExerciseDTO from "@/types/api/Training/ExerciseDTO.tsx";
 import WorkoutPlanDTO from "@/types/api/Training/WorkoutPlanDTO.tsx";
+import MuscleGroupDTO from "@/types/api/Training/MuscleGroupDTO.tsx";
+import GoalDTO from "@/types/api/Training/GoalDTO.tsx";
 
 const App = () =>  {
 
@@ -49,9 +51,19 @@ const App = () =>  {
         return storedUserWorkoutPlans ? JSON.parse(storedUserWorkoutPlans) : [];
     });
 
+    const [userGoals, setUserGoals] = useState<GoalDTO[]>(() => {
+        const storedUserGoals = localStorage.getItem("userGoals");
+        return storedUserGoals ? JSON.parse(storedUserGoals) : [];
+    });
+
     const [currentWorkout, setCurrentWorkout] = useState<WorkoutDTO>(() => {
         const storedWorkout = localStorage.getItem("currentWorkout");
         return storedWorkout ? JSON.parse(storedWorkout) : {};
+    });
+
+    const [muscleGroups, setMuscleGroups] = useState<MuscleGroupDTO[]>(() => {
+        const storedMuscleGroups = localStorage.getItem("muscleGroups");
+        return storedMuscleGroups ? JSON.parse(storedMuscleGroups) : [];
     });
 
 
@@ -62,8 +74,10 @@ const App = () =>  {
           authenticated, setAuthenticated,
           currentWorkout, setCurrentWorkout,
           userWorkouts, setUserWorkouts,
+          userGoals, setUserGoals,
           exercises, setExercises,
-          userWorkoutPlans, setUserWorkoutPlans
+          userWorkoutPlans, setUserWorkoutPlans,
+          muscleGroups, setMuscleGroups
 
       }}>
           <BrowserRouter>

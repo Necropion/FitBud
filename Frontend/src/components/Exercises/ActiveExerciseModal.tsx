@@ -2,6 +2,7 @@ import {Button} from "@/components/ui/button.tsx";
 import * as React from "react";
 import ExerciseDTO from "@/types/api/Training/ExerciseDTO.tsx";
 import {useState} from "react";
+import DiagonalIconGrid from "@/components/Background/DiagonalIconGrid.tsx";
 
 // Type definition for the props
 interface ActiveExerciseModalProps {
@@ -26,7 +27,12 @@ const ActiveExerciseModal: React.FC<ActiveExerciseModalProps> = ({ handleClickEv
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+
             <div className="bg-[#1A1A1A] text-white rounded-2xl shadow-lg flex flex-col justify-between w-[80%] h-[80%] p-6 relative border border-[#333]">
+
+                {/* Background Design */}
+                <DiagonalIconGrid/>
+
                 <div className="text-center text-4xl mb-4">{activeExercise.name}</div>
 
                 <div className="flex justify-between mb-4">

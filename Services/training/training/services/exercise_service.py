@@ -38,3 +38,4 @@ def delete_exercise(exercise_id):
         raise ex
     finally:
         db.close()
+

@@ -108,6 +108,8 @@ export const useTrainingWorkout = () => {
                 notes: workoutPlan.notes
             }
 
+            console.log("Payload", workoutPlanPayload)
+
             const postPlan = await fetch(`${gateway.training}api/workout-plan/`, {
                 method: "POST",
                 body: JSON.stringify(workoutPlanPayload),

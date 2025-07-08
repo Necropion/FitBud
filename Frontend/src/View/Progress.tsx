@@ -8,12 +8,14 @@ import * as React from "react";
 import {useTraining} from "@/hooks/useTraining.ts";
 import AddWorkoutPlan from "@/components/Workout/AddWorkoutPlan.tsx";
 import WorkoutPlanFormDTO from "@/types/api/Training/WorkoutPlanFormDTO.tsx";
+import GroupDTO from "@/types/api/Training/GroupDTO.tsx";
+import muscleGroupDTO from "@/types/api/Training/MuscleGroupDTO.tsx";
 
 const Progress = () => {
 
-    const { userWorkoutPlans } = useContext(AppContext);
+    const { userWorkoutPlans, muscleGroups } = useContext(AppContext);
     const { fetchUserWorkoutPlans, postWorkoutPlan, loading } = useTrainingWorkout();
-    const { addingWorkout, setAddingWorkout } = useTraining();
+    const { addingWorkout, setAddingWorkout, getMuscleGroups } = useTraining();
 
     // State Variables
     const [workoutPlanFormData, setWorkoutPlanFormData] = useState<WorkoutPlanFormDTO>({
@@ -23,12 +25,39 @@ const Progress = () => {
         goal_id: 0,
         notes: ""
     });
+    const [step, setStep] = useState<number>(0);
+
+    const [groupList, setGroupList] = useState<GroupDTO[]>([]);
 
     const handleClickEvent = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
 
         if (e.currentTarget.id === "addPlanBtn") {
+            setStep(0)
             setAddingWorkout(true);
+        }
+
+        if (e.currentTarget.id === "addMuscleGroupBtn") {
+            console.log("Group added!")
+            setGroupList([
+                {
+                    name: "Back"
+                }
+            ])
+        }
+
+        if (e.currentTarget.id === "nextBtn") {
+            setStep((prev) => prev + 1)
+        }
+
+        if (e.currentTarget.id === "backBtn") {
+            setStep((prev) => {
+                if (step !== 0) {
+                    return prev - 1;
+                }
+
+                return 0;
+            });
         }
 
         if (e.currentTarget.id === "postWorkoutPlanBtn") {
@@ -37,13 +66,24 @@ const Progress = () => {
         }
 
         if (e.currentTarget.id === "cancelBtn") {
+            setStep(0)
             setAddingWorkout(false);
         }
     }
 
     // Re-render if user workouts not present
     useEffect(() => {
-        fetchUserWorkoutPlans();
+    }, []);
+
+    // Re-render if user workout plans not present
+    useEffect(() => {
+        if (!userWorkoutPlans || userWorkoutPlans.length === 0) {
+            fetchUserWorkoutPlans();
+        }
+    }, [userWorkoutPlans?.length]);
+
+    useEffect(() => {
+        getMuscleGroups();
     }, []);
 
     return (
@@ -80,11 +120,14 @@ const Progress = () => {
                     </Card>
                 ))}
             </div>
+
             {addingWorkout && (
                 <AddWorkoutPlan
                     handleClickEvent={handleClickEvent}
                     workoutPlanFormData={workoutPlanFormData}
                     setWorkoutPlanFormData={setWorkoutPlanFormData}
+                    muscleGroups={muscleGroups}
+                    step={step}
                 />
             )}
         </div>

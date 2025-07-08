@@ -4,7 +4,7 @@ import ExerciseDTO from "@/types/api/Training/ExerciseDTO.tsx";
 
 export const useTraining = () => {
 
-    const { gateway, user, setCurrentWorkout, exercises, setExercises } = useContext(AppContext);
+    const { gateway, user, setCurrentWorkout, exercises, setExercises, setMuscleGroups } = useContext(AppContext);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -109,6 +109,31 @@ export const useTraining = () => {
         }
     }
 
+    const getMuscleGroups = async () => {
+        setLoading(true);
+        setError(null);
+
+        try {
+            const fetchMuscleGroups = await fetch(`${gateway.training}api/muscle-group/`);
+            const  response = await fetchMuscleGroups.json();
+
+            if (!fetchMuscleGroups.ok) {
+                throw new Error(response?.error || "Something went wrong deleting exercise!")
+            }
+
+            setMuscleGroups(response.data);
+            localStorage.setItem("muscleGroups", JSON.parse(response.data));
+        } catch(error) {
+            if(error instanceof Error) {
+                setError(error.message);
+            } else {
+                setError("An error has occurred when fetching muscle groups.")
+            }
+        } finally {
+            setLoading(false);
+        }
+    }
+
     const postQuickWorkout = async (exercise: ExerciseDTO) => {
         setError(null);
 
@@ -194,6 +219,7 @@ export const useTraining = () => {
         getExercises,
         addExercise,
         deleteExercise,
+        getMuscleGroups,
         startExercise,
         stopExercise,
         formattedRemainingTime,

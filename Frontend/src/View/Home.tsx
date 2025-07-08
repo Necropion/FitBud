@@ -36,14 +36,14 @@ const Home = () => {
         if (!user?.id) {
             fetchUser();
         }
-    }, [user]);
+    }, [user?.id]);
 
     // Re-render if user workouts not present
     useEffect(() => {
-        if (userWorkouts.length === 0 || !userWorkouts) {
+        if (!userWorkouts || userWorkouts.length === 0) {
             fetchUserWorkouts();
         }
-    }, [userWorkouts]);
+    }, [userWorkouts?.length]);
 
     return (
         <div className="w-full max-w-screen-xl mx-auto px-6 lg:px-12 pt-8 space-y-10 text-white">
@@ -53,7 +53,7 @@ const Home = () => {
                 <p className="text-[#AFAFAF] text-lg text-center">Here’s what’s happening today.</p>
             </header>
 
-            {/* Top Stats Cards */}
+            {/* Top Stats Cards
             <div className="grid gap-6 md:grid-cols-3">
                 <Card className="bg-[#1A1A1A] border-[#2A2A2A]">
                     <CardHeader>
@@ -90,7 +90,7 @@ const Home = () => {
                         <p className="text-4xl font-bold text-white">+12%</p>
                     </CardContent>
                 </Card>
-            </div>
+            </div>*/}
 
             {/* Workouts Section */}
             <section>
