@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect} from "react";
 import { Button } from "@/components/ui/button";
 import { Toggle } from "@/components/ui/toggle";
 import {
@@ -38,8 +38,6 @@ const AddWorkoutPlan: React.FC<AddWorkoutPlanProps> = ({
 
     const { userGoals } = useContext(AppContext);
     const { getUserGoals } = useTrainingGoal();
-
-    const [addingMuscleGroup, setAddingMusclegroup] = useState(false);
 
     useEffect(() => {
         getUserGoals()
@@ -125,9 +123,13 @@ const AddWorkoutPlan: React.FC<AddWorkoutPlanProps> = ({
         {
             label: "Please pick the muscle group you would like to target?",
             content: (
-                <div className=" h-[100%] w-[100%] grid grid-cols-4 grid-rows-3">
+                <div className="h-full w-full grid grid-cols-4 grid-rows-3 gap-4 p-4">
                     {muscleGroups?.map((g) => (
-                        <Toggle key={g.id} variant="outline" className="h-[80%] w-[80%] bg-[#2A2A2A]">
+                        <Toggle
+                            key={g.id}
+                            variant="outline"
+                            className="h-24 w-full rounded-2xl bg-[#2A2A2A] text-white text-lg font-medium shadow-sm hover:bg-[#3A3A3A] focus:ring-2 focus:ring-offset-2 focus:ring-white transition-all duration-200 ease-in-out"
+                        >
                             {g.name}
                         </Toggle>
                     ))}

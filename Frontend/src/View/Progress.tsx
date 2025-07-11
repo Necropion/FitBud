@@ -8,8 +8,6 @@ import * as React from "react";
 import {useTraining} from "@/hooks/useTraining.ts";
 import AddWorkoutPlan from "@/components/Workout/AddWorkoutPlan.tsx";
 import WorkoutPlanFormDTO from "@/types/api/Training/WorkoutPlanFormDTO.tsx";
-import GroupDTO from "@/types/api/Training/GroupDTO.tsx";
-import muscleGroupDTO from "@/types/api/Training/MuscleGroupDTO.tsx";
 
 const Progress = () => {
 
@@ -27,8 +25,6 @@ const Progress = () => {
     });
     const [step, setStep] = useState<number>(0);
 
-    const [groupList, setGroupList] = useState<GroupDTO[]>([]);
-
     const handleClickEvent = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
 
@@ -39,11 +35,6 @@ const Progress = () => {
 
         if (e.currentTarget.id === "addMuscleGroupBtn") {
             console.log("Group added!")
-            setGroupList([
-                {
-                    name: "Back"
-                }
-            ])
         }
 
         if (e.currentTarget.id === "nextBtn") {
@@ -100,12 +91,12 @@ const Progress = () => {
                 </div>
             </div>
 
-            <div className="grid gap-6 grid-cols-1">
+            <div className="grid gap-6 grid-cols-2">
                 {loading ? "Loading..." : userWorkoutPlans
                     .slice()
                     .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
                     .map((plan) => (
-                    <Card key={plan.id} className="bg-[#1A1A1A] border border-[#2A2A2A]">
+                    <Card key={plan.id} className="bg-[#1A1A1A] border border-[#2A2A2A] h-[400px]">
                         <CardHeader>
                             <CardTitle className="text-[#E6AC00] text-lg">{plan.name}</CardTitle>
                             <CardDescription className="text-[#AFAFAF]">

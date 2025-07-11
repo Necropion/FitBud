@@ -79,7 +79,7 @@ const Exercises = () => {
 
     useEffect(() => {
         getMuscleGroups();
-    }, [muscleGroups]);
+    }, []);
 
     return (
         <div className="w-full max-w-screen-xl mx-auto px-6 lg:px-12 pt-8 flex flex-col gap-8 text-white">
