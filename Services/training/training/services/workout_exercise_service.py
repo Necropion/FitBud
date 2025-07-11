@@ -1,8 +1,10 @@
 from django.core.serializers import serialize
-
 from training.data.db import SessionLocal
 from training.models.workout_exercise_model import WorkoutExercise
 from training.serializers.workout_exercise_serializer import WorkoutExerciseSerializer
+import logging
+
+logger = logging.getLogger(__name__)
 
 # Get All Workout Exercises
 def get_workout_exercises():
@@ -42,5 +44,6 @@ def create_workout_exercises_list(workout_id, exercise_id_list):
 
         return workout_exercises
     except Exception as ex:
-        return {"error": "Failed to create workout exercises", "details": str(ex)}
+        logger.error(f"Error creating workout exercises list: {ex}")
+        raise Exception("Error creating workout exercises list")
 

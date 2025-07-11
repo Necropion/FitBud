@@ -35,32 +35,6 @@ export const useTrainingWorkout = () => {
         }
     }
 
-    const fetchUserWorkoutPlans = async () => {
-        setLoading(true);
-        setError(null);
-
-        try{
-            const getPlans = await fetch(`${gateway.training}api/workout-plan/user-plans/?user_id=${user.id}`)
-            const response = await getPlans.json()
-
-            if (!getPlans.ok) {
-                throw new Error (response.error || "Something went wrong when fetching workout list")
-            }
-
-            setUserWorkoutPlans(response.data);
-            localStorage.setItem("userWorkoutPlans", JSON.stringify(response.data))
-            console.log("User Workout Plans fetched successfully!", JSON.stringify(response.data))
-        } catch(error) {
-            if(error instanceof Error) {
-                setError(error.message);
-            } else {
-                setError("An error has occurred when fetching workouts.")
-            }
-        } finally {
-            setLoading(false)
-        }
-    }
-
     const endWorkout = async () => {
         setError(null);
 
@@ -92,6 +66,57 @@ export const useTrainingWorkout = () => {
             } else {
                 setError("An error has occurred when fetching workouts.")
             }
+        }
+    }
+
+    const deleteWorkout = async (workoutId: number | undefined) => {
+        setError(null);
+
+        try{
+            const deleteOperation = await fetch(`${gateway.training}api/workout/${workoutId}/`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            const response = await deleteOperation.json();
+
+            if (!deleteOperation.ok) {
+                throw new Error(response?.error || "Something went wrong while deleting active workout")
+            }
+            await fetchUserWorkouts();
+        } catch(error) {
+            if(error instanceof Error) {
+                setError(error.message);
+            } else {
+                setError("An error has occurred when fetching workouts.")
+            }
+        }
+    }
+
+    const fetchUserWorkoutPlans = async () => {
+        setLoading(true);
+        setError(null);
+
+        try{
+            const getPlans = await fetch(`${gateway.training}api/workout-plan/user-plans/?user_id=${user.id}`)
+            const response = await getPlans.json()
+
+            if (!getPlans.ok) {
+                throw new Error (response.error || "Something went wrong when fetching workout list")
+            }
+
+            setUserWorkoutPlans(response.data);
+            localStorage.setItem("userWorkoutPlans", JSON.stringify(response.data))
+            console.log("User Workout Plans fetched successfully!", JSON.stringify(response.data))
+        } catch(error) {
+            if(error instanceof Error) {
+                setError(error.message);
+            } else {
+                setError("An error has occurred when fetching workouts.")
+            }
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -130,31 +155,6 @@ export const useTrainingWorkout = () => {
                 setError(error.message);
             } else {
                 setError("An error has occurred when posting workout plan.")
-            }
-        }
-    }
-
-    const deleteWorkout = async (workoutId: number | undefined) => {
-        setError(null);
-
-        try{
-            const deleteOperation = await fetch(`${gateway.training}api/workout/${workoutId}/`, {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            })
-            const response = await deleteOperation.json();
-
-            if (!deleteOperation.ok) {
-                throw new Error(response?.error || "Something went wrong while deleting active workout")
-            }
-            await fetchUserWorkouts();
-        } catch(error) {
-            if(error instanceof Error) {
-                setError(error.message);
-            } else {
-                setError("An error has occurred when fetching workouts.")
             }
         }
     }

@@ -81,7 +81,7 @@ const Login = () => {
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-[#0E0E0E] text-white">
-            <div className="w-full max-w-4xl grid grid-cols-2 shadow-lg rounded-lg border border-[#2A2A2A]">
+            <div className="w-full max-w-4xl grid grid-cols-2 shadow-xl rounded-xl border border-[#2A2A2A] overflow-hidden">
                 <Card className="w-full max-w-md bg-[#0E0E0E] text-white border-none rounded-none">
                     <CardHeader className="text-center">
                         <CardTitle className="text-2xl font-bold tracking-tight text-white">
@@ -166,7 +166,7 @@ const Login = () => {
                     className="relative w-full max-w-md flex justify-center items-center bg-[#1A1A1A] text-white border-none rounded-none"
                 >
                     <DiagonalIconGrid />
-                    <img src="/cited logo.png" alt="FitBud Cited Logo" className="w-[90%]" />
+                    <img src="/cited logo.png" alt="FitBud Cited Logo" className="w-[90%] mr-2" />
                 </Card>
             </div>
         </div>

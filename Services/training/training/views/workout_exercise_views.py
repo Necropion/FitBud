@@ -20,15 +20,18 @@ class WorkoutExerciseViewSet(ViewSet):
     def post_workout_exercise_list(self, request):
         exercise_id_list = request.data['exerciseIdList']
         workout_id = request.data['workoutId']
+
         try:
             created_workout_exercises = workout_exercise_service.create_workout_exercises_list(workout_id, exercise_id_list)
+            serializer = WorkoutExerciseSerializer(created_workout_exercises, many=True)
+
             return Response({
                 "message": "Workout Exercises created successfully",
-                "data": created_workout_exercises
+                "data": serializer.data
             }, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({
                 "message": "Something went wrong while creating workout exercises",
                 "error": str(e)
-            })
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 

@@ -2,8 +2,6 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework import status
-
-from training.models import WorkoutPlan
 from training.serializers import WorkoutPlanSerializer
 from training.services import workout_plan_service
 
