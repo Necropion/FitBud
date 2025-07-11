@@ -69,13 +69,13 @@ const AddExercise: React.FC<AddExerciseProps> = ({ muscleGroups ,handleClickEven
                     <div>
                         <label className="block mb-1">Muscle Group</label>
                         <select
-                            name="muscle_group_id"
+                            name="category"
                             className="w-full p-2 rounded bg-[#2A2A2A] text-white"
                             value={exerciseFormData.category}
                             onChange={handleChange}>
                             <option value="">Select Muscle Group</option>
                             {muscleGroups.map((mg: MuscleGroupDTO) => (
-                                <option key={mg.id} value={mg.id}>
+                                <option key={mg.id} value={mg.name}>
                                     {mg.name}
                                 </option>
                             ))}

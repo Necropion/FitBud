@@ -194,9 +194,9 @@ const AddWorkoutPlan: React.FC<AddWorkoutPlanProps> = ({
         {
             label: "Please add exercises to each muscle group:",
             content: (
-                <div className="h-full w-full grid grid-rows gap-6 p-4 overflow-y-auto">
+                <div className="h-full w-full flex flex-row justify-start gap-6 p-4 overflow-x-auto">
                     {selectedMuscleGroups.map((muscle) => (
-                        <Card key={muscle} className="bg-[#1F1F1F] border border-[#333] p-4 text-white">
+                        <Card key={muscle} className="w-[500px] flex-shrink-0 bg-[#1F1F1F] border border-[#333] p-4 text-white">
                             <CardTitle className="text-xl mb-2">{muscle}</CardTitle>
                             <CardContent className="space-y-3">
                                 {(muscleExercises[muscle] || []).map((exercise, idx) => (
@@ -212,8 +212,8 @@ const AddWorkoutPlan: React.FC<AddWorkoutPlanProps> = ({
                                             <div className="text-sm text-gray-400">Duration: {exercise.duration} min</div>
 
                                             {/* Sets and Reps Inputs */}
-                                            <div className="flex gap-4">
-                                                <div className="flex flex-col w-1/2">
+                                            <div className="flex flex-col gap-4">
+                                                <div className="flex flex-col w-full">
                                                     <label className="text-xs text-gray-300 mb-1" htmlFor={`sets-${idx}`}>Sets</label>
                                                     <Input
                                                         id={`sets-${idx}`}
@@ -222,7 +222,7 @@ const AddWorkoutPlan: React.FC<AddWorkoutPlanProps> = ({
                                                         className="bg-[#1A1A1A] text-white border border-[#555] placeholder:text-gray-500"
                                                     />
                                                 </div>
-                                                <div className="flex flex-col w-1/2">
+                                                <div className="flex flex-col w-full">
                                                     <label className="text-xs text-gray-300 mb-1" htmlFor={`reps-${idx}`}>Reps</label>
                                                     <Input
                                                         id={`reps-${idx}`}
@@ -274,20 +274,25 @@ const AddWorkoutPlan: React.FC<AddWorkoutPlanProps> = ({
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 overflow-hidden">
 
             {/* Modal Container */}
-            <div className="bg-[#1A1A1A] text-white rounded-2xl shadow-lg flex flex-col w-[40%] h-[80%] p-6 relative border border-[#333] overflow-y-auto z-10">
+            <div
+                className={`bg-[#1A1A1A] text-white rounded-2xl shadow-lg flex flex-col ${
+                    step === steps.length - 1 ? "w-[90%] h-[90%]" : "w-[40%]"
+                } h-[80%] p-6 relative border border-[#333] overflow-y-auto z-10 transition-all duration-300 ease-in-out`}
+            >
 
-                {/* Background Design */}
+
+            {/* Background Design */}
                 <DiagonalIconGrid/>
 
                 {/* Content */}
-                <h2 className="h-[20%] text-2xl font-bold text-center relative z-10">New Workout Program</h2>
+                <h2 className="h-[10%] text-2xl font-bold text-center relative z-10">New Workout Program</h2>
 
-                <div className="h-[80%] flex flex-col items-center relative z-10 text-center">
+                <div className="h-[90%] flex flex-col items-center relative z-10 text-center">
 
-                    <label className="h-[20%]">{steps[step]?.label} ({step + 1}/{steps.length})</label>
+                    <label className="h-[5%]">{steps[step]?.label} ({step + 1}/{steps.length})</label>
                     {steps[step]?.content}
 
-                    <div className="mt-[10%]">
+                    <div className="mt-[0%]">
                         <Button id="backBtn" onClick={handleClickEvent}
                                 className="mr-[5px] bg-[#E6AC00] hover:bg-[#cc9900] text-black">Back</Button>
                         <Button

@@ -1,6 +1,7 @@
 import {useContext, useRef, useState} from "react";
 import AppContext from "@/context/AppContext.tsx";
 import ExerciseDTO from "@/types/api/Training/ExerciseDTO.tsx";
+import ExerciseFormDTO from "@/types/api/Training/ExerciseFormDTO.tsx";
 
 export const useTraining = () => {
 
@@ -54,7 +55,7 @@ export const useTraining = () => {
         }
     }
 
-    const addExercise = async (exercise: object) => {
+    const addExercise = async (exercise: ExerciseFormDTO) => {
         setError(null);
 
         try {
