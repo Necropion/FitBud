@@ -1,4 +1,5 @@
 import React, {useContext, useEffect, useState} from "react";
+import ReactDOM from "react-dom";
 import { Button } from "@/components/ui/button";
 import { Toggle } from "@/components/ui/toggle";
 import {
@@ -270,8 +271,8 @@ const AddWorkoutPlan: React.FC<AddWorkoutPlanProps> = ({
 
     ]
 
-    return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 overflow-hidden">
+    const modalContent = (
+        <div className="fixed inset-0 z-[101] flex items-center justify-center bg-black/60 overflow-hidden">
 
             {/* Modal Container */}
             <div
@@ -281,33 +282,35 @@ const AddWorkoutPlan: React.FC<AddWorkoutPlanProps> = ({
             >
 
 
-            {/* Background Design */}
+                {/* Background Design */}
                 <DiagonalIconGrid/>
 
                 {/* Content */}
-                <h2 className="h-[10%] text-2xl font-bold text-center relative z-10">New Workout Program</h2>
+                <h2 className="h-[10%] text-2xl font-bold text-center relative z-[101]">New Workout Program</h2>
 
-                <div className="h-[90%] flex flex-col items-center relative z-10 text-center">
+                <div className="h-[90%] flex flex-col items-center relative z-[101] text-center">
 
                     <label className="h-[5%]">{steps[step]?.label} ({step + 1}/{steps.length})</label>
                     {steps[step]?.content}
 
                     <div className="mt-[0%]">
                         <Button id="backBtn" onClick={handleClickEvent}
-                                className="mr-[5px] bg-[#E6AC00] hover:bg-[#cc9900] text-black">Back</Button>
+                                className="mr-[5px] bg-custom-primaryaccent hover:bg-[#cc9900] text-black">Back</Button>
                         <Button
                             id={step < steps.length - 1 ? "nextBtn" : "postWorkoutPlanBtn"}
                             onClick={handleClickEvent}
-                            className="mr-[5px] ml-[5px] bg-[#E6AC00] hover:bg-[#cc9900] text-black">
+                            className="mr-[5px] ml-[5px] bg-custom-primaryaccent hover:bg-[#cc9900] text-black">
                             {step < steps.length - 1 ? "Next" : "Finish"}
                         </Button>
                         <Button id="cancelBtn" onClick={handleClickEvent}
-                                className="ml-[5px] bg-[#b52230] hover:bg-[#cc9900] text-black">Cancel</Button>
+                                className="ml-[5px] bg-custom-alert hover:bg-[#cc9900] text-black">Cancel</Button>
                     </div>
                 </div>
             </div>
         </div>
     );
+
+    return ReactDOM.createPortal(modalContent, document.body);
 };
 
 export default AddWorkoutPlan;

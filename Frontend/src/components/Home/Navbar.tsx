@@ -45,8 +45,8 @@ const Navbar = () => {
     };
 
     return (
-        <header className="w-full px-6 py-4 border-b border-[#1A1A1A] flex items-center justify-between bg-[#0E0E0E]">
-            {/* Left: Logo + Brand */}
+        <header className="w-full z-0 relative px-6 py-4 border-b border-[#1A1A1A] flex items-center justify-between bg-[#0E0E0E]">
+        {/* Left: Logo + Brand */}
             <div className="flex items-center gap-3">
                 <img src="/logo.png" alt="FitBud Logo" className="w-[40px] h-[40px]" />
                 <div className="text-2xl font-bold text-[#E6AC00]">FitBud</div>
@@ -69,7 +69,7 @@ const Navbar = () => {
                             key={href}
                             ref={(el) => {refs.current[href] = el;}}
                             onClick={() => handleClick(href)}
-                            className={`relative z-10 px-4 py-2 text-sm font-medium rounded-full transition-colors ${
+                            className={`relative z-[1] px-4 py-2 text-sm font-medium rounded-full transition-colors ${
                                 isActive ? "text-black" : "text-white hover:text-[#E6AC00]"}`
                             }
                         >

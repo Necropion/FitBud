@@ -46,7 +46,19 @@ module.exports = {
     				'3': 'hsl(var(--chart-3))',
     				'4': 'hsl(var(--chart-4))',
     				'5': 'hsl(var(--chart-5))'
-    			}
+    			},
+				custom: {
+					darkbg: "#0E0E0E",
+					secondarybg: "#1A1A1A",
+					mutedbg: "#2A2A2A",
+					primaryaccent: "#E6AC00",
+					primarytext: "#FFFFFF",
+					secondarytext: "#AFAFAF",
+					success: "#4CAF50",
+					warning: "#FFC107",
+					alert: "#B52230",
+					highlight: "#3AB0FF"
+				}
     		},
     		borderRadius: {
     			lg: 'var(--radius)',
