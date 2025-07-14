@@ -10,7 +10,7 @@ import {
 import {Toggle} from "@/components/ui/toggle.tsx";
 import {Card, CardContent, CardTitle} from "@/components/ui/card.tsx";
 import {Input} from "@/components/ui/input.tsx";
-import React from "react";
+import React, {useState} from "react";
 import WorkoutPlanFormDTO from "@/types/api/Training/WorkoutPlanFormDTO.tsx";
 import GoalDTO from "@/types/api/Training/GoalDTO.tsx";
 import ExerciseDTO from "@/types/api/Training/ExerciseDTO.tsx";
@@ -23,9 +23,12 @@ interface GetWorkoutPlanFormStepsParams {
     exercises: ExerciseDTO[];
     muscleGroups: MuscleGroupDTO[];
     selectedMuscleGroups: string[];
+    setSelectedMuscleGroups: React.Dispatch<React.SetStateAction<string[]>>;
     muscleExercises: Record<string, ExerciseDTO[]>;
     handleToggle: (e: React.MouseEvent<HTMLButtonElement>) => void;
     handleAddExercise: (muscle: string, exercise: ExerciseDTO) => void;
+    selectedExercises: Record<string, string>;
+    setSelectedExercises: React.Dispatch<React.SetStateAction<Record<string, string>>>;
 }
 
 export const getWorkoutPlanFormSteps = ({
@@ -35,9 +38,12 @@ export const getWorkoutPlanFormSteps = ({
     exercises,
     muscleGroups,
     selectedMuscleGroups,
+    setSelectedMuscleGroups,
     muscleExercises,
     handleToggle,
-    handleAddExercise
+    handleAddExercise,
+    selectedExercises,
+    setSelectedExercises
 }: GetWorkoutPlanFormStepsParams) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -186,12 +192,24 @@ export const getWorkoutPlanFormSteps = ({
 
                                     </div>
                                 ))}
-                                <Select onValueChange={(value) => {
-                                    const exercise = exercises.find(e => e.name === value && e.category === muscle);
-                                    if (exercise) {
-                                        handleAddExercise(muscle, exercise)
-                                    }
-                                }}>
+                                <Select
+                                    value={selectedExercises[muscle] || ""}
+                                    onValueChange={(value) => {
+                                        const exercise = exercises.find(e => e.name === value && e.category === muscle);
+                                        if (exercise) {
+                                            handleAddExercise(muscle, exercise);
+                                            setSelectedExercises(prev => ({
+                                                ...prev,
+                                                [muscle]: "" // reset dropdown
+                                            }));
+                                        } else {
+                                            setSelectedExercises(prev => ({
+                                                ...prev,
+                                                [muscle]: value
+                                            }));
+                                        }
+                                    }}
+                                >
                                     <SelectTrigger className="w-full bg-[#2A2A2A] text-white border border-[#444]">
                                         <SelectValue placeholder="Add Exercise" />
                                     </SelectTrigger>

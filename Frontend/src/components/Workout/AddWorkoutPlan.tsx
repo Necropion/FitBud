@@ -31,6 +31,7 @@ const AddWorkoutPlan: React.FC<AddWorkoutPlanProps> = ({
     const { getExercises } = useTraining();
 
     const [selectedMuscleGroups, setSelectedMuscleGroups] = useState<string[]>([]);
+    const [selectedExercises, setSelectedExercises] = useState<Record<string, string>>({});
     const [muscleExercises, setMuscleExercises] = useState<Record<string, ExerciseDTO[]>>({});
 
     const handleAddExercise = (muscle: string, exercise: ExerciseDTO) => {
@@ -90,7 +91,9 @@ const AddWorkoutPlan: React.FC<AddWorkoutPlanProps> = ({
         setSelectedMuscleGroups,
         muscleExercises,
         handleToggle,
-        handleAddExercise
+        handleAddExercise,
+        selectedExercises,
+        setSelectedExercises
     })
 
     const modalContent = (
