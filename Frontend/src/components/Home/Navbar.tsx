@@ -45,11 +45,11 @@ const Navbar = () => {
     };
 
     return (
-        <header className="w-full z-0 relative px-6 py-4 border-b border-[#1A1A1A] flex items-center justify-between bg-[#0E0E0E]">
+        <header className="w-full z-0 relative px-6 py-4 border-b border-custom-secondarybg flex items-center justify-between bg-custom-darkbg">
         {/* Left: Logo + Brand */}
             <div className="flex items-center gap-3">
                 <img src="/logo.png" alt="FitBud Logo" className="w-[40px] h-[40px]" />
-                <div className="text-2xl font-bold text-[#E6AC00]">FitBud</div>
+                <div className="text-2xl font-bold text-custom-primaryaccent">FitBud</div>
             </div>
 
             {/* Center Nav with Animated Bubble */}
@@ -59,7 +59,7 @@ const Navbar = () => {
             >
         <span
             ref={bubbleRef}
-            className="absolute top-0 left-0 h-full bg-[#E6AC00] rounded-full transition-all duration-300 ease-in-out z-0"
+            className="absolute top-0 left-0 h-full bg-custom-primaryaccent rounded-full transition-all duration-300 ease-in-out z-0"
             style={{ width: "0px" }}
         />
                 {navItems.map(({ label, href }) => {
@@ -70,7 +70,7 @@ const Navbar = () => {
                             ref={(el) => {refs.current[href] = el;}}
                             onClick={() => handleClick(href)}
                             className={`relative z-[1] px-4 py-2 text-sm font-medium rounded-full transition-colors ${
-                                isActive ? "text-black" : "text-white hover:text-[#E6AC00]"}`
+                                isActive ? "text-black" : "text-custom-primarytext hover:text-custom-primaryaccent"}`
                             }
                         >
                             {label}
@@ -86,7 +86,7 @@ const Navbar = () => {
                     localStorage.setItem("user", "{}");
                     navigate("/");
                 }}
-                className="text-[#B52230] text-sm hover:underline"
+                className="text-custom-alert text-sm hover:underline"
             >
                 Sign out
             </button>
