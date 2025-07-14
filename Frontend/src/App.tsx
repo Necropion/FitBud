@@ -10,7 +10,6 @@ import Exercises from "./View/Exercises.tsx";
 import UserDTO from "@/types/api/Authentication/UserDTO.tsx";
 import Callback from "@/View/Callback.tsx";
 import Profile from "@/View/Profile.tsx";
-import Progress from "@/View/Progress.tsx";
 import AppShell from "@/AppShell.tsx";
 import DashboardLayout from "@/components/Home/Dashboard/DashboardLayout.tsx";
 import WorkoutDTO from "@/types/api/Training/WorkoutDTO.tsx";
@@ -18,6 +17,7 @@ import ExerciseDTO from "@/types/api/Training/ExerciseDTO.tsx";
 import WorkoutPlanDTO from "@/types/api/Training/WorkoutPlanDTO.tsx";
 import MuscleGroupDTO from "@/types/api/Training/MuscleGroupDTO.tsx";
 import GoalDTO from "@/types/api/Training/GoalDTO.tsx";
+import Plan from "@/View/Progress.tsx";
 
 const App = () =>  {
 
@@ -90,7 +90,7 @@ const App = () =>  {
                       <Route path="/home" element={<DashboardLayout><Home /></DashboardLayout>}/>
                       <Route path="/profile" element={<DashboardLayout><Profile /></DashboardLayout>}/>
                       <Route path="/exercises" element={<DashboardLayout><Exercises /></DashboardLayout>}/>
-                      <Route path="/progress" element={<DashboardLayout><Progress /></DashboardLayout>}/>
+                      <Route path="/plan" element={<DashboardLayout><Plan /></DashboardLayout>}/>
                   </Route>
               </Routes>
           </BrowserRouter>

@@ -6,7 +6,7 @@ const navItems = [
     { label: "Dashboard", href: "/home" },
     { label: "Profile", href: "/profile" },
     { label: "Exercises", href: "/exercises" },
-    { label: "Progress", href: "/progress" },
+    { label: "Plan", href: "/plan" },
 ];
 
 const Navbar = () => {

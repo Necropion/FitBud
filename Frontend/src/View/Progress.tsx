@@ -9,7 +9,7 @@ import {useTraining} from "@/hooks/useTraining.ts";
 import AddWorkoutPlan from "@/components/Workout/AddWorkoutPlan.tsx";
 import WorkoutPlanFormDTO from "@/types/api/Training/WorkoutPlanFormDTO.tsx";
 
-const Progress = () => {
+const Plan = () => {
 
     const { userWorkoutPlans, muscleGroups } = useContext(AppContext);
     const { fetchUserWorkoutPlans, postWorkoutPlan, loading } = useTrainingWorkout();
@@ -125,4 +125,4 @@ const Progress = () => {
     );
 }
 
-export default Progress;
+export default Plan;
