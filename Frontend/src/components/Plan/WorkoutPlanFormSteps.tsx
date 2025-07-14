@@ -10,11 +10,12 @@ import {
 import {Toggle} from "@/components/ui/toggle.tsx";
 import {Card, CardContent, CardTitle} from "@/components/ui/card.tsx";
 import {Input} from "@/components/ui/input.tsx";
-import React, {useState} from "react";
+import React from "react";
 import WorkoutPlanFormDTO from "@/types/api/Training/WorkoutPlanFormDTO.tsx";
 import GoalDTO from "@/types/api/Training/GoalDTO.tsx";
 import ExerciseDTO from "@/types/api/Training/ExerciseDTO.tsx";
 import MuscleGroupDTO from "@/types/api/Training/MuscleGroupDTO.tsx";
+import {Button} from "@/components/ui/button.tsx";
 
 interface GetWorkoutPlanFormStepsParams {
     workoutPlanFormData: WorkoutPlanFormDTO;
@@ -23,10 +24,10 @@ interface GetWorkoutPlanFormStepsParams {
     exercises: ExerciseDTO[];
     muscleGroups: MuscleGroupDTO[];
     selectedMuscleGroups: string[];
-    setSelectedMuscleGroups: React.Dispatch<React.SetStateAction<string[]>>;
     muscleExercises: Record<string, ExerciseDTO[]>;
     handleToggle: (e: React.MouseEvent<HTMLButtonElement>) => void;
     handleAddExercise: (muscle: string, exercise: ExerciseDTO) => void;
+    handleRemoveExercise: (muscle: string, index: number) => void;
     selectedExercises: Record<string, string>;
     setSelectedExercises: React.Dispatch<React.SetStateAction<Record<string, string>>>;
 }
@@ -38,10 +39,10 @@ export const getWorkoutPlanFormSteps = ({
     exercises,
     muscleGroups,
     selectedMuscleGroups,
-    setSelectedMuscleGroups,
     muscleExercises,
     handleToggle,
     handleAddExercise,
+    handleRemoveExercise,
     selectedExercises,
     setSelectedExercises
 }: GetWorkoutPlanFormStepsParams) => {
@@ -188,8 +189,9 @@ export const getWorkoutPlanFormSteps = ({
                                                     />
                                                 </div>
                                             </div>
+                                            <Button id="removeExerciseBtn" onClick={() => handleRemoveExercise(muscle, idx)}
+                                                    className="ml-[5px] bg-custom-alert hover:bg-[#cc9900] text-black">Remove</Button>
                                         </div>
-
                                     </div>
                                 ))}
                                 <Select

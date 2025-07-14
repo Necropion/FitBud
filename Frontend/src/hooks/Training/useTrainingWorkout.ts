@@ -1,6 +1,8 @@
 import {useContext, useState} from "react";
 import AppContext from "@/context/AppContext.tsx";
 import WorkoutPlanFormDTO from "@/types/api/Training/WorkoutPlanFormDTO.tsx";
+import ExerciseDTO from "@/types/api/Training/ExerciseDTO.tsx";
+import WorkoutExerciseCreateDTO from "@/types/api/Training/WorkoutExerciseCreateDTO.tsx";
 
 export const useTrainingWorkout = () => {
     const { gateway, user, currentWorkout, setUserWorkouts, setUserWorkoutPlans} = useContext(AppContext);
@@ -120,19 +122,18 @@ export const useTrainingWorkout = () => {
         }
     }
 
-    const postWorkoutPlan = async (workoutPlan: WorkoutPlanFormDTO) => {
+    const createWorkoutPlanWithExercises = async (workoutPlan: WorkoutPlanFormDTO) => {
         setError(null);
 
         try{
-
             const workoutPlanPayload: WorkoutPlanFormDTO = {
                 user_id: user.id ?? 0,
-                name: workoutPlan.name,
-                description: workoutPlan.description,
                 goal_id: workoutPlan.goal_id,
-                notes: workoutPlan.notes
+                name: workoutPlan.name,
+                description: workoutPlan.description ?? "",
+                notes: workoutPlan.notes ?? "",
+                exercises: workoutPlan.exercises ?? []
             }
-
             console.log("Payload", workoutPlanPayload)
 
             const postPlan = await fetch(`${gateway.training}api/workout-plan/`, {
@@ -143,7 +144,6 @@ export const useTrainingWorkout = () => {
                 }
             })
             const response = await postPlan.json();
-
             if (!postPlan.ok) {
                 throw new Error(response?.error || "Something went wrong when posting workout plan")
             }
@@ -164,7 +164,7 @@ export const useTrainingWorkout = () => {
         fetchUserWorkoutPlans,
         endWorkout,
         deleteWorkout,
-        postWorkoutPlan,
+        createWorkoutPlanWithExercises,
         loading,
         error
     }

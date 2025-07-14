@@ -17,7 +17,7 @@ import ExerciseDTO from "@/types/api/Training/ExerciseDTO.tsx";
 import WorkoutPlanDTO from "@/types/api/Training/WorkoutPlanDTO.tsx";
 import MuscleGroupDTO from "@/types/api/Training/MuscleGroupDTO.tsx";
 import GoalDTO from "@/types/api/Training/GoalDTO.tsx";
-import Plan from "@/View/Progress.tsx";
+import Plan from "@/View/Plan.tsx";
 
 const App = () =>  {
 

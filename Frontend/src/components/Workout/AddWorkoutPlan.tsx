@@ -88,10 +88,10 @@ const AddWorkoutPlan: React.FC<AddWorkoutPlanProps> = ({
         exercises,
         muscleGroups,
         selectedMuscleGroups,
-        setSelectedMuscleGroups,
         muscleExercises,
         handleToggle,
         handleAddExercise,
+        handleRemoveExercise,
         selectedExercises,
         setSelectedExercises
     })

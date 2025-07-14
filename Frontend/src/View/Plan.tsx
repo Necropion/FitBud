@@ -12,7 +12,7 @@ import WorkoutPlanFormDTO from "@/types/api/Training/WorkoutPlanFormDTO.tsx";
 const Plan = () => {
 
     const { userWorkoutPlans, muscleGroups } = useContext(AppContext);
-    const { fetchUserWorkoutPlans, postWorkoutPlan, loading } = useTrainingWorkout();
+    const { fetchUserWorkoutPlans, createWorkoutPlanWithExercises, loading } = useTrainingWorkout();
     const { addingWorkout, setAddingWorkout, getMuscleGroups } = useTraining();
 
     // State Variables
@@ -21,7 +21,14 @@ const Plan = () => {
         name: "",
         description: "",
         goal_id: 0,
-        notes: ""
+        notes: "",
+        exercises: {
+                exercise_id: 0,
+                order: 0,
+                sets: 0,
+                reps: 0,
+                duration: 0
+        }
     });
     const [step, setStep] = useState<number>(0);
 
@@ -52,7 +59,7 @@ const Plan = () => {
         }
 
         if (e.currentTarget.id === "postWorkoutPlanBtn") {
-            await postWorkoutPlan(workoutPlanFormData);
+            await createWorkoutPlanWithExercises(workoutPlanFormData);
             setAddingWorkout(false);
         }
 
