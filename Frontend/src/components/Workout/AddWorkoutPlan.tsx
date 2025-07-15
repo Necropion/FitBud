@@ -8,7 +8,8 @@ import AppContext from "@/context/AppContext.tsx";
 import {useTrainingGoal} from "@/hooks/Training/useTrainingGoal.ts";
 import {useTraining} from "@/hooks/useTraining.ts";
 import ExerciseDTO from "@/types/api/Training/ExerciseDTO.tsx";
-import {getWorkoutPlanFormSteps} from "@/components/Plan/WorkoutPlanFormSteps.tsx"; // Example Lucide icons
+import {getWorkoutPlanFormSteps} from "@/components/Plan/WorkoutPlanFormSteps.tsx";
+import WorkoutExerciseCreateDTO from "@/types/api/Training/WorkoutExerciseCreateDTO.tsx"; // Example Lucide icons
 
 interface AddWorkoutPlanProps {
     handleClickEvent: (e: React.MouseEvent<HTMLButtonElement>) => void;
@@ -33,15 +34,35 @@ const AddWorkoutPlan: React.FC<AddWorkoutPlanProps> = ({
     const [selectedMuscleGroups, setSelectedMuscleGroups] = useState<string[]>([]);
     const [selectedExercises, setSelectedExercises] = useState<Record<string, string>>({});
     const [muscleExercises, setMuscleExercises] = useState<Record<string, ExerciseDTO[]>>({});
+    const [workoutExercises, setWorkoutExercises] = useState<WorkoutExerciseCreateDTO[]>([]);
 
     const handleAddExercise = (muscle: string, exercise: ExerciseDTO) => {
+
+        const workoutExercise: WorkoutExerciseCreateDTO = {
+            exercise_id: exercise.id,
+            order: 0,
+            sets: 0,
+            reps: 0,
+            duration: 0
+        }
+
         setMuscleExercises((prev) => ({
             ...prev,
             [muscle]: [...(prev[muscle] || []), exercise],
         }));
+
+        setWorkoutExercises((prev) => [ ...prev, workoutExercise]);
     };
 
     const handleRemoveExercise = (muscle: string, index: number) => {
+        const exerciseToRemove = muscleExercises[muscle]?.[index];
+
+        if (!exerciseToRemove) {
+            return;
+        }
+
+        setWorkoutExercises(prev => prev.filter(ex => ex.exercise_id !== exerciseToRemove.id))
+
         setMuscleExercises(prev => {
             const updated = [...(prev[muscle] || [])];
             updated.splice(index, 1);
@@ -57,11 +78,7 @@ const AddWorkoutPlan: React.FC<AddWorkoutPlanProps> = ({
             const newMuscle = e.currentTarget.dataset.name
 
             if (selectedMuscleGroups.includes(newMuscle) || newMuscle === null) {
-                setSelectedMuscleGroups(prev => {
-                    const newValue = prev.filter(item => item !== newMuscle)
-                    console.log(newValue);
-                    return newValue;
-                });
+                setSelectedMuscleGroups(prev => prev.filter(item => item !== newMuscle));
             } else {
                 setSelectedMuscleGroups(prev => {
                     const newValue = [...prev, newMuscle];
@@ -81,6 +98,12 @@ const AddWorkoutPlan: React.FC<AddWorkoutPlanProps> = ({
         getExercises()
     }, []);
 
+    useEffect(() => {
+        console.log("workoutExercises: ", workoutExercises)
+        setWorkoutPlanFormData((prev) => ({ ...prev, exercises: workoutExercises}))
+
+    }, [setWorkoutPlanFormData, workoutExercises]);
+
     const steps = getWorkoutPlanFormSteps({
         workoutPlanFormData,
         setWorkoutPlanFormData,
@@ -93,7 +116,7 @@ const AddWorkoutPlan: React.FC<AddWorkoutPlanProps> = ({
         handleAddExercise,
         handleRemoveExercise,
         selectedExercises,
-        setSelectedExercises
+        setSelectedExercises,
     })
 
     const modalContent = (

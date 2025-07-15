@@ -22,13 +22,7 @@ const Plan = () => {
         description: "",
         goal_id: 0,
         notes: "",
-        exercises: {
-                exercise_id: 0,
-                order: 0,
-                sets: 0,
-                reps: 0,
-                duration: 0
-        }
+        exercises: []
     });
     const [step, setStep] = useState<number>(0);
 
@@ -59,6 +53,7 @@ const Plan = () => {
         }
 
         if (e.currentTarget.id === "postWorkoutPlanBtn") {
+            console.log("Payload Workout Plan", workoutPlanFormData)
             await createWorkoutPlanWithExercises(workoutPlanFormData);
             setAddingWorkout(false);
         }
@@ -98,26 +93,39 @@ const Plan = () => {
                 </div>
             </div>
 
-            <div className="grid gap-6 grid-cols-2">
-                {loading ? "Loading..." : userWorkoutPlans
-                    .slice()
-                    .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-                    .map((plan) => (
-                    <Card key={plan.id} className="bg-[#1A1A1A] border border-[#2A2A2A] h-[400px]">
-                        <CardHeader>
-                            <CardTitle className="text-[#E6AC00] text-lg">{plan.name}</CardTitle>
-                            <CardDescription className="text-[#AFAFAF]">
-                                {plan.description}
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent className="text-sm text-white space-y-1">
-                            <p>
-                                <span className="text-[#AFAFAF]">Created: </span> {plan.created_at ? format(new Date(plan.created_at), "HH:mm,  PPP") : "N/A"}
-                            </p>
-                        </CardContent>
-                    </Card>
-                ))}
+            <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+                {loading ? (
+                    <div className="text-white text-center col-span-full">Loading...</div>
+                ) : (
+                    userWorkoutPlans
+                        .slice()
+                        .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+                        .map((plan) => (
+                            <Card key={plan.id} className="bg-[#1A1A1A] border border-[#2A2A2A] hover:shadow-lg transition-all duration-200">
+                                <CardHeader>
+                                    <CardTitle className="text-[#E6AC00] text-xl">{plan.name}</CardTitle>
+                                    <CardDescription className="text-[#AFAFAF]">
+                                        {plan.description || "No description provided."}
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent className="text-sm text-white space-y-3">
+                                    <div>
+                                        <span className="text-[#AFAFAF] font-medium">Created:</span>{" "}
+                                        {plan.created_at ? format(new Date(plan.created_at), "HH:mm, PPP") : "N/A"}
+                                    </div>
+                                    {plan.notes && (
+                                        <div className="text-[#CCCCCC]">
+                                            <span className="font-medium text-white">Notes:</span> {plan.notes}
+                                        </div>
+                                    )}
+                                    {/* Optional: Add buttons or actions here */}
+                                    {/* <Button variant="outline" className="mt-4">View Plan</Button> */}
+                                </CardContent>
+                            </Card>
+                        ))
+                )}
             </div>
+
 
             {addingWorkout && (
                 <AddWorkoutPlan

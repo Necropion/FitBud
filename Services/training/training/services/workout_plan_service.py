@@ -19,19 +19,15 @@ def get_workout_plans():
         db.close()
 
 # Create Workout Plan
-def create_workout_plan(data: dict) -> WorkoutPlan:
-    db = SessionLocal()
+def create_workout_plan(db, data: dict) -> WorkoutPlan:
     try:
         workout_plan = WorkoutPlan(**data)
         db.add(workout_plan)
-        db.commit()
-        db.refresh(workout_plan)
+        db.flush() # Ensures ID is generated but not committed yet
         return workout_plan
     except Exception as ex:
         logger.error(f"Error creating workout plan: {ex}")
         raise Exception("Error creating workout plan")
-    finally:
-        db.close()
 
 # Fetch All User Workout Plans
 def fetch_user_workout_plans(user_id):

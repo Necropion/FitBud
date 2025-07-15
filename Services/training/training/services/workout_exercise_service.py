@@ -20,27 +20,13 @@ def get_workout_exercises():
 
 
 # Create Workout Exercise List
-def create_workout_exercises_list(workout_id, exercise_id_list):
-    db = SessionLocal()
+def create_workout_exercises_list(db, workout_plan_id, exercise_list):
     try:
-        workout_exercises = []
-
-        for index, exercise_id in enumerate(exercise_id_list):
-            workout_exercise = WorkoutExercise(
-                workout_id=workout_id,
-                exercise_id=exercise_id,
-                order=index + 1,
-                sets=3,
-                reps=10,
-                duration=10,
-            )
-            workout_exercises.append(workout_exercise)
-
+        workout_exercises = [
+            WorkoutExercise(workout_plan_id=workout_plan_id, **item)
+            for item in exercise_list
+        ]
         db.add_all(workout_exercises)
-        db.commit()
-
-        for obj in workout_exercises:
-            db.refresh(obj)
 
         return workout_exercises
     except Exception as ex:

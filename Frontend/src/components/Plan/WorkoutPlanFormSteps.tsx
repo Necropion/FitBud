@@ -51,12 +51,29 @@ export const getWorkoutPlanFormSteps = ({
         setWorkoutPlanFormData((prev) => ({ ...prev, [name]: value}))
     }
 
+    const handleExerciseChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value, dataset } = e.target;
+        const exerciseId = parseInt(dataset.exerciseId || "", 10)
+        if (!exerciseId) {
+            return;
+        }
+
+        setWorkoutPlanFormData(prev => {
+            const updatedExercises = prev.exercises.map(ex =>
+            ex.exercise_id === exerciseId ? { ...ex, [name]: Number(value) } : ex
+            );
+
+            return { ...prev, exercises: updatedExercises };
+        })
+    }
+
     return [
         {
             label: "Please pick a name for your program",
             content: (
                 <div className="w-full h-full">
                     <input
+                        id="workoutNameInput"
                         type="text"
                         name="name"
                         className="w-[60%] p-2 rounded bg-[#2A2A2A] text-white"
@@ -75,7 +92,7 @@ export const getWorkoutPlanFormSteps = ({
                         <SelectTrigger className="w-[60%] bg-[#2A2A2A] text-white border border-[#444]">
                             <SelectValue placeholder="Select a Goal" />
                         </SelectTrigger>
-                        <SelectContent className="bg-[#2A2A2A] text-white border border-[#444]">
+                        <SelectContent className="bg-[#2A2A2A] text-white border border-[#444] z-[103]">
                             <SelectGroup>
                                 <SelectLabel className="text-[#CCCCCC] px-2 py-1">Your Goals</SelectLabel>
                                 {userGoals.map((goal) => (
@@ -153,7 +170,7 @@ export const getWorkoutPlanFormSteps = ({
             content: (
                 <div className="h-full w-full flex flex-row justify-start gap-6 p-4 overflow-x-auto">
                     {selectedMuscleGroups.map((muscle) => (
-                        <Card key={muscle} className="w-[500px] flex-shrink-0 bg-[#1F1F1F] border border-[#333] p-4 text-white">
+                        <Card key={muscle} className="w-[500px] overflow-y-auto flex-shrink-0 bg-[#1F1F1F] border border-[#333] p-4 text-white">
                             <CardTitle className="text-xl mb-2">{muscle}</CardTitle>
                             <CardContent className="space-y-3">
                                 {(muscleExercises[muscle] || []).map((exercise, idx) => (
@@ -174,8 +191,12 @@ export const getWorkoutPlanFormSteps = ({
                                                     <label className="text-xs text-gray-300 mb-1" htmlFor={`sets-${idx}`}>Sets</label>
                                                     <Input
                                                         id={`sets-${idx}`}
+                                                        data-exercise-id={exercise.id}
+                                                        name="sets"
                                                         placeholder="e.g. 3"
                                                         type="number"
+                                                        value={workoutPlanFormData.exercises.find(e => e.exercise_id === exercise.id)?.sets || ""}
+                                                        onChange={handleExerciseChange}
                                                         className="bg-[#1A1A1A] text-white border border-[#555] placeholder:text-gray-500"
                                                     />
                                                 </div>
@@ -183,8 +204,12 @@ export const getWorkoutPlanFormSteps = ({
                                                     <label className="text-xs text-gray-300 mb-1" htmlFor={`reps-${idx}`}>Reps</label>
                                                     <Input
                                                         id={`reps-${idx}`}
+                                                        data-exercise-id={exercise.id}
+                                                        name="reps"
                                                         placeholder="e.g. 12"
                                                         type="number"
+                                                        value={workoutPlanFormData.exercises.find(e => e.exercise_id === exercise.id)?.reps || ""}
+                                                        onChange={handleExerciseChange}
                                                         className="bg-[#1A1A1A] text-white border border-[#555] placeholder:text-gray-500"
                                                     />
                                                 </div>

@@ -1,8 +1,6 @@
 import {useContext, useState} from "react";
 import AppContext from "@/context/AppContext.tsx";
 import WorkoutPlanFormDTO from "@/types/api/Training/WorkoutPlanFormDTO.tsx";
-import ExerciseDTO from "@/types/api/Training/ExerciseDTO.tsx";
-import WorkoutExerciseCreateDTO from "@/types/api/Training/WorkoutExerciseCreateDTO.tsx";
 
 export const useTrainingWorkout = () => {
     const { gateway, user, currentWorkout, setUserWorkouts, setUserWorkoutPlans} = useContext(AppContext);

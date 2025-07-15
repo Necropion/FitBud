@@ -6,7 +6,7 @@ type WorkoutPlanFormDTO = {
     name: string;
     description?: string;
     notes?: string;
-    exercises: WorkoutExerciseCreateDTO;
+    exercises: WorkoutExerciseCreateDTO[];
 }
 
 export default WorkoutPlanFormDTO;

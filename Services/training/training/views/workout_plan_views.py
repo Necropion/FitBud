@@ -2,8 +2,14 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework import status
-from training.serializers import WorkoutPlanSerializer
-from training.services import workout_plan_service
+from training.data.db import SessionLocal
+from training.models import WorkoutPlan
+from training.serializers import WorkoutPlanSerializer, WorkoutExerciseSerializer
+from training.services import workout_plan_service, workout_exercise_service
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class WorkoutPlanViewSet(ViewSet):
 
@@ -27,9 +33,38 @@ class WorkoutPlanViewSet(ViewSet):
 
     # Post Workout Plan
     def create(self, request):
-        workout_plan = workout_plan_service.create_workout_plan(request.data)
-        serializer = WorkoutPlanSerializer(workout_plan)
-        return Response({
-            "message": "Workout Plan created successfully",
-            "data": serializer.data
-        }, status=status.HTTP_201_CREATED)
+        db = SessionLocal()
+        try:
+            workout_plan_data = {
+                "user_id": request.data.get('user_id'),
+                "name": request.data.get('name'),
+                "description": request.data.get('description'),
+                "goal_id": request.data.get('goal_id'),
+                "notes": request.data.get('notes'),
+            }
+            workout_plan = workout_plan_service.create_workout_plan(db=db, data=workout_plan_data)
+            workout_plan_serializer = WorkoutPlanSerializer(workout_plan)
+
+            workout_exercises_data = request.data.get('exercises')
+            workout_exercises = workout_exercise_service.create_workout_exercises_list(db=db, workout_plan_id=workout_plan.id, exercise_list=workout_exercises_data)
+            workout_exercises_serializer = WorkoutExerciseSerializer(workout_exercises, many=True)
+
+            db.commit()
+
+            db.refresh(workout_plan)
+            for obj in workout_exercises:
+                db.refresh(obj)
+
+            return Response({
+                "message": "Workout Plan created successfully",
+                "data": {
+                    "workout_plan": workout_plan_serializer.data,
+                    "exercises": workout_exercises_serializer.data,
+                }
+            }, status=status.HTTP_201_CREATED)
+        except Exception as ex:
+            db.rollback()
+            logger.error(f"Error creating workout plan: {ex}")
+            raise Exception("Error creating workout plan")
+        finally:
+            db.close()
