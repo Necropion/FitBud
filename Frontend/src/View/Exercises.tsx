@@ -75,7 +75,7 @@ const Exercises = () => {
         if (exercises.length === 0 || !exercises) {
             getExercises();
         }
-    }, [exercises]);
+    }, []);
 
     useEffect(() => {
         getMuscleGroups();
