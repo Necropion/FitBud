@@ -310,6 +310,7 @@ export const getWorkoutPlanFormSteps = ({
                                                     <li key={idx} className="text-sm text-gray-300 border-b border-[#444] pb-2">
                                                         <div className="font-medium text-white">{exerciseInfo?.name}</div>
                                                         <div className="text-gray-400">Sets: {e.sets} | Reps: {e.reps} | Duration: {exerciseInfo?.duration} min</div>
+                                                        <div>Description: {exerciseInfo?.description}</div>
                                                     </li>
                                                 );
                                             })}
