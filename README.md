@@ -1,7 +1,7 @@
 # FitBud  
 
 ### Demo
-Full Demo: [Link](https://youtu.be/PTNRf5KRzH0)  
+Full Demo: [Youtube](https://youtu.be/PTNRf5KRzH0)  
 
 ![FitBud in action](./demo.gif)
 
