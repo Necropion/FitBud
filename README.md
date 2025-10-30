@@ -1,6 +1,7 @@
 # FitBud  
 
 ### Demo
+Full Demo: [Link](https://youtu.be/PTNRf5KRzH0)
 ![FitBud in action](./demo.gif)
 
 | **Commit Type** | **Description**                                                                                                       |
@@ -18,5 +19,3 @@
 | **revert**      | Reverts a previous commit and rolls back the changes it introduced.                                                  |
 | **pr**          | Creating a pull request.                                                                                             |
 | **merge**       | Merging a pull request.                                                                                              |
-
-Pull request test
